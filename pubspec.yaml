@@ -1,0 +1,11 @@
+name: tekartik_android_utils
+dependencies:
+  xml: any
+  tekartik_build_utils:
+    git: git://github.com/tekartik/build_utils.dart
+dev_dependencies:
+  test: any
+  dev_test: any
+
+executables:
+  apk_name_it:
