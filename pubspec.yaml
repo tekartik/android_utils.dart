@@ -1,4 +1,8 @@
 name: tekartik_android_utils
+version: 0.0.1
+description: Android utilities
+environment:
+  sdk: '>=1.0.0 <2.0.0'
 dependencies:
   xml: any
   tekartik_build_utils:
@@ -9,3 +13,4 @@ dev_dependencies:
 
 executables:
   apk_name_it:
+  adb_kill_emu:
