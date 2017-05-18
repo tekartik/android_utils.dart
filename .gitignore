@@ -26,5 +26,8 @@ doc/api/
 # (Library packages only! Remove pattern if developing an application package)
 pubspec.lock
 
-
+# intellij
 .idea/
+# test result
+tmp/
+/.local/

@@ -5,12 +5,20 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   xml: any
+  fs_shim: any
+  tekartik_io_auth_utils:
+    git: git://github/tekartik/io_auth_utils.dart
+  googleapis_auth: any
+  googleapis: any
   tekartik_build_utils:
     git: git://github.com/tekartik/build_utils.dart
 dev_dependencies:
   test: any
   dev_test: any
-
+  grinder: any
+dependency_overrides:
+  tekartik_io_auth_utils:
+    path: /media/ssd/devx/git/github.com/tekartik/io_auth_utils.dart
 executables:
   apk_name_it:
   adb_kill_emu:

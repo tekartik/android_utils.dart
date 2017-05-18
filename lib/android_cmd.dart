@@ -15,10 +15,11 @@ List<String> adbMonkeyArgs({String packageName, int count}) {
   return args;
 }
 
+const String defaultEmulatorName = "emulator-5554";
 // http://stackoverflow.com/questions/20155376/android-stop-emulator-from-command-line
 // adb -s emulator-5554 emu kill
 ProcessCmd adbKillEmulator({String emulatorName}) {
-  emulatorName ??= "emulator-5554";
+  emulatorName ??= defaultEmulatorName;
   return new ProcessCmd('adb', ['-s', emulatorName, 'emu', 'kill']);
 }
 

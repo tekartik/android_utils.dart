@@ -13,13 +13,15 @@ const String _FLAG_HELP = 'help';
 //const String _FLAG_VERSION_NAME = 'versionName';
 const String _OPTION_EMULATOR_NAME = 'emulatorName';
 
+const String scriptName = "adb_kill_emu";
+
 main(List<String> args) async {
   var parser = new ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
   parser.addOption(_OPTION_EMULATOR_NAME,
-      abbr: 'e', help: 'Emulator name', defaultsTo: null);
+      abbr: 'e', help: 'Emulator name', defaultsTo: defaultEmulatorName);
 
   var results = parser.parse(args);
 
@@ -29,10 +31,10 @@ main(List<String> args) async {
   String emulatorName = results[_OPTION_EMULATOR_NAME];
 
   _usage() {
-    print("${basename(Platform.script.toFilePath())} [<emulator_name>");
+    print("${scriptName} [<emulator_name>");
     print(parser.usage);
-
   }
+
   if (help) {
     _usage();
     return;
