@@ -1,5 +1,5 @@
 name: tekartik_android_utils
-version: 0.0.1
+version: 0.1.0
 description: Android utilities
 environment:
   sdk: '>=1.0.0 <2.0.0'
@@ -7,7 +7,7 @@ dependencies:
   xml: any
   fs_shim: any
   tekartik_io_auth_utils:
-    git: git://github/tekartik/io_auth_utils.dart
+    git: git://github.com/tekartik/io_auth_utils.dart
   googleapis_auth: any
   googleapis: any
   tekartik_build_utils:
@@ -17,8 +17,8 @@ dev_dependencies:
   dev_test: any
   grinder: any
 dependency_overrides:
-  tekartik_io_auth_utils:
-    path: /media/ssd/devx/git/github.com/tekartik/io_auth_utils.dart
+#  tekartik_io_auth_utils:
+#    path: /media/ssd/devx/git/github.com/tekartik/io_auth_utils.dart
 executables:
   apk_name_it:
   adb_kill_emu:

@@ -31,3 +31,5 @@ pubspec.lock
 # test result
 tmp/
 /.local/
+
+/test/data/com.tekartik.miniexp*
