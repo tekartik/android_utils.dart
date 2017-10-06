@@ -2,10 +2,8 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:args/args.dart';
-import 'package:path/path.dart';
-import 'dart:io';
+import 'package:tekartik_android_utils/apk_utils.dart';
 
 const String _FLAG_HELP = 'help';
 const String _FLAG_VERSION_NAME = 'versionName';
@@ -22,13 +20,13 @@ main(List<String> args) async {
   parser.parse(args);
 
   bool help = results[_FLAG_HELP];
-  String versionName = results[_FLAG_VERSION_NAME];
+  //String versionName = results[_FLAG_VERSION_NAME];
 
   _usage() {
     print("apk_name_it <path_to_apk_file> [<dst_folder>]");
     print(parser.usage);
-
   }
+
   if (help) {
     _usage();
     return;
@@ -73,15 +71,15 @@ main(List<String> args) async {
     await nameApk(apkFilePath, outFolderPath: outFolderPath);
   }
 
-    /*
+  /*
     //nameIt(apkFile, join(content, "AndroidManifest.xml"));
   } else {
     if (results.rest.length == 2) {
       nameIt(results.rest[0], results.rest[1], versionName: versionName);
     }
-    */else {
-      print("Missing apk file name");
-      _usage();
-    }
-
+    */
+  else {
+    print("Missing apk file name");
+    _usage();
+  }
 }

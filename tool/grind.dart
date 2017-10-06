@@ -17,10 +17,14 @@ clean() => defaultClean();
 
 @Task()
 name() async {
-  runDartScript('bin/apk_name_it.dart', arguments: [join("test", "data", "app-release.apk")]);
+  runDartScript('bin/apk_name_it.dart',
+      arguments: [join("test", "data", "app-release.apk")]);
 }
 
 @Task()
 info() async {
-  runDartScript('bin/apk_info.dart', arguments: [join("test", "data", "app-release.apk"), join("test", "data", "tmp")]);
+  runDartScript('bin/apk_info.dart', arguments: [
+    join("test", "data", "app-release.apk"),
+    join("test", "data", "tmp")
+  ]);
 }

@@ -4,11 +4,10 @@
 
 library apk_utils_test;
 
-import 'package:path/path.dart';
+import 'package:dev_test/test.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
-import 'package:dev_test/test.dart';
 
 void main() => defineTests();
 
@@ -41,13 +40,11 @@ void defineTests() {
   group('badging_parser', () {
     test('parse', () {
       // package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''
-      ApkInfo apkInfo = parseBadgingLine("package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''");
+      ApkInfo apkInfo = parseBadgingLine(
+          "package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''");
       expect(apkInfo.name, 'com.inventhys.elfinfo.app');
       expect(apkInfo.versionCode, '2');
       expect(apkInfo.versionName, '0.1');
-
-
     });
-
   });
 }

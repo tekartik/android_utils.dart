@@ -6,13 +6,14 @@ library apk_utils;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:xml/xml.dart';
-import 'package:path/path.dart';
-import 'package:tekartik_android_utils/src/apk_info.dart';
-import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
-import 'package:tekartik_io_utils/io_utils_import.dart';
-import 'package:process_run/cmd_run.dart';
+
 import 'package:fs_shim/utils/io/copy.dart';
+import 'package:path/path.dart';
+import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
+import 'package:tekartik_android_utils/src/apk_info.dart';
+import 'package:tekartik_io_utils/io_utils_import.dart';
+import 'package:xml/xml.dart';
 
 class ManifestInfo {
   String versionName;
@@ -41,8 +42,8 @@ class ManifestInfo {
 }
 
 Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
-  ProcessResult result =
-  await run("aapt", ['dump', 'badging', apkFilePath], commandVerbose: verbose);
+  ProcessResult result = await run("aapt", ['dump', 'badging', apkFilePath],
+      commandVerbose: verbose);
   Iterable<String> lines = LineSplitter.split(result.stdout.toString());
   ApkInfo apkInfo;
   for (String line in lines) {
@@ -56,7 +57,7 @@ Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
 
 Future nameApk(String apkFilePath, {String outFolderPath}) async {
   if (!await new File(apkFilePath).exists()) {
-    throw("$apkFilePath does not exist");
+    throw ("$apkFilePath does not exist");
   }
 
   String content = "${apkFilePath}.content";
@@ -81,11 +82,12 @@ Future nameApk(String apkFilePath, {String outFolderPath}) async {
   if (apkInfo != null) {
     await copyApk(apkFilePath, apkInfo, outFolderPath: outFolderPath);
   } else {
-    throw("cannot read info on $apkFilePath");
+    throw ("cannot read info on $apkFilePath");
   }
 }
 
-Future copyApk(String apkFilePath, ApkInfo apkInfo, {String outFolderPath}) async {
+Future copyApk(String apkFilePath, ApkInfo apkInfo,
+    {String outFolderPath}) async {
   String dstFileName =
       "${apkInfo.name}-${apkInfo.versionName}-${apkInfo.versionCode}.apk";
 
@@ -104,7 +106,9 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo, {String outFolderPath}) asyn
     //await new File(apkFilePath).copy(dst);
 
   }
-  stdout.writeln('  size: ${new File(dst).statSync().size}');
+  stdout.writeln('  size: ${new File(dst)
+      .statSync()
+      .size}');
 }
 
 Future nameIt(String apkFilePath, String manifestFilePath,
@@ -129,5 +133,4 @@ Future nameIt(String apkFilePath, String manifestFilePath,
 
   return copyApk(apkFilePath,
       new ApkInfo(info.packageName, versionName, info.versionCodeName));
-
 }

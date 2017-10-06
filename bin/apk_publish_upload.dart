@@ -2,19 +2,18 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:http/http.dart';
-import 'package:tekartik_android_utils/apk_utils.dart';
-import 'package:args/args.dart';
-import 'package:path/path.dart';
 import 'dart:io';
-import 'package:tekartik_android_utils/src/apk_info.dart';
-import 'package:tekartik_io_utils/io_utils_import.dart';
-import 'package:tekartik_io_auth_utils/io_auth_utils.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:googleapis_auth/auth.dart' as auth;
-import 'package:googleapis/plus/v1.dart';
-import 'package:googleapis/androidpublisher/v2.dart';
+
 import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' as commons;
+import 'package:args/args.dart';
+import 'package:googleapis/androidpublisher/v2.dart';
+import 'package:googleapis/plus/v1.dart';
+import 'package:http/http.dart';
+import 'package:path/path.dart';
+import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_android_utils/src/apk_info.dart';
+import 'package:tekartik_io_auth_utils/io_auth_utils.dart';
+import 'package:tekartik_io_utils/io_utils_import.dart';
 
 final List<String> scopes = [
   //emailScope,
@@ -43,8 +42,8 @@ main(List<String> args) async {
   _usage() {
     print("apk_publish_upload <path_to_apk_file> --auth auth.json");
     print(parser.usage);
-
   }
+
   if (help) {
     _usage();
     return;
@@ -88,20 +87,19 @@ main(List<String> args) async {
     if (results.rest.length == 2) {
       nameIt(results.rest[0], results.rest[1], versionName: versionName);
     } else if (results.rest.length == 0) {
-
       bool foundTestData = false;
 
       //String testAuthJsonPath = join("bin", "tmp", "client_secret_124267391961-qu3lag0eht68os2cfuj4khn4rb3i6k4g.apps.googleusercontent.com.json");
-      String testAuthJsonPath = join("bin", "tmp", "client_secret_243871252418-n20l8un6s86fi5vhkm8gm0d9kg7knige.apps.googleusercontent.com.json");
+      String testAuthJsonPath = join("bin", "tmp",
+          "client_secret_243871252418-n20l8un6s86fi5vhkm8gm0d9kg7knige.apps.googleusercontent.com.json");
 
       if (await new File(testAuthJsonPath).exists()) {
-
         foundTestData = true;
         Map map = JSON.decode(await new File(testAuthJsonPath).readAsString());
         print(map);
 
-        AuthClientInfo authClientInfo = await AuthClientInfo.load(
-            filePath: testAuthJsonPath);
+        AuthClientInfo authClientInfo =
+            await AuthClientInfo.load(filePath: testAuthJsonPath);
         print(authClientInfo);
         Client authClient = await authClientInfo.getClient(scopes);
 
@@ -112,7 +110,6 @@ main(List<String> args) async {
         } catch (e) {
           stderr.writeln("PlusApi error $e");
         }
-
 
         AndroidpublisherApi api = new AndroidpublisherApi(authClient);
         /*
@@ -136,15 +133,16 @@ main(List<String> args) async {
 
           List<int> data = await new File(apkFilePath).readAsBytes();
           commons.Media media =
-          new commons.Media(new Stream.fromIterable([data]), data.length);
+              new commons.Media(new Stream.fromIterable([data]), data.length);
           print('uploading ${data.length}...');
-          Apk apk = await api.edits.apks.upload(
-              packageName, appEdit.id, uploadMedia: media);
+          Apk apk = await api.edits.apks
+              .upload(packageName, appEdit.id, uploadMedia: media);
           print('uploaded');
           print("versionCode: ${apk.versionCode}");
 
           Track track = new Track()..versionCodes = [apk.versionCode];
-          track = await api.edits.tracks.update(track, packageName, appEdit.id, alphaTrackName);
+          track = await api.edits.tracks
+              .update(track, packageName, appEdit.id, alphaTrackName);
           print("versionCodes: ${[track.versionCodes]}");
 
           await api.edits.commit(packageName, appEdit.id);
@@ -155,9 +153,8 @@ main(List<String> args) async {
           } catch (e2) {
             stderr.writeln("edits.delete error $e2");
           }
-          rethrow ;
+          rethrow;
         }
-
       }
       if (!foundTestData) {
         print("Missing apk file name");

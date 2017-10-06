@@ -1,5 +1,9 @@
 # Changelog
 
-## 0.0.1
+## 0.2.0
 
-- Initial version, created by Stagehand
+- Add apk_kill_monkey
+
+## 0.1.0
+
+- Initial version, apk_name_it, apk_info, apk_kill_emu

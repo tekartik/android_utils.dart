@@ -1,5 +1,3 @@
-
-
 // package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''
 
 import 'apk_info.dart';
@@ -15,8 +13,8 @@ String _get(String line, String key) {
     }
   }
   return null;
-
 }
+
 ApkInfo parseBadgingLine(String line) {
   if (line.startsWith('package:')) {
     String name = _get(line, "name");

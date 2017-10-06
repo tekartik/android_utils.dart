@@ -2,10 +2,8 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:args/args.dart';
-import 'package:path/path.dart';
-import 'dart:io';
+import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
 
 const String _FLAG_HELP = 'help';
@@ -28,8 +26,8 @@ main(List<String> args) async {
   _usage() {
     print("apk_info <path_to_apk_file>");
     print(parser.usage);
-
   }
+
   if (help) {
     _usage();
     return;

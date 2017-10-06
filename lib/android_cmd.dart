@@ -1,8 +1,10 @@
 import 'package:process_run/cmd_run.dart';
 
-ProcessCmd adbCmd(List<String> args) {
+ProcessCmd _adbCmd(List<String> args) {
   return new ProcessCmd('adb', args);
 }
+
+ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
 
 List<String> adbMonkeyArgs({String packageName, int count}) {
   count ??= 50000;
@@ -15,14 +17,35 @@ List<String> adbMonkeyArgs({String packageName, int count}) {
   return args;
 }
 
-const String defaultEmulatorName = "emulator-5554";
+const String defaultEmulatorSerialNumber = "emulator-5554";
 // http://stackoverflow.com/questions/20155376/android-stop-emulator-from-command-line
 // adb -s emulator-5554 emu kill
 ProcessCmd adbKillEmulator({String emulatorName}) {
-  emulatorName ??= defaultEmulatorName;
+  emulatorName ??= defaultEmulatorSerialNumber;
   return new ProcessCmd('adb', ['-s', emulatorName, 'emu', 'kill']);
 }
 
+List<String> shellPsAdbArgs() {
+  return ['shell', 'ps'];
+}
+
+List<String> shellKill(int pid) {
+  return ['shell', 'kill', '${pid}'];
+}
+
+class AdbTarget {
+  final String serial;
+
+  AdbTarget({this.serial});
+
+  ProcessCmd adbCmd(List<String> args) {
+    args ??= [];
+    if (serial != null) {
+      args.insertAll(0, ["-s", serial]);
+    }
+    return _adbCmd(args);
+  }
+}
 
 ProcessCmd nameApkCommand({String flavor}) {
   String filename;

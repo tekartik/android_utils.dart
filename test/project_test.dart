@@ -4,8 +4,8 @@
 
 library apk_utils_test;
 
-import 'package:tekartik_android_utils/project.dart';
 import 'package:dev_test/test.dart';
+import 'package:tekartik_android_utils/project.dart';
 
 void main() => defineTests();
 

@@ -2,12 +2,9 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:tekartik_android_utils/android_cmd.dart';
-import 'package:tekartik_android_utils/apk_utils.dart';
-import 'package:tekartik_build_utils/cmd_run.dart';
 import 'package:args/args.dart';
-import 'package:path/path.dart';
-import 'dart:io';
+import 'package:tekartik_android_utils/android_cmd.dart';
+import 'package:tekartik_build_utils/cmd_run.dart';
 
 const String _FLAG_HELP = 'help';
 //const String _FLAG_VERSION_NAME = 'versionName';
@@ -21,7 +18,9 @@ main(List<String> args) async {
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
   parser.addOption(_OPTION_EMULATOR_NAME,
-      abbr: 'e', help: 'Emulator name', defaultsTo: defaultEmulatorName);
+      abbr: 'e',
+      help: 'Emulator name',
+      defaultsTo: defaultEmulatorSerialNumber);
 
   var results = parser.parse(args);
 
