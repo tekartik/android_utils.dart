@@ -5,19 +5,24 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   xml: any
-  fs_shim: any
+  fs_shim: '>=0.7.1'
   tekartik_io_auth_utils:
     git: git://github.com/tekartik/io_auth_utils.dart
+  tekartik_io_utils:
+    git: git://github.com/tekartik/io_utils.dart
   googleapis_auth: any
   googleapis: any
-  tekartik_build_utils:
-    git: git://github.com/tekartik/build_utils.dart
-    version: '>=0.3.1'
+  process_run: any
+#  tekartik_build_utils:
+#    git: git://github.com/tekartik/build_utils.dart
+#    version: '>=0.3.1'
 dev_dependencies:
   test: any
   dev_test: any
   grinder: any
 dependency_overrides:
+#  fs_shim:
+#    path: ../fs_shim.dart
 #  tekartik_build_utils:
 #    path: ../build_utils.dart
 #  tekartik_io_auth_utils:

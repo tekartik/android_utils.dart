@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/adb_shell.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
-import 'package:tekartik_build_utils/cmd_run.dart';
+import 'package:process_run/cmd_run.dart';
 
 const String _FLAG_HELP = 'help';
 //const String _FLAG_VERSION_NAME = 'versionName';
@@ -54,7 +54,7 @@ main(List<String> args) async {
   } else {
     stdout.writeln(psLine);
     cmd = target.adbCmd(shellKill(psLine.pid));
-    runCmd(cmd);
+    runCmd(cmd, verbose: true);
   }
   /*
   List<String> lines = LineSplitter.split(result.stdout.toString());

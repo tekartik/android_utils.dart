@@ -3,8 +3,8 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:args/args.dart';
+import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
-import 'package:tekartik_build_utils/cmd_run.dart';
 
 const String _FLAG_HELP = 'help';
 //const String _FLAG_VERSION_NAME = 'versionName';
@@ -40,5 +40,5 @@ main(List<String> args) async {
   }
 
   ProcessCmd cmd = adbKillEmulator(emulatorName: emulatorName);
-  await runCmd(cmd);
+  await runCmd(cmd, verbose: true);
 }

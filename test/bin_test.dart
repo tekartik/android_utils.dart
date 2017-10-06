@@ -1,5 +1,6 @@
-import 'package:dev_test/test.dart';
 @TestOn("vm")
+
+import 'package:dev_test/test.dart';
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 import 'package:path/path.dart';
@@ -42,7 +43,7 @@ void defineTests() {
   });
   group('bin_pub', () {
     test('apk_info', () async {
-      ProcessResult result = await runCmd(
+      ProcessResult result = await devRunCmd(
           pubCmd(["run", "apk_info.dart", join(inFolder, "app-release.apk")]),
           commandVerbose: true);
       expect(result.stdout, contains("versionName"));

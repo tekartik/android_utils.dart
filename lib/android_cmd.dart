@@ -6,14 +6,18 @@ ProcessCmd _adbCmd(List<String> args) {
 
 ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
 
-List<String> adbMonkeyArgs({String packageName, int count}) {
+List<String> adbMonkeyArgs({String packageName, int count, int sysKeysPercent = 0}) {
   count ??= 50000;
   List<String> args = ['shell', 'monkey'];
   if (packageName != null) {
     args.addAll(['-p', packageName]);
-
-    args.addAll(['-v', "$count"]);
   }
+  if (sysKeysPercent != null) {
+    args.addAll(['--pct-syskeys', "$sysKeysPercent"]);
+  }
+
+  args.addAll(["$count"]);
+
   return args;
 }
 
