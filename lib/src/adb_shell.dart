@@ -18,8 +18,13 @@ class ShellPsParser {
 
   PsLine findByName(String name) {
     for (PsLine line in lines) {
-      if (line.name == name) {
-        return line;
+      try {
+        if (line.name == name) {
+          return line;
+        }
+      } catch (e) {
+        print(e);
+        print(line);
       }
     }
     return null;
@@ -70,4 +75,6 @@ class _PsLineBase {
   _PsLineBase(String line) {
     _parts = line.split(spaceSplitRegExp);
   }
+
+  toString() => _parts.join(" ");
 }

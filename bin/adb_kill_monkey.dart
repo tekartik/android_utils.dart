@@ -52,6 +52,7 @@ main(List<String> args) async {
   if (psLine == null) {
     stderr.writeln("Process ${processName} not found");
   } else {
+    stdout.writeln(psLine);
     cmd = target.adbCmd(shellKill(psLine.pid));
     runCmd(cmd);
   }

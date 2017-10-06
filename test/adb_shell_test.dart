@@ -15,6 +15,7 @@ void main() {
           "shell     7398  1310  1217116 16816 binder_thr a9529424 S com.android.commands.monkey");
       expect(psLine.pid, 7398);
       expect(psLine.name, "com.android.commands.monkey");
+      expect(psLine.toString(), "shell 7398 1310 1217116 16816 binder_thr a9529424 S com.android.commands.monkey");
     });
 
     test('ps_parser', () {
