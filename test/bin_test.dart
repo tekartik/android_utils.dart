@@ -43,7 +43,7 @@ void defineTests() {
   });
   group('bin_pub', () {
     test('apk_info', () async {
-      ProcessResult result = await devRunCmd(
+      ProcessResult result = await runCmd(
           pubCmd(["run", "apk_info.dart", join(inFolder, "app-release.apk")]),
           commandVerbose: true);
       expect(result.stdout, contains("versionName"));
