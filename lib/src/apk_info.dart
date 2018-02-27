@@ -4,4 +4,16 @@ class ApkInfo {
   String versionCode;
 
   ApkInfo(this.name, this.versionName, this.versionCode);
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      'name': name,
+      'versionName': versionName,
+      'versionCode': versionCode
+    };
+    return map;
+  }
+
+  @override
+  toString() => toMap().toString();
 }

@@ -44,4 +44,22 @@ class AndroidProject {
     List<String> parts = targetToParts(target);
     return '${joinAll(parts)}';
   }
+
+  static const String modeRelease = "release";
+  static const String modeDebug = "debug";
+
+  static const String moduleApp = "app";
+
+  // mode: debug/release
+  String getApkPath({String flavor, String module, String mode}) {
+    module ??= moduleApp;
+    mode ??= modeRelease;
+    if (flavor == null) {
+      return join(
+          path, module, 'build', 'outputs', 'apk', mode, "$module-$mode.apk");
+    } else {
+      return join(path, 'app', 'build', 'outputs', 'apk', flavor, mode,
+          '${module}-${flavor}-${mode}.apk');
+    }
+  }
 }
