@@ -28,6 +28,8 @@ pubspec.lock
 
 # intellij
 .idea/
+*.iml
+
 # test result
 tmp/
 /.local/

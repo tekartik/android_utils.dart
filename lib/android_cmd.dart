@@ -1,3 +1,4 @@
+import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 
 ProcessCmd _adbCmd(List<String> args) {
@@ -57,7 +58,7 @@ ProcessCmd nameApkCommand({String flavor}) {
   if (flavor == null) {
     filename = "app-release";
   } else {
-    filename = "app-${flavor}-release";
+    filename = join(flavor, "release", "app-${flavor}-release");
   }
-  return new ProcessCmd('apk_name_it', ['app/build/outputs/apk/$filename.apk']);
+  return new ProcessCmd('apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
 }
