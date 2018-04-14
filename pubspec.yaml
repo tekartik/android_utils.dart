@@ -36,6 +36,7 @@ dependency_overrides:
 
 executables:
   apk_name_it:
+  apk_info:
   adb_kill_emu:
   adb_kill_monkey:
   adb_tcpip:
