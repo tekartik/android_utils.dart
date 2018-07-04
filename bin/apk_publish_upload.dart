@@ -95,7 +95,7 @@ main(List<String> args) async {
 
       if (await new File(testAuthJsonPath).exists()) {
         foundTestData = true;
-        Map map = JSON.decode(await new File(testAuthJsonPath).readAsString());
+        Map map = json.decode(await new File(testAuthJsonPath).readAsString());
         print(map);
 
         AuthClientInfo authClientInfo =
