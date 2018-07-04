@@ -2,17 +2,23 @@ name: tekartik_android_utils
 version: 0.3.1
 description: Android utilities
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: '>=2.0.0-dev.63 <2.0.0'
 dependencies:
   args: any
   xml: any
   fs_shim: '>=0.7.1'
   tekartik_io_auth_utils:
-    git: git://github.com/tekartik/io_auth_utils.dart
+    git:
+      url: git://github.com/tekartik/io_auth_utils.dart
+      ref: dart2
   tekartik_build_utils:
-    git: git://github.com/tekartik/build_utils.dart
+    git:
+      url: git://github.com/tekartik/build_utils.dart
+      ref: dart2
   tekartik_cmd_utils:
-    git: git://github.com/tekartik/cmd_utils.dart
+    git:
+      url: git://github.com/tekartik/cmd_utils.dart
+      ref: dart2
   googleapis_auth: any
   googleapis: any
   process_run: any
