@@ -1,7 +1,7 @@
 import 'package:grinder/grinder.dart';
 import 'package:path/path.dart';
 
-main(args) => grind(args);
+main(List<String> args) => grind(args);
 
 @Task()
 test() => new TestRunner().testAsync();
