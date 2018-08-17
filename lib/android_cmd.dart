@@ -60,5 +60,6 @@ ProcessCmd nameApkCommand({String flavor}) {
   } else {
     filename = join(flavor, "release", "app-${flavor}-release");
   }
-  return new ProcessCmd('apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
+  return new ProcessCmd(
+      'apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
 }

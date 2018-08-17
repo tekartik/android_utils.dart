@@ -22,10 +22,14 @@ void defineTests() {
       AndroidProject project = new AndroidProject(androidTopPath);
 
       String flavor = "prod";
-      String sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk', flavor, 'release', 'app-${flavor}-release.apk');
+      String sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',
+          flavor, 'release', 'app-${flavor}-release.apk');
       expect(project.getApkPath(flavor: flavor), sourceApk);
 
-      expect(project.getApkPath(), join(androidTopPath, 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk'));
+      expect(
+          project.getApkPath(),
+          join(androidTopPath, 'app', 'build', 'outputs', 'apk', 'release',
+              'app-release.apk'));
     });
   });
 }

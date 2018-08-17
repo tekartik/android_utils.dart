@@ -106,9 +106,7 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
     //await new File(apkFilePath).copy(dst);
 
   }
-  stdout.writeln('  size: ${new File(dst)
-      .statSync()
-      .size}');
+  stdout.writeln('  size: ${new File(dst).statSync().size}');
 }
 
 Future nameIt(String apkFilePath, String manifestFilePath,
