@@ -9,9 +9,9 @@ class ShellPsParser {
 
     for (String line in lines) {
       if (header == null) {
-        header = new PsHeader(line);
+        header = PsHeader(line);
       } else {
-        this.lines.add(new PsLine(line, header: header));
+        this.lines.add(PsLine(line, header: header));
       }
     }
   }
@@ -42,8 +42,8 @@ class PsHeader extends _PsLineBase {
   }
 }
 
-PsHeader _defaultHeader = new PsHeader(
-    "USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME");
+PsHeader _defaultHeader =
+    PsHeader("USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME");
 
 class PsLine extends _PsLineBase {
   PsHeader _header;
@@ -67,7 +67,7 @@ class PsLine extends _PsLineBase {
 
 }
 
-var spaceSplitRegExp = new RegExp('\\s+');
+var spaceSplitRegExp = RegExp('\\s+');
 
 class _PsLineBase {
   List<String> _parts;

@@ -19,7 +19,7 @@ void defineTests() {
 
     test('getApkPath', () {
       String androidTopPath = '.';
-      AndroidProject project = new AndroidProject(androidTopPath);
+      AndroidProject project = AndroidProject(androidTopPath);
 
       String flavor = "prod";
       String sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',

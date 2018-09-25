@@ -13,7 +13,7 @@ const String _OPTION_EMULATOR_NAME = 'emulatorName';
 const String scriptName = "adb_kill_emu";
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);

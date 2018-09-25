@@ -22,7 +22,7 @@ ApkInfo parseBadgingLine(String line) {
     String versionCode = _get(line, "versionCode");
 
     if (name != null && versionName != null && versionCode != null) {
-      return new ApkInfo(name, versionName, versionCode);
+      return ApkInfo(name, versionName, versionCode);
     }
   }
   return null;

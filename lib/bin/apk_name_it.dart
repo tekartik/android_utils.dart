@@ -9,7 +9,7 @@ const String _FLAG_HELP = 'help';
 const String _FLAG_VERSION_NAME = 'versionName';
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addOption(_FLAG_VERSION_NAME,

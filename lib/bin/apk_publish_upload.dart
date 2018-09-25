@@ -26,7 +26,7 @@ const String _FLAG_HELP = 'help';
 const String _OPTION_AUTH = 'auth';
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   parser.addOption(_OPTION_AUTH,
@@ -93,9 +93,9 @@ main(List<String> args) async {
       String testAuthJsonPath = join("bin", "tmp",
           "client_secret_243871252418-n20l8un6s86fi5vhkm8gm0d9kg7knige.apps.googleusercontent.com.json");
 
-      if (await new File(testAuthJsonPath).exists()) {
+      if (await File(testAuthJsonPath).exists()) {
         foundTestData = true;
-        Map map = json.decode(await new File(testAuthJsonPath).readAsString());
+        Map map = json.decode(await File(testAuthJsonPath).readAsString());
         print(map);
 
         AuthClientInfo authClientInfo =
@@ -104,14 +104,14 @@ main(List<String> args) async {
         Client authClient = await authClientInfo.getClient(scopes);
 
         try {
-          PlusApi plusApi = new PlusApi(authClient);
+          PlusApi plusApi = PlusApi(authClient);
           Person person = await plusApi.people.get("me");
           print(person.toJson());
         } catch (e) {
           stderr.writeln("PlusApi error $e");
         }
 
-        AndroidpublisherApi api = new AndroidpublisherApi(authClient);
+        AndroidpublisherApi api = AndroidpublisherApi(authClient);
         /*
         String packageName = "com.tekartik.buvettekpcm";
         AppEdit appEdit = await api.edits.insert(null, packageName);
@@ -131,16 +131,16 @@ main(List<String> args) async {
           print('versionCode : ${apkInfo.versionCode}');
           print('versionName : ${apkInfo.versionName}');
 
-          List<int> data = await new File(apkFilePath).readAsBytes();
+          List<int> data = await File(apkFilePath).readAsBytes();
           commons.Media media =
-              new commons.Media(new Stream.fromIterable([data]), data.length);
+              commons.Media(Stream.fromIterable([data]), data.length);
           print('uploading ${data.length}...');
           Apk apk = await api.edits.apks
               .upload(packageName, appEdit.id, uploadMedia: media);
           print('uploaded');
           print("versionCode: ${apk.versionCode}");
 
-          Track track = new Track()..versionCodes = [apk.versionCode];
+          Track track = Track()..versionCodes = [apk.versionCode];
           track = await api.edits.tracks
               .update(track, packageName, appEdit.id, alphaTrackName);
           print("versionCodes: ${[track.versionCodes]}");

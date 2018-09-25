@@ -13,7 +13,7 @@ class AndroidProject {
   // target can be :app ot app
   ProcessCmd buildApkCmd(String target, {String flavor}) {
     String gradleTarget = targetToGradleTarget(target);
-    ProcessCmd cmd = new ProcessCmd(
+    ProcessCmd cmd = ProcessCmd(
         gradleExecutable, ['$gradleTarget:assemble${flavor}Release'],
         workingDirectory: path);
     return cmd;

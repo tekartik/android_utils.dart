@@ -16,7 +16,7 @@ const String _OPTION_SERIAL_NUMBER = 'serial';
 const String scriptName = "adb_kill_monkey";
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
@@ -41,11 +41,11 @@ main(List<String> args) async {
     return;
   }
 
-  AdbTarget target = new AdbTarget(serial: serialNumber);
+  AdbTarget target = AdbTarget(serial: serialNumber);
   ProcessCmd cmd = target.adbCmd(shellPsAdbArgs());
   ProcessResult result =
       await runCmd(cmd, verbose: false, commandVerbose: true);
-  ShellPsParser shellPsParser = new ShellPsParser(result.stdout.toString());
+  ShellPsParser shellPsParser = ShellPsParser(result.stdout.toString());
 
   String processName = "com.android.commands.monkey";
   PsLine psLine = shellPsParser.findByName(processName);

@@ -12,7 +12,7 @@ const String _flagHelp = 'help';
 const String scriptName = "adb_device_os_version";
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);

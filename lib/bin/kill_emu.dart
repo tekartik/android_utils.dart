@@ -11,7 +11,7 @@ const String _FLAG_HELP = 'help';
 const String scriptName = "kill_emu";
 
 main(List<String> args) async {
-  var parser = new ArgParser();
+  var parser = ArgParser();
 
   parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
 
@@ -31,7 +31,13 @@ main(List<String> args) async {
     return;
   }
 
-  await killCommand("qemu");
+  if (Platform.isWindows) {
+    //await dart .\bin\kill_cmd.dart qemu-system-i386.exe
+    await killAllCommandsByName('qemu-system-i386.exe');
+  } else {
+    await killAllCommandsByName("qemu");
+  }
+
 /*
   ProcessCmd cmd = new ProcessCmd("ps", ["x", "-o", "pid,cmd"]);
   ProcessResult processResult = await runCmd(cmd, commandVerbose: true);

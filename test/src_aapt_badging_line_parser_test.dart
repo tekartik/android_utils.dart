@@ -30,7 +30,7 @@ void defineTests() {
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19" />
 </manifest>
 ''';
-      ManifestInfo info = new ManifestInfo(xmlText);
+      ManifestInfo info = ManifestInfo(xmlText);
       expect(info.packageName, "io.bitswift.app");
       expect(info.versionName, "0.1.0");
       expect(info.versionCodeName, "1");

@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 main(List<String> args) => grind(args);
 
 @Task()
-test() => new TestRunner().testAsync();
+test() => TestRunner().testAsync();
 
 @DefaultTask()
 @Depends(test)
