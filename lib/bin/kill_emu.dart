@@ -34,6 +34,7 @@ main(List<String> args) async {
   if (Platform.isWindows) {
     //await dart .\bin\kill_cmd.dart qemu-system-i386.exe
     await killAllCommandsByName('qemu-system-i386.exe');
+    await killAllCommandsByName('qemu-system-x86_64.exe');
   } else {
     await killAllCommandsByName("qemu");
   }
