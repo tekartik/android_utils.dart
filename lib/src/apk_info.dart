@@ -15,5 +15,5 @@ class ApkInfo {
   }
 
   @override
-  toString() => toMap().toString();
+  String toString() => toMap().toString();
 }

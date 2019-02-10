@@ -5,22 +5,23 @@
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:tekartik_cmd_utils/kill_cmd.dart';
+import 'package:tekartik_common_utils/common_utils_import.dart';
 
-const String _FLAG_HELP = 'help';
+const String _flagHelp = 'help';
 
 const String scriptName = "kill_emu";
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_FLAG_HELP];
-  _usage() {
+  bool help = parseBool(results[_flagHelp]);
+  void _usage() {
     stdout.writeln("kill the android (qemu) emulator process(es)");
     stdout.writeln("  ${scriptName}");
     print(parser.usage);

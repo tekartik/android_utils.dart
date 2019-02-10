@@ -22,24 +22,23 @@ final List<String> scopes = [
 
 const String alphaTrackName = "alpha";
 
-const String _FLAG_HELP = 'help';
-const String _OPTION_AUTH = 'auth';
+const String _flagHelp = 'help';
+const String _optionAuth = 'auth';
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addOption(_OPTION_AUTH,
-      help: 'Auth json definition', defaultsTo: null);
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
+  parser.addOption(_optionAuth, help: 'Auth json definition', defaultsTo: null);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_FLAG_HELP];
-  String versionName = results[_OPTION_AUTH];
+  bool help = parseBool(results[_flagHelp]);
+  String versionName = results[_optionAuth]?.toString();
 
-  _usage() {
+  void _usage() {
     print("apk_publish_upload <path_to_apk_file> --auth auth.json");
     print(parser.usage);
   }
@@ -85,17 +84,17 @@ main(List<String> args) async {
     //nameIt(apkFile, join(content, "AndroidManifest.xml"));
   } else {
     if (results.rest.length == 2) {
-      nameIt(results.rest[0], results.rest[1], versionName: versionName);
-    } else if (results.rest.length == 0) {
+      await nameIt(results.rest[0], results.rest[1], versionName: versionName);
+    } else if (results.rest.isEmpty) {
       bool foundTestData = false;
 
       //String testAuthJsonPath = join("bin", "tmp", "client_secret_124267391961-qu3lag0eht68os2cfuj4khn4rb3i6k4g.apps.googleusercontent.com.json");
       String testAuthJsonPath = join("bin", "tmp",
           "client_secret_243871252418-n20l8un6s86fi5vhkm8gm0d9kg7knige.apps.googleusercontent.com.json");
 
-      if (await File(testAuthJsonPath).exists()) {
+      if (File(testAuthJsonPath).existsSync()) {
         foundTestData = true;
-        Map map = json.decode(await File(testAuthJsonPath).readAsString());
+        Map map = parseJsonObject(await File(testAuthJsonPath).readAsString());
         print(map);
 
         AuthClientInfo authClientInfo =

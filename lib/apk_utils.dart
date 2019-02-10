@@ -56,7 +56,7 @@ Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
 }
 
 Future nameApk(String apkFilePath, {String outFolderPath}) async {
-  if (!await File(apkFilePath).exists()) {
+  if (!File(apkFilePath).existsSync()) {
     throw ("$apkFilePath does not exist");
   }
 

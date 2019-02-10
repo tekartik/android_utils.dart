@@ -21,7 +21,7 @@ void defineTests() {
   group('bin', () {
     test('apk_info', () async {
       ProcessResult result = await runCmd(
-          dartCmd([
+          DartCmd([
             join("bin", "apk_info.dart"),
             join(inFolder, "app-release.apk")
           ]),
@@ -32,7 +32,7 @@ void defineTests() {
 
     test('nameIt', () async {
       ProcessResult result = await runCmd(
-          dartCmd([
+          DartCmd([
             join("bin", "apk_name_it.dart"),
             join(inFolder, "app-release.apk"),
             join(outFolder, joinAll(testDescriptions))
@@ -44,7 +44,7 @@ void defineTests() {
   group('bin_pub', () {
     test('apk_info', () async {
       ProcessResult result = await runCmd(
-          pubCmd(["run", "apk_info.dart", join(inFolder, "app-release.apk")]),
+          PubCmd(["run", "apk_info.dart", join(inFolder, "app-release.apk")]),
           commandVerbose: true);
       expect(result.stdout, contains("versionName"));
       expect(result.exitCode, 0);
@@ -52,14 +52,14 @@ void defineTests() {
 
     test('apk_info no arg', () async {
       ProcessResult result =
-          await runCmd(pubCmd(["run", "apk_info.dart"]), commandVerbose: true);
+          await runCmd(PubCmd(["run", "apk_info.dart"]), commandVerbose: true);
       expect(result.stdout, contains("versionName"));
       expect(result.exitCode, 0);
     });
 
     test('nameIt', () async {
       ProcessResult result = await runCmd(
-          pubCmd([
+          PubCmd([
             "run",
             "apk_name_it.dart",
             join(inFolder, "app-release.apk"),
@@ -71,7 +71,7 @@ void defineTests() {
 
     test('nameIt no arg', () async {
       ProcessResult result =
-          await runCmd(pubCmd(["run", "apk_name_it.dart"]), verbose: true);
+          await runCmd(PubCmd(["run", "apk_name_it.dart"]), verbose: true);
       expect(result.exitCode, 0);
     });
   });

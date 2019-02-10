@@ -2,28 +2,31 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
+import 'package:tekartik_common_utils/bool_utils.dart';
 
-const String _FLAG_HELP = 'help';
-const String _FLAG_VERSION_NAME = 'versionName';
+const String _flagHelp = 'help';
+const String _flagVersionName = 'versionName';
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addOption(_FLAG_VERSION_NAME,
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
+  parser.addOption(_flagVersionName,
       abbr: 'v', help: 'Version name', defaultsTo: null);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_FLAG_HELP];
-  String versionName = results[_FLAG_VERSION_NAME];
+  bool help = parseBool(results[_flagHelp]);
+  String versionName = results[_flagVersionName]?.toString();
 
-  _usage() {
+  void _usage() {
     print("apk_info <path_to_apk_file>");
     print(parser.usage);
   }
@@ -72,7 +75,7 @@ main(List<String> args) async {
     //nameIt(apkFile, join(content, "AndroidManifest.xml"));
   } else {
     if (results.rest.length == 2) {
-      nameIt(results.rest[0], results.rest[1], versionName: versionName);
+      await nameIt(results.rest[0], results.rest[1], versionName: versionName);
     } else {
       print("Missing apk file name");
       _usage();

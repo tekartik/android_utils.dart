@@ -76,5 +76,6 @@ class _PsLineBase {
     _parts = line.split(spaceSplitRegExp);
   }
 
-  toString() => _parts.join(" ");
+  @override
+  String toString() => _parts.join(" ");
 }

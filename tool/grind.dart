@@ -1,28 +1,30 @@
+import 'dart:async';
+
 import 'package:grinder/grinder.dart';
 import 'package:path/path.dart';
 
-main(List<String> args) => grind(args);
+Future main(List<String> args) => grind(args);
 
 @Task()
-test() => TestRunner().testAsync();
+Future test() => TestRunner().testAsync();
 
 @DefaultTask()
 @Depends(test)
-build() {
+void build() {
   Pub.build();
 }
 
 @Task()
-clean() => defaultClean();
+void clean() => defaultClean();
 
 @Task()
-name() async {
+Future name() async {
   runDartScript('bin/apk_name_it.dart',
       arguments: [join("test", "data", "app-release.apk")]);
 }
 
 @Task()
-info() async {
+Future info() async {
   runDartScript('bin/apk_info.dart', arguments: [
     join("test", "data", "app-release.apk"),
     join("test", "data", "tmp")

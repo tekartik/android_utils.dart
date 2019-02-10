@@ -2,27 +2,30 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_common_utils/bool_utils.dart';
 
-const String _FLAG_HELP = 'help';
-const String _FLAG_VERSION_NAME = 'versionName';
+const String _flagHelp = 'help';
+const String _flagVersionName = 'versionName';
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addOption(_FLAG_VERSION_NAME,
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
+  parser.addOption(_flagVersionName,
       abbr: 'v', help: 'Version name', defaultsTo: null);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_FLAG_HELP];
-  //String versionName = results[_FLAG_VERSION_NAME];
+  bool help = parseBool(results[_flagHelp]);
+  //String versionName = results[_flagVersionName];
 
-  _usage() {
+  void _usage() {
     print("apk_name_it <path_to_apk_file> [<dst_folder>]");
     print(parser.usage);
   }
@@ -32,7 +35,7 @@ main(List<String> args) async {
     return;
   }
 
-  if (results.rest.length > 0) {
+  if (results.rest.isNotEmpty) {
     // New just give the apk
     String apkFilePath = results.rest[0];
     String outFolderPath;

@@ -2,25 +2,27 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/adb_shell.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:tekartik_common_utils/bool_utils.dart';
 
-const String _FLAG_HELP = 'help';
-//const String _FLAG_VERSION_NAME = 'versionName';
-const String _OPTION_SERIAL_NUMBER = 'serial';
+const String _flagHelp = 'help';
+//const String _flagVersionName = 'versionName';
+const String _optionSerialNumber = 'serial';
 
 const String scriptName = "adb_kill_monkey";
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
-  //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
-  parser.addOption(_OPTION_SERIAL_NUMBER,
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
+  //parser.addFlag(_flagVersionName, abbr: 'v', help: 'Version name', negatable: false);
+  parser.addOption(_optionSerialNumber,
       abbr: 's', help: 'Serial name', defaultsTo: defaultEmulatorSerialNumber);
 
   var results = parser.parse(args);
@@ -28,10 +30,10 @@ main(List<String> args) async {
   parser.parse(args);
   //bool verbose = false;
 
-  bool help = results[_FLAG_HELP];
-  String serialNumber = results[_OPTION_SERIAL_NUMBER];
+  bool help = parseBool(results[_flagHelp]);
+  String serialNumber = results[_optionSerialNumber]?.toString();
 
-  _usage() {
+  void _usage() {
     print("${scriptName} [-s <serial_number>]");
     print(parser.usage);
   }
@@ -54,7 +56,7 @@ main(List<String> args) async {
   } else {
     stdout.writeln(psLine);
     cmd = target.adbCmd(shellKill(psLine.pid));
-    runCmd(cmd, verbose: true);
+    await runCmd(cmd, verbose: true);
   }
   /*
   List<String> lines = LineSplitter.split(result.stdout.toString());

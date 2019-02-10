@@ -1,6 +1,8 @@
 #!/usr/bin/env dart
 library tekartik_script.bin.apk_info;
 
-import 'package:tekartik_android_utils/bin/apk_info.dart' as _;
+import 'dart:async';
 
-main(List<String> arguments) => _.main(arguments);
+import 'package:tekartik_android_utils/bin/apk_info.dart' as apk_info;
+
+Future main(List<String> arguments) => apk_info.main(arguments);

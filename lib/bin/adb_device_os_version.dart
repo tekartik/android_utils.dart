@@ -11,19 +11,19 @@ const String _flagHelp = 'help';
 
 const String scriptName = "adb_device_os_version";
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
   parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
-  //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
+  //parser.addFlag(_flagVersionName, abbr: 'v', help: 'Version name', negatable: false);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_flagHelp];
+  bool help = results[_flagHelp] as bool;
 
-  _usage() {
+  void _usage() {
     print("${scriptName}");
     print(parser.usage);
   }

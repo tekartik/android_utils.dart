@@ -7,23 +7,23 @@ import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
-const String _FLAG_HELP = 'help';
+const String _flagHelp = 'help';
 
 const String scriptName = "adb_tcpip";
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   var parser = ArgParser();
 
-  parser.addFlag(_FLAG_HELP, abbr: 'h', help: 'Usage help', negatable: false);
-  //parser.addFlag(_FLAG_VERSION_NAME, abbr: 'v', help: 'Version name', negatable: false);
+  parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
+  //parser.addFlag(_flagVersionName, abbr: 'v', help: 'Version name', negatable: false);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
-  bool help = results[_FLAG_HELP];
+  bool help = parseBool(results[_flagHelp]);
 
-  _usage() {
+  void _usage() {
     print("${scriptName}");
     print(parser.usage);
   }
