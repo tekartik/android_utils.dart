@@ -11,7 +11,7 @@ void main() {
   group('adb_shell', () {
     test('ps_line', () async {
       // await runCmd(adbCmd(['shell', 'ps']));
-      PsLine psLine = new PsLine(
+      PsLine psLine = PsLine(
           "shell     7398  1310  1217116 16816 binder_thr a9529424 S com.android.commands.monkey");
       expect(psLine.pid, 7398);
       expect(psLine.name, "com.android.commands.monkey");
@@ -26,7 +26,7 @@ root      1     0     8504   1504  SyS_epoll_ 00000000 S /init
 root      2     0     0      0       kthreadd 00000000 S kthreadd
 root      3     2     0      0     smpboot_th 00000000 S ksoftirqd/0
 ''';
-      ShellPsParser parser = new ShellPsParser(out);
+      ShellPsParser parser = ShellPsParser(out);
       expect(parser.findByName("/init").pid, 1);
     });
   });

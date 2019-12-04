@@ -10,10 +10,12 @@ import 'dart:io';
 import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 import 'package:xml/xml.dart';
+export 'package:tekartik_android_utils/src/apk_info.dart';
 
 class ManifestInfo {
   String versionName;
@@ -41,6 +43,11 @@ class ManifestInfo {
   }
 }
 
+bool _aaptSupported;
+
+/// True if aapt si present and supported
+bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
+
 Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
   ProcessResult result = await run("aapt", ['dump', 'badging', apkFilePath],
       commandVerbose: verbose);
@@ -56,13 +63,13 @@ Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
 }
 
 Future nameApk(String apkFilePath, {String outFolderPath}) async {
-  if (!await new File(apkFilePath).exists()) {
+  if (!File(apkFilePath).existsSync()) {
     throw ("$apkFilePath does not exist");
   }
 
   String content = "${apkFilePath}.content";
   try {
-    await new Directory(content).delete(recursive: true);
+    await Directory(content).delete(recursive: true);
   } catch (_) {}
 
   /*
@@ -97,7 +104,7 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
     stderr.writeln('name is already fine');
     return;
   } else {
-    await copyFile(new File(apkFilePath), new File(dst));
+    await copyFile(File(apkFilePath), File(dst));
     /*
     if (outFolderPath != null) {
       if (new Directory(outFolderPath).)
@@ -106,9 +113,7 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
     //await new File(apkFilePath).copy(dst);
 
   }
-  stdout.writeln('  size: ${new File(dst)
-      .statSync()
-      .size}');
+  stdout.writeln('  size: ${File(dst).statSync().size}');
 }
 
 Future nameIt(String apkFilePath, String manifestFilePath,
@@ -122,15 +127,15 @@ Future nameIt(String apkFilePath, String manifestFilePath,
   print(apkFilePath);
   print(manifestFilePath);
 
-  String xmlText = new File(manifestFilePath).readAsStringSync();
+  String xmlText = File(manifestFilePath).readAsStringSync();
   print(xmlText);
 
-  ManifestInfo info = new ManifestInfo(xmlText);
+  ManifestInfo info = ManifestInfo(xmlText);
 
   if (versionName == null) {
     versionName = info.versionName;
   }
 
   return copyApk(apkFilePath,
-      new ApkInfo(info.packageName, versionName, info.versionCodeName));
+      ApkInfo(info.packageName, versionName, info.versionCodeName));
 }

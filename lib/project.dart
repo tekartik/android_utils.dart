@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart' as utils;
 import 'package:tekartik_io_utils/io_utils_import.dart';
+import 'package:tekartik_build_utils/gradle/gradle.dart';
 
 class AndroidProject {
   String path;
@@ -10,10 +11,10 @@ class AndroidProject {
   AndroidProject(this.path);
 
   // target can be :app ot app
-  ProcessCmd buildApkCmd(String target) {
+  ProcessCmd buildApkCmd(String target, {String flavor}) {
     String gradleTarget = targetToGradleTarget(target);
-    ProcessCmd cmd = new ProcessCmd(
-        '$path/gradlew', ['$gradleTarget:assembleRelease'],
+    ProcessCmd cmd = ProcessCmd(
+        gradleExecutable, ['$gradleTarget:assemble${flavor}Release'],
         workingDirectory: path);
     return cmd;
   }
@@ -49,6 +50,8 @@ class AndroidProject {
   static const String modeDebug = "debug";
 
   static const String moduleApp = "app";
+
+  String get gradleExecutable => join(path, gradleShellExecutableFilename);
 
   // mode: debug/release
   String getApkPath({String flavor, String module, String mode}) {

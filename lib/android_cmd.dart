@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 
 ProcessCmd _adbCmd(List<String> args) {
-  return new ProcessCmd('adb', args);
+  return ProcessCmd('adb', args);
 }
 
 ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
@@ -28,7 +28,7 @@ const String defaultEmulatorSerialNumber = "emulator-5554";
 // adb -s emulator-5554 emu kill
 ProcessCmd adbKillEmulator({String emulatorName}) {
   emulatorName ??= defaultEmulatorSerialNumber;
-  return new ProcessCmd('adb', ['-s', emulatorName, 'emu', 'kill']);
+  return ProcessCmd('adb', ['-s', emulatorName, 'emu', 'kill']);
 }
 
 List<String> shellPsAdbArgs() {
@@ -60,5 +60,6 @@ ProcessCmd nameApkCommand({String flavor}) {
   } else {
     filename = join(flavor, "release", "app-${flavor}-release");
   }
-  return new ProcessCmd('apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
+  return ProcessCmd(
+      'apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
 }

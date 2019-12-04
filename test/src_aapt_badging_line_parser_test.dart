@@ -30,7 +30,7 @@ void defineTests() {
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19" />
 </manifest>
 ''';
-      ManifestInfo info = new ManifestInfo(xmlText);
+      ManifestInfo info = ManifestInfo(xmlText);
       expect(info.packageName, "io.bitswift.app");
       expect(info.versionName, "0.1.0");
       expect(info.versionCodeName, "1");
@@ -39,10 +39,9 @@ void defineTests() {
 
   group('badging_parser', () {
     test('parse', () {
-      // package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''
       ApkInfo apkInfo = parseBadgingLine(
-          "package: name='com.inventhys.elfinfo.app' versionCode='2' versionName='0.1' platformBuildVersionName=''");
-      expect(apkInfo.name, 'com.inventhys.elfinfo.app');
+          "package: name='com.test.app' versionCode='2' versionName='0.1' platformBuildVersionName=''");
+      expect(apkInfo.name, 'com.test.app');
       expect(apkInfo.versionCode, '2');
       expect(apkInfo.versionName, '0.1');
     });
