@@ -1,12 +1,10 @@
 @TestOn("vm")
-
 import 'package:dev_test/test.dart';
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
+
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
@@ -41,7 +39,7 @@ void defineTests() {
           verbose: true);
       expect(result.exitCode, 0);
     });
-  });
+  }, skip: !aaptSupported);
   group('bin_pub', () {
     test('apk_info', () async {
       ProcessResult result = await runCmd(
