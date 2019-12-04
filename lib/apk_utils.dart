@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
@@ -41,6 +42,11 @@ class ManifestInfo {
     }
   }
 }
+
+bool _aaptSupported;
+
+/// True if aapt si present and supported
+bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
 Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
   ProcessResult result = await run("aapt", ['dump', 'badging', apkFilePath],

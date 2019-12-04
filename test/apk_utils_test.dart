@@ -19,18 +19,20 @@ void defineTests() {
       // ignore: unnecessary_statements
       ApkInfo;
     });
-    test('getApkInfo', () async {
-      ApkInfo apkInfo =
-          await getApkInfo(join(inFolder, "app-release.apk"), verbose: true);
-      expect(apkInfo.name, 'com.tekartik.miniexp');
-      expect(apkInfo.versionCode, '2');
-      expect(apkInfo.versionName, '1.0.1');
-    });
+    group('aapt', () {
+      test('getApkInfo', () async {
+        ApkInfo apkInfo =
+            await getApkInfo(join(inFolder, "app-release.apk"), verbose: true);
+        expect(apkInfo.name, 'com.tekartik.miniexp');
+        expect(apkInfo.versionCode, '2');
+        expect(apkInfo.versionName, '1.0.1');
+      });
 
-    test('nameIt', () async {
-      String apkFilePath = join(inFolder, "app-release.apk");
-      await nameApk(apkFilePath,
-          outFolderPath: join(outFolder, joinAll(testDescriptions)));
-    });
+      test('nameIt', () async {
+        String apkFilePath = join(inFolder, "app-release.apk");
+        await nameApk(apkFilePath,
+            outFolderPath: join(outFolder, joinAll(testDescriptions)));
+      });
+    }, skip: !aaptSupported);
   });
 }
