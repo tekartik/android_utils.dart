@@ -2,6 +2,15 @@
 
 Android utilities
 
+## Setup
+
+dependency:
+  tekartik_android_utils:
+    git:
+      url: git://github.com/tekartik/android_utils.dart
+      ref: dart2
+    version: '>=0.1.0'
+    
 ## Activation
 
 ### From git repository

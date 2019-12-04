@@ -7,7 +7,6 @@ library apk_utils_test;
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
-import 'package:tekartik_android_utils/src/apk_info.dart';
 
 void main() => defineTests();
 
@@ -16,6 +15,10 @@ String outFolder = join(inFolder, "tmp");
 
 void defineTests() {
   group('apk_utils', () {
+    test('public', () {
+      // ignore: unnecessary_statements
+      ApkInfo;
+    });
     test('getApkInfo', () async {
       ApkInfo apkInfo =
           await getApkInfo(join(inFolder, "app-release.apk"), verbose: true);
