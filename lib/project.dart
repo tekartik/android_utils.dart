@@ -12,8 +12,8 @@ class AndroidProject {
 
   // target can be :app ot app
   ProcessCmd buildApkCmd(String target, {String flavor}) {
-    String gradleTarget = targetToGradleTarget(target);
-    ProcessCmd cmd = ProcessCmd(
+    var gradleTarget = targetToGradleTarget(target);
+    var cmd = ProcessCmd(
         gradleExecutable, ['$gradleTarget:assemble${flavor}Release'],
         workingDirectory: path);
     return cmd;
@@ -21,35 +21,35 @@ class AndroidProject {
 
   // target can be :app ot app
   Future nameApk(String target) {
-    String targetPath = targetToPath(target);
-    String baseTarget = basename(targetPath);
+    var targetPath = targetToPath(target);
+    var baseTarget = basename(targetPath);
     return utils.nameApk(join(path, targetPath, 'build', 'outputs', 'apk',
         '${baseTarget}-release.apk'));
   }
 
   static List<String> targetToParts(String target) {
-    List<String> parts = [];
-    List<String> segments = target.split(':');
-    for (String segment in segments) {
+    var parts = <String>[];
+    var segments = target.split(':');
+    for (var segment in segments) {
       parts.addAll(splitParts(segment));
     }
     return parts;
   }
 
   static String targetToGradleTarget(String target) {
-    List<String> parts = targetToParts(target);
+    var parts = targetToParts(target);
     return ':${parts.join(':')}';
   }
 
   String targetToPath(String target) {
-    List<String> parts = targetToParts(target);
+    var parts = targetToParts(target);
     return '${joinAll(parts)}';
   }
 
-  static const String modeRelease = "release";
-  static const String modeDebug = "debug";
+  static const String modeRelease = 'release';
+  static const String modeDebug = 'debug';
 
-  static const String moduleApp = "app";
+  static const String moduleApp = 'app';
 
   String get gradleExecutable => join(path, gradleShellExecutableFilename);
 
@@ -59,7 +59,7 @@ class AndroidProject {
     mode ??= modeRelease;
     if (flavor == null) {
       return join(
-          path, module, 'build', 'outputs', 'apk', mode, "$module-$mode.apk");
+          path, module, 'build', 'outputs', 'apk', mode, '$module-$mode.apk');
     } else {
       return join(path, 'app', 'build', 'outputs', 'apk', flavor, mode,
           '${module}-${flavor}-${mode}.apk');

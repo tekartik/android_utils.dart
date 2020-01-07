@@ -9,7 +9,7 @@ import 'package:tekartik_io_utils/io_utils_import.dart';
 
 const String _flagHelp = 'help';
 
-const String scriptName = "adb_device_os_version";
+const String scriptName = 'adb_device_os_version';
 
 Future main(List<String> args) async {
   var parser = ArgParser();
@@ -21,10 +21,10 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  bool help = results[_flagHelp] as bool;
+  var help = results[_flagHelp] as bool;
 
   void _usage() {
-    print("${scriptName}");
+    print('${scriptName}');
     print(parser.usage);
   }
 
@@ -33,23 +33,23 @@ Future main(List<String> args) async {
     return;
   }
 
-  int port = 5555;
+  var port = 5555;
 
-  ProcessCmd cmd = adbCmd(['-d', 'tcpip', '$port']);
+  var cmd = adbCmd(['-d', 'tcpip', '$port']);
   await runCmd(cmd, verbose: true);
 
   await sleep(2000);
 
   String ipAddress;
-  for (int i = 0; i < 5; i++) {
+  for (var i = 0; i < 5; i++) {
     cmd = adbCmd(['-d', 'shell', 'ip', '-f', 'inet', 'addr', 'show', 'wlan0']);
-    ProcessResult result = await runCmd(cmd, verbose: true);
-    for (String line in LineSplitter.split(result.stdout.toString())) {
-      String prefix = "inet ";
-      int index = line.indexOf(prefix);
+    var result = await runCmd(cmd, verbose: true);
+    for (var line in LineSplitter.split(result.stdout.toString())) {
+      var prefix = 'inet ';
+      var index = line.indexOf(prefix);
       if (index >= 0) {
         line = line.substring(index + prefix.length);
-        index = line.indexOf("/");
+        index = line.indexOf('/');
         ipAddress = line.substring(0, index);
         print(ipAddress);
         break;
@@ -63,7 +63,7 @@ Future main(List<String> args) async {
   }
 
   if (ipAddress == null) {
-    stderr.writeln("no ip address found");
+    stderr.writeln('no ip address found');
   } else {
     cmd = adbCmd(['connect', '$ipAddress:$port']);
     await runCmd(cmd, verbose: true);

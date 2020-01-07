@@ -10,20 +10,20 @@ ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
 List<String> adbMonkeyArgs(
     {String packageName, int count, int sysKeysPercent = 0}) {
   count ??= 50000;
-  List<String> args = ['shell', 'monkey'];
+  var args = <String>['shell', 'monkey'];
   if (packageName != null) {
     args.addAll(['-p', packageName]);
   }
   if (sysKeysPercent != null) {
-    args.addAll(['--pct-syskeys', "$sysKeysPercent"]);
+    args.addAll(['--pct-syskeys', '$sysKeysPercent']);
   }
 
-  args.addAll(["$count"]);
+  args.addAll(['$count']);
 
   return args;
 }
 
-const String defaultEmulatorSerialNumber = "emulator-5554";
+const String defaultEmulatorSerialNumber = 'emulator-5554';
 // http://stackoverflow.com/questions/20155376/android-stop-emulator-from-command-line
 // adb -s emulator-5554 emu kill
 ProcessCmd adbKillEmulator({String emulatorName}) {
@@ -47,7 +47,7 @@ class AdbTarget {
   ProcessCmd adbCmd(List<String> args) {
     args ??= [];
     if (serial != null) {
-      args.insertAll(0, ["-s", serial]);
+      args.insertAll(0, ['-s', serial]);
     }
     return _adbCmd(args);
   }
@@ -56,9 +56,9 @@ class AdbTarget {
 ProcessCmd nameApkCommand({String flavor}) {
   String filename;
   if (flavor == null) {
-    filename = "app-release";
+    filename = 'app-release';
   } else {
-    filename = join(flavor, "release", "app-${flavor}-release");
+    filename = join(flavor, 'release', 'app-${flavor}-release');
   }
   return ProcessCmd(
       'apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);

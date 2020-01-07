@@ -6,7 +6,6 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
-import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_common_utils/bool_utils.dart';
 
 const String _flagHelp = 'help';
@@ -23,11 +22,11 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  bool help = parseBool(results[_flagHelp]);
-  String versionName = results[_flagVersionName]?.toString();
+  var help = parseBool(results[_flagHelp]);
+  var versionName = results[_flagVersionName]?.toString();
 
   void _usage() {
-    print("apk_info <path_to_apk_file>");
+    print('apk_info <path_to_apk_file>');
     print(parser.usage);
   }
 
@@ -38,19 +37,19 @@ Future main(List<String> args) async {
 
   if (results.rest.length == 1) {
     // New just give the apk
-    String apkFilePath = results.rest[0];
+    var apkFilePath = results.rest[0];
     /*
     if (!await new File(apkFile).exists()) {
-      print("$apkFile does not exist");
+      print('$apkFile does not exist');
       exit(1);
     }
 
-    String content = "${apkFile}.content";
+    String content = '${apkFile}.content';
     try {
       await new Directory(content).delete(recursive: true);
     } catch (_) {}
 
-    ProcessResult result = await Process.run("aapt", ['dump', 'badging', apkFile]);
+    ProcessResult result = await Process.run('aapt', ['dump', 'badging', apkFile]);
     List<String> lines = LineSplitter.split(result.stdout.toString());
     ApkInfo apkInfo;
     for (String line in lines) {
@@ -63,21 +62,21 @@ Future main(List<String> args) async {
     if (apkInfo != null) {
       copyApk(apkFile, apkInfo);
     } else {
-      print("cannot read info on $apkFile");
+      print('cannot read info on $apkFile');
       exit(1);
     }
     */
-    ApkInfo apkInfo = await getApkInfo(apkFilePath);
+    var apkInfo = await getApkInfo(apkFilePath);
     print('name : ${apkInfo.name}');
     print('versionCode : ${apkInfo.versionCode}');
     print('versionName : ${apkInfo.versionName}');
 
-    //nameIt(apkFile, join(content, "AndroidManifest.xml"));
+    //nameIt(apkFile, join(content, 'AndroidManifest.xml'));
   } else {
     if (results.rest.length == 2) {
       await nameIt(results.rest[0], results.rest[1], versionName: versionName);
     } else {
-      print("Missing apk file name");
+      print('Missing apk file name');
       _usage();
     }
   }

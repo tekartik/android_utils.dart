@@ -9,7 +9,7 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 
 const String _flagHelp = 'help';
 
-const String scriptName = "kill_emu";
+const String scriptName = 'kill_emu';
 
 Future main(List<String> args) async {
   var parser = ArgParser();
@@ -20,10 +20,10 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  bool help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp]);
   void _usage() {
-    stdout.writeln("kill the android (qemu) emulator process(es)");
-    stdout.writeln("  ${scriptName}");
+    stdout.writeln('kill the android (qemu) emulator process(es)');
+    stdout.writeln('  ${scriptName}');
     print(parser.usage);
   }
 
@@ -37,20 +37,20 @@ Future main(List<String> args) async {
     await killAllCommandsByName('qemu-system-i386.exe');
     await killAllCommandsByName('qemu-system-x86_64.exe');
   } else {
-    await killAllCommandsByName("qemu");
+    await killAllCommandsByName('qemu');
   }
 
 /*
-  ProcessCmd cmd = new ProcessCmd("ps", ["x", "-o", "pid,cmd"]);
+  ProcessCmd cmd = new ProcessCmd('ps', ['x', '-o', 'pid,cmd']);
   ProcessResult processResult = await runCmd(cmd, commandVerbose: true);
   PsParser psParser = new PsParser(processResult.stdout.toString());
-  List<PsLine> lines = psParser.findByCmd("qemu");
+  List<PsLine> lines = psParser.findByCmd('qemu');
   if (lines.isEmpty) {
-    stderr.writeln("qemu process not found");
+    stderr.writeln('qemu process not found');
   } else {
     for (PsLine line in lines) {
       print(line);
-      ProcessCmd cmd = new ProcessCmd("kill", ["-9", "${line.pid}"]);
+      ProcessCmd cmd = new ProcessCmd('kill', ['-9', '${line.pid}']);
       await runCmd(cmd, verbose: true);
     }
   }

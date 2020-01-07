@@ -5,9 +5,9 @@ class ShellPsParser {
   List<PsLine> lines = [];
 
   ShellPsParser(String shellPsStdout) {
-    Iterable<String> lines = LineSplitter.split(shellPsStdout);
+    var lines = LineSplitter.split(shellPsStdout);
 
-    for (String line in lines) {
+    for (var line in lines) {
       if (header == null) {
         header = PsHeader(line);
       } else {
@@ -17,7 +17,7 @@ class ShellPsParser {
   }
 
   PsLine findByName(String name) {
-    for (PsLine line in lines) {
+    for (var line in lines) {
       try {
         if (line.name == name) {
           return line;
@@ -43,7 +43,7 @@ class PsHeader extends _PsLineBase {
 }
 
 PsHeader _defaultHeader =
-    PsHeader("USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME");
+    PsHeader('USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME');
 
 class PsLine extends _PsLineBase {
   PsHeader _header;
@@ -52,17 +52,17 @@ class PsLine extends _PsLineBase {
     _header = header ?? _defaultHeader;
   }
 
-  int get pid => int.parse(_getColumn("PID"));
+  int get pid => int.parse(_getColumn('PID'));
 
   String _getColumn(String name) {
-    int index = _header.findPartIndex(name);
+    var index = _header.findPartIndex(name);
     if (index != null && index >= 0) {
       return _parts[index];
     }
     return null;
   }
 
-  String get name => _parts[8]; //_getColumn("NAME");
+  String get name => _parts[8]; //_getColumn('NAME');
 // shell     7398  1310  1217116 16816 binder_thr a9529424 S com.android.commands.monkey
 
 }
@@ -77,5 +77,5 @@ class _PsLineBase {
   }
 
   @override
-  String toString() => _parts.join(" ");
+  String toString() => _parts.join(' ');
 }

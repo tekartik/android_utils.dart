@@ -20,13 +20,13 @@ void clean() => defaultClean();
 @Task()
 Future name() async {
   runDartScript('bin/apk_name_it.dart',
-      arguments: [join("test", "data", "app-release.apk")]);
+      arguments: [join('test', 'data', 'app-release.apk')]);
 }
 
 @Task()
 Future info() async {
   runDartScript('bin/apk_info.dart', arguments: [
-    join("test", "data", "app-release.apk"),
-    join("test", "data", "tmp")
+    join('test', 'data', 'app-release.apk'),
+    join('test', 'data', 'tmp')
   ]);
 }

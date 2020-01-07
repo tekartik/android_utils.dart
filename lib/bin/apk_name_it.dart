@@ -22,11 +22,11 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  bool help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp]);
   //String versionName = results[_flagVersionName];
 
   void _usage() {
-    print("apk_name_it <path_to_apk_file> [<dst_folder>]");
+    print('apk_name_it <path_to_apk_file> [<dst_folder>]');
     print(parser.usage);
   }
 
@@ -37,7 +37,7 @@ Future main(List<String> args) async {
 
   if (results.rest.isNotEmpty) {
     // New just give the apk
-    String apkFilePath = results.rest[0];
+    var apkFilePath = results.rest[0];
     String outFolderPath;
 
     if (results.rest.length > 1) {
@@ -45,16 +45,16 @@ Future main(List<String> args) async {
     }
     /*
     if (!await new File(apkFile).exists()) {
-      print("$apkFile does not exist");
+      print('$apkFile does not exist');
       exit(1);
     }
 
-    String content = "${apkFile}.content";
+    String content = '${apkFile}.content';
     try {
       await new Directory(content).delete(recursive: true);
     } catch (_) {}
 
-    ProcessResult result = await Process.run("aapt", ['dump', 'badging', apkFile]);
+    ProcessResult result = await Process.run('aapt', ['dump', 'badging', apkFile]);
     List<String> lines = LineSplitter.split(result.stdout.toString());
     ApkInfo apkInfo;
     for (String line in lines) {
@@ -67,7 +67,7 @@ Future main(List<String> args) async {
     if (apkInfo != null) {
       copyApk(apkFile, apkInfo);
     } else {
-      print("cannot read info on $apkFile");
+      print('cannot read info on $apkFile');
       exit(1);
     }
     */
@@ -75,14 +75,14 @@ Future main(List<String> args) async {
   }
 
   /*
-    //nameIt(apkFile, join(content, "AndroidManifest.xml"));
+    //nameIt(apkFile, join(content, 'AndroidManifest.xml'));
   } else {
     if (results.rest.length == 2) {
       nameIt(results.rest[0], results.rest[1], versionName: versionName);
     }
     */
   else {
-    print("Missing apk file name");
+    print('Missing apk file name');
     _usage();
   }
 }
