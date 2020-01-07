@@ -1,4 +1,4 @@
-@TestOn("vm")
+@TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
@@ -18,11 +18,11 @@ void defineTests() {
     });
 
     test('getApkPath', () {
-      String androidTopPath = '.';
-      AndroidProject project = AndroidProject(androidTopPath);
+      var androidTopPath = '.';
+      var project = AndroidProject(androidTopPath);
 
-      String flavor = "prod";
-      String sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',
+      var flavor = 'prod';
+      var sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',
           flavor, 'release', 'app-${flavor}-release.apk');
       expect(project.getApkPath(flavor: flavor), sourceApk);
 

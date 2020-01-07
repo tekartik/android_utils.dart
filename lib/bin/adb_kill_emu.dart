@@ -13,7 +13,7 @@ const String _flagHelp = 'help';
 //const String _flagVersionName = 'versionName';
 const String _optionEmulatorName = 'emulatorName';
 
-const String scriptName = "adb_kill_emu";
+const String scriptName = 'adb_kill_emu';
 
 Future main(List<String> args) async {
   var parser = ArgParser();
@@ -29,11 +29,11 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  bool help = parseBool(results[_flagHelp]);
-  String emulatorName = results[_optionEmulatorName]?.toString();
+  var help = parseBool(results[_flagHelp]);
+  var emulatorName = results[_optionEmulatorName]?.toString();
 
   void _usage() {
-    print("${scriptName} [<emulator_name>");
+    print('${scriptName} [<emulator_name>');
     print(parser.usage);
   }
 
@@ -42,6 +42,6 @@ Future main(List<String> args) async {
     return;
   }
 
-  ProcessCmd cmd = adbKillEmulator(emulatorName: emulatorName);
+  var cmd = adbKillEmulator(emulatorName: emulatorName);
   await runCmd(cmd, verbose: true);
 }

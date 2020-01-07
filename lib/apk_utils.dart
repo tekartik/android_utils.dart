@@ -24,18 +24,18 @@ class ManifestInfo {
 
   ManifestInfo(String xmlText) {
     var xml = parse(xmlText);
-    XmlElement manifestElement = xml.findElements("manifest").first;
-    for (XmlAttribute attribute in manifestElement.attributes) {
-      String name = attribute.name.toString();
+    var manifestElement = xml.findElements('manifest').first;
+    for (var attribute in manifestElement.attributes) {
+      var name = attribute.name.toString();
       //print(name);
       switch (name) {
-        case "package":
+        case 'package':
           packageName = attribute.value;
           break;
-        case "android:versionName":
+        case 'android:versionName':
           versionName = attribute.value;
           break;
-        case "android:versionCode":
+        case 'android:versionCode':
           versionCodeName = attribute.value;
           break;
       }
@@ -49,11 +49,11 @@ bool _aaptSupported;
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
 Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
-  ProcessResult result = await run("aapt", ['dump', 'badging', apkFilePath],
+  var result = await run('aapt', ['dump', 'badging', apkFilePath],
       commandVerbose: verbose);
-  Iterable<String> lines = LineSplitter.split(result.stdout.toString());
+  var lines = LineSplitter.split(result.stdout.toString());
   ApkInfo apkInfo;
-  for (String line in lines) {
+  for (var line in lines) {
     apkInfo = parseBadgingLine(line);
     if (apkInfo != null) {
       break;
@@ -64,17 +64,17 @@ Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
 
 Future nameApk(String apkFilePath, {String outFolderPath}) async {
   if (!File(apkFilePath).existsSync()) {
-    throw ("$apkFilePath does not exist");
+    throw ('$apkFilePath does not exist');
   }
 
-  String content = "${apkFilePath}.content";
+  var content = '${apkFilePath}.content';
   try {
     await Directory(content).delete(recursive: true);
   } catch (_) {}
 
   /*
   ProcessResult result =
-      await run("aapt", ['dump', 'badging', apkFile], commandVerbose: true);
+      await run('aapt', ['dump', 'badging', apkFile], commandVerbose: true);
   List<String> lines = LineSplitter.split(result.stdout.toString());
   for (String line in lines) {
     apkInfo = parseBadgingLine(line);
@@ -84,21 +84,21 @@ Future nameApk(String apkFilePath, {String outFolderPath}) async {
   }
 
   */
-  ApkInfo apkInfo = await getApkInfo(apkFilePath);
+  var apkInfo = await getApkInfo(apkFilePath);
 
   if (apkInfo != null) {
     await copyApk(apkFilePath, apkInfo, outFolderPath: outFolderPath);
   } else {
-    throw ("cannot read info on $apkFilePath");
+    throw ('cannot read info on $apkFilePath');
   }
 }
 
 Future copyApk(String apkFilePath, ApkInfo apkInfo,
     {String outFolderPath}) async {
-  String dstFileName =
-      "${apkInfo.name}-${apkInfo.versionName}-${apkInfo.versionCode}.apk";
+  var dstFileName =
+      '${apkInfo.name}-${apkInfo.versionName}-${apkInfo.versionCode}.apk';
 
-  String dst = join(outFolderPath ?? dirname(apkFilePath), dstFileName);
+  var dst = join(outFolderPath ?? dirname(apkFilePath), dstFileName);
   stdout.writeln('naming: $dst');
   if (absolute(apkFilePath) == absolute(dstFileName)) {
     stderr.writeln('name is already fine');
@@ -118,23 +118,21 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
 
 Future nameIt(String apkFilePath, String manifestFilePath,
     {String versionName}) {
-  if (extension(apkFilePath) != ".apk") {
-    throw "$apkFilePath is not an android .apk file";
+  if (extension(apkFilePath) != '.apk') {
+    throw '$apkFilePath is not an android .apk file';
   }
-  if (extension(manifestFilePath) != ".xml") {
-    throw "$manifestFilePath is not an android .xml file";
+  if (extension(manifestFilePath) != '.xml') {
+    throw '$manifestFilePath is not an android .xml file';
   }
   print(apkFilePath);
   print(manifestFilePath);
 
-  String xmlText = File(manifestFilePath).readAsStringSync();
+  var xmlText = File(manifestFilePath).readAsStringSync();
   print(xmlText);
 
-  ManifestInfo info = ManifestInfo(xmlText);
+  var info = ManifestInfo(xmlText);
 
-  if (versionName == null) {
-    versionName = info.versionName;
-  }
+  versionName ??= info.versionName;
 
   return copyApk(apkFilePath,
       ApkInfo(info.packageName, versionName, info.versionCodeName));

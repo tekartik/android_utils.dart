@@ -15,7 +15,7 @@ const String _flagHelp = 'help';
 //const String _flagVersionName = 'versionName';
 const String _optionSerialNumber = 'serial';
 
-const String scriptName = "adb_kill_monkey";
+const String scriptName = 'adb_kill_monkey';
 
 Future main(List<String> args) async {
   var parser = ArgParser();
@@ -30,11 +30,11 @@ Future main(List<String> args) async {
   parser.parse(args);
   //bool verbose = false;
 
-  bool help = parseBool(results[_flagHelp]);
-  String serialNumber = results[_optionSerialNumber]?.toString();
+  var help = parseBool(results[_flagHelp]);
+  var serialNumber = results[_optionSerialNumber]?.toString();
 
   void _usage() {
-    print("${scriptName} [-s <serial_number>]");
+    print('${scriptName} [-s <serial_number>]');
     print(parser.usage);
   }
 
@@ -43,16 +43,15 @@ Future main(List<String> args) async {
     return;
   }
 
-  AdbTarget target = AdbTarget(serial: serialNumber);
-  ProcessCmd cmd = target.adbCmd(shellPsAdbArgs());
-  ProcessResult result =
-      await runCmd(cmd, verbose: false, commandVerbose: true);
-  ShellPsParser shellPsParser = ShellPsParser(result.stdout.toString());
+  var target = AdbTarget(serial: serialNumber);
+  var cmd = target.adbCmd(shellPsAdbArgs());
+  var result = await runCmd(cmd, verbose: false, commandVerbose: true);
+  var shellPsParser = ShellPsParser(result.stdout.toString());
 
-  String processName = "com.android.commands.monkey";
-  PsLine psLine = shellPsParser.findByName(processName);
+  var processName = 'com.android.commands.monkey';
+  var psLine = shellPsParser.findByName(processName);
   if (psLine == null) {
-    stderr.writeln("Process ${processName} not found");
+    stderr.writeln('Process ${processName} not found');
   } else {
     stdout.writeln(psLine);
     cmd = target.adbCmd(shellKill(psLine.pid));

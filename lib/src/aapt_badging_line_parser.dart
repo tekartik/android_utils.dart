@@ -1,11 +1,11 @@
 import 'apk_info.dart';
 
 String _get(String line, String key) {
-  String prefix = " ${key}='";
-  int index = line.indexOf(prefix);
+  var prefix = " ${key}='";
+  var index = line.indexOf(prefix);
   if (index != -1) {
-    String value = line.substring(index + prefix.length);
-    int endIndex = value.indexOf("'");
+    var value = line.substring(index + prefix.length);
+    var endIndex = value.indexOf("'");
     if (endIndex != -1) {
       return value.substring(0, endIndex);
     }
@@ -15,9 +15,9 @@ String _get(String line, String key) {
 
 ApkInfo parseBadgingLine(String line) {
   if (line.startsWith('package:')) {
-    String name = _get(line, "name");
-    String versionName = _get(line, "versionName");
-    String versionCode = _get(line, "versionCode");
+    var name = _get(line, 'name');
+    var versionName = _get(line, 'versionName');
+    var versionCode = _get(line, 'versionCode');
 
     if (name != null && versionName != null && versionCode != null) {
       return ApkInfo(name, versionName, versionCode);
