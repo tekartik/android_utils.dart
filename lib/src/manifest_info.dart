@@ -1,5 +1,4 @@
 import 'package:tekartik_android_utils/aab_utils.dart';
-import 'package:tekartik_build_utils/android/android_import.dart';
 import 'package:xml/xml.dart';
 
 class ManifestInfo extends ApkInfo {
