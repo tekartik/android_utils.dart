@@ -1,5 +1,5 @@
 name: tekartik_android_utils
-version: 0.4.4
+version: 0.4.5
 description: Android utilities
 environment:
   sdk: '>=2.4.0 <3.0.0'

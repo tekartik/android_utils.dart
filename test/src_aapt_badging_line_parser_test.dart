@@ -5,14 +5,14 @@
 library apk_utils_test;
 
 import 'package:dev_test/test.dart';
-import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
+import 'package:tekartik_android_utils/src/manifest_info.dart';
 
 void main() => defineTests();
 
 void defineTests() {
   group('main tests', () {
-    test('calculate', () {
+    test('aapt', () {
       var xmlText = '''
 <?xml version='1.0' encoding='utf-8'?>
 <manifest android:hardwareAccelerated="true" android:versionCode="1" android:versionName="0.1.0" package="io.bitswift.app" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -29,10 +29,29 @@ void defineTests() {
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19" />
 </manifest>
 ''';
-      var info = ManifestInfo(xmlText);
-      expect(info.packageName, 'io.bitswift.app');
+      var info = ManifestInfo()..fromXml(xmlText);
+      expect(info.name, 'io.bitswift.app');
       expect(info.versionName, '0.1.0');
-      expect(info.versionCodeName, '1');
+      expect(info.versionCode, '1');
+    });
+    test('aab', () {
+      var xmlText = '''
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="29" android:compileSdkVersionCodename="10" android:versionCode="2" android:versionName="1.0.1" package="com.tekartik.miniexp" platformBuildVersionCode="29" platformBuildVersionName="10">
+  <uses-sdk android:minSdkVersion="25" android:targetSdkVersion="29"/>
+  <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:name="com.tekartik.miniexp.App" android:supportsRtl="true">
+    <activity android:name="com.tekartik.miniexp.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+  </application>
+</manifest>
+''';
+      var info = ManifestInfo()..fromXml(xmlText);
+      expect(info.name, 'com.tekartik.miniexp');
+      expect(info.versionName, '1.0.1');
+      expect(info.versionCode, '2');
     });
   });
 
