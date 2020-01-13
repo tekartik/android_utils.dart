@@ -16,17 +16,18 @@ String outFolder = join(inFolder, 'tmp');
 
 void defineTests() {
   group('aab_utils', () {
-    test('version', () async {
-      // print(Platform.environment);
-      await run('bundletool version');
-    });
     test('public', () {
       // ignore: unnecessary_statements
       AabInfo;
       // ignore: unnecessary_statements
       getAabInfo;
     });
-    group('aapt', () {
+    group('bundletool', () {
+      test('version', () async {
+        // print(Platform.environment);
+        await run('bundletool version');
+      });
+
       test('getAabInfo', () async {
         var manifestInfo =
             await getAabInfo(join(inFolder, 'app-release.aab'), verbose: true);
