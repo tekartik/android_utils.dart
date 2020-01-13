@@ -3,7 +3,7 @@ class ApkInfo {
   String versionName;
   String versionCode;
 
-  ApkInfo(this.name, this.versionName, this.versionCode);
+  ApkInfo({this.name, this.versionName, this.versionCode});
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{

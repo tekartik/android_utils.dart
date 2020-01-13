@@ -20,7 +20,8 @@ ApkInfo parseBadgingLine(String line) {
     var versionCode = _get(line, 'versionCode');
 
     if (name != null && versionName != null && versionCode != null) {
-      return ApkInfo(name, versionName, versionCode);
+      return ApkInfo(
+          name: name, versionName: versionName, versionCode: versionCode);
     }
   }
   return null;

@@ -11,37 +11,12 @@ import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/which.dart';
+import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
-import 'package:xml/xml.dart';
+
 export 'package:tekartik_android_utils/src/apk_info.dart';
-
-class ManifestInfo {
-  String versionName;
-  String packageName;
-  String versionCodeName;
-
-  ManifestInfo(String xmlText) {
-    var xml = parse(xmlText);
-    var manifestElement = xml.findElements('manifest').first;
-    for (var attribute in manifestElement.attributes) {
-      var name = attribute.name.toString();
-      //print(name);
-      switch (name) {
-        case 'package':
-          packageName = attribute.value;
-          break;
-        case 'android:versionName':
-          versionName = attribute.value;
-          break;
-        case 'android:versionCode':
-          versionCodeName = attribute.value;
-          break;
-      }
-    }
-  }
-}
 
 bool _aaptSupported;
 
@@ -130,10 +105,14 @@ Future nameIt(String apkFilePath, String manifestFilePath,
   var xmlText = File(manifestFilePath).readAsStringSync();
   print(xmlText);
 
-  var info = ManifestInfo(xmlText);
+  var info = AabInfo()..fromXml(xmlText);
 
   versionName ??= info.versionName;
 
-  return copyApk(apkFilePath,
-      ApkInfo(info.packageName, versionName, info.versionCodeName));
+  return copyApk(
+      apkFilePath,
+      ApkInfo(
+          name: info.name,
+          versionName: versionName,
+          versionCode: info.versionCode));
 }
