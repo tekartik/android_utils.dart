@@ -44,13 +44,14 @@ const _noTrack = '_no_track_';
 
 /// Upload aabs
 Future uploadBundle(LocalAab localAab) async {
-  return await manageBundle(localAab, options: _noPublishOptions);
+  return await manageBundle(localAab, publishOptions: _noPublishOptions);
 }
 
 /// Publish to internal by default
 Future publishBundle(LocalAab localAab, {String track}) async {
   track ??= _internalTrack;
-  return await manageBundle(localAab, options: PublishOptions(track: track));
+  return await manageBundle(localAab,
+      publishOptions: PublishOptions(track: track));
 }
 
 class UploadOptions {
@@ -72,9 +73,9 @@ const _internalTrack = 'internal';
 Future manageBundle(LocalAab localAab,
     {String serviceAccountPath,
     UploadOptions uploadOptions,
-    PublishOptions options}) async {
+    PublishOptions publishOptions}) async {
   uploadOptions ??= _noUploadOptions;
-  options ??= _noPublishOptions;
+  publishOptions ??= _noPublishOptions;
   await localAab.init();
 
   ServiceAccountCredentials credentials;
@@ -161,7 +162,7 @@ Future manageBundle(LocalAab localAab,
     }
 
     var file = File(localAab.path);
-    var size = (await file.stat()).size;
+    var size = file.statSync().size;
     var media = Media(file.openRead(), size);
 
     int versionCode;
@@ -184,6 +185,7 @@ Future manageBundle(LocalAab localAab,
           ..versionCodes = [versionCode.toString()]
           ..status = 'completed'
       ]; // v2:versionCodes = [versionCode];
+      print('updating track: ${track.releases.first.toJson()}');
       await publish.edits.tracks
           .update(track, packageName, appEdit.id, trackName);
     }
@@ -191,8 +193,8 @@ Future manageBundle(LocalAab localAab,
     print('uploaded');
 
     // await publishTrack('internal'); // 'alpha'
-    if (options != _noPublishOptions) {
-      await publishTrack(options.track);
+    if (publishOptions != _noPublishOptions) {
+      await publishTrack(publishOptions.track);
     }
 
     await publish.edits.validate(packageName, editId);
