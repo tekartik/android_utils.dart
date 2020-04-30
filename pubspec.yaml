@@ -23,7 +23,7 @@ dependencies:
     version: '>=0.2.2'
   googleapis_auth: any
   googleapis: any
-  process_run: '>=0.10.4+1'
+  process_run: '>=0.10.9-dev.1'
   glob: any
 #  tekartik_build_utils:
 #    git: git://github.com/tekartik/build_utils.dart
