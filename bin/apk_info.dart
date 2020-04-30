@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 library tekartik_script.bin.apk_info;
 
 import 'dart:async';
