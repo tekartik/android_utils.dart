@@ -6,7 +6,7 @@ import 'dart:io';
 
 import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' as commons;
 import 'package:args/args.dart';
-import 'package:googleapis/androidpublisher/v2.dart';
+import 'package:googleapis/androidpublisher/v3.dart';
 import 'package:googleapis/plus/v1.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
@@ -136,10 +136,16 @@ Future main(List<String> args) async {
           print('uploaded');
           print('versionCode: ${apk.versionCode}');
 
-          var track = Track()..versionCodes = [apk.versionCode];
+          var track = Track();
+          // track.track = trackName;
+          track.releases = [
+            TrackRelease()
+              ..versionCodes = [apk.versionCode.toString()]
+              ..status = 'completed'
+          ]; // v2:versionCodes = [versionCode];
           track = await api.edits.tracks
               .update(track, packageName, appEdit.id, alphaTrackName);
-          print('versionCodes: ${[track.versionCodes]}');
+          print('versionCodes: ${track.releases.first.versionCodes}');
 
           await api.edits.commit(packageName, appEdit.id);
           print('commited');
