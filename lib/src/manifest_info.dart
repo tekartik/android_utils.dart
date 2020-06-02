@@ -4,7 +4,7 @@ import 'package:xml/xml.dart';
 class ManifestInfo extends ApkInfo {
   void fromXml(String xmlText) {
     // devPrint(xmlText);
-    var xml = parse(xmlText);
+    var xml = XmlDocument.parse(xmlText);
     var manifestElement = xml.findElements('manifest').first;
     for (var attribute in manifestElement.attributes) {
       var name = attribute.name.toString();
