@@ -6,12 +6,11 @@ import 'package:process_run/shell_run.dart';
 // ignore: implementation_imports
 import 'package:process_run/src/shell_utils.dart'
     show shellEnvironment, envPathSeparator, envPathKey;
-import 'package:tekartik_build_utils/common_import.dart';
-import 'package:tekartik_common_utils/version_utils.dart';
-
 import 'package:process_run/src/shell_utils.dart' // ignore: implementation_imports
     show
         shellSplit;
+import 'package:tekartik_build_utils/common_import.dart';
+import 'package:tekartik_common_utils/version_utils.dart';
 
 /// Initialized using [initAndroidBuildEnvironment]
 /// Valid actions are composed of a verb and an optional direct object:
@@ -22,7 +21,10 @@ import 'package:process_run/src/shell_utils.dart' // ignore: implementation_impo
 /// - create avd          : Creates a new Android Virtual Device.
 /// -   move avd          : Moves or renames an Android Virtual Device.
 /// - delete avd          : Deletes an Android Virtual Device.
-String avdmanager;
+// String avdmanager;
+
+/// Initialized using [initAndroidBuildEnvironment]
+// String adb;
 
 abstract class AndroidBuildContext {
   String get androidStudioPath;
@@ -181,8 +183,10 @@ Future<void> initAndroidBuildEnvironment({int sdkVersion}) async {
       shellEnvironmentPrependPath(context.androidSdkBuildToolsPath);
     }
     if (context.androidSdkToolsPath != null) {
-      avdmanager =
-          shellArgument(join(context.androidSdkToolsPath, 'bin', 'avdmanager'));
+      shellEnvironmentPrependPath(join(context.androidSdkToolsPath, 'bin'));
+    }
+    if (context.androidSdkPlatformToolsPath != null) {
+      shellEnvironmentPrependPath(join(context.androidSdkPlatformToolsPath));
     }
   }();
 }

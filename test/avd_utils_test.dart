@@ -4,20 +4,26 @@ library tekartik_android_util.test.avd_utils_test;
 import 'dart:convert';
 
 import 'package:dev_test/test.dart';
+import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/avd_utils.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
 
 void main() {
-  group('build_utils', () {
+  group('avd_utils', () {
     setUpAll(() async {
       await initAndroidBuildEnvironment();
     });
     test('avdmanager', () async {
-      if (avdmanager != null) {
+      if (whichSync('avdmanager') != null) {
         var avdInfos = await getAvdInfos();
         expect(avdInfos, const TypeMatcher<List>());
+        // await run('$avdmanager list');
+        // await run('$avdmanager list avd');
+        // await run('$avdmanager list target');
+        // await run('$avdmanager list device');
       }
     }, skip: true);
+
     test('parse avdmanager output', () {
       var output = '''
     Name: Nexus_4_API_25

@@ -78,6 +78,6 @@ List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
 
 /// [initAndroidBuildEnvironment] must have been called first
 Future<List<AvdInfo>> getAvdInfos() async {
-  var lines = (await run('$avdmanager list avd')).outLines;
+  var lines = (await run('avdmanager list avd')).outLines;
   return avdInfosParseLines(lines);
 }
