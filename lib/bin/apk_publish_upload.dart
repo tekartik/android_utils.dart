@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' as commons;
 import 'package:args/args.dart';
 import 'package:googleapis/androidpublisher/v3.dart';
-import 'package:googleapis/plus/v1.dart';
+import 'package:googleapis/people/v1.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_io_auth_utils/io_auth_utils.dart';
@@ -101,8 +101,8 @@ Future main(List<String> args) async {
         var authClient = await authClientInfo.getClient(scopes);
 
         try {
-          var plusApi = PlusApi(authClient);
-          var person = await plusApi.people.get('me');
+          var peopleApi = PeopleApi(authClient);
+          var person = await peopleApi.people.get('me');
           print(person.toJson());
         } catch (e) {
           stderr.writeln('PlusApi error $e');
