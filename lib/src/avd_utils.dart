@@ -18,25 +18,28 @@ List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
 
   void validatePreviousValue() {
     if (avdInfo != null && key != null && value != null) {
-      switch (key) {
-        case 'name':
-          avdInfo.name = value;
-          break;
-        case 'device':
-          avdInfo.device = value;
-          break;
-        case 'path':
-          avdInfo.path = value;
-          break;
-        case 'target':
-          avdInfo.target = value;
-          break;
-        case 'skin':
-          avdInfo.skin = value;
-          break;
-        case 'sdcard':
-          avdInfo.sdCard = value;
-          break;
+      // We expect the name first
+      if (avdInfo.name != null || key == 'name') {
+        switch (key) {
+          case 'name':
+            avdInfo.name = value;
+            break;
+          case 'device':
+            avdInfo.device = value;
+            break;
+          case 'path':
+            avdInfo.path = value;
+            break;
+          case 'target':
+            avdInfo.target = value;
+            break;
+          case 'skin':
+            avdInfo.skin = value;
+            break;
+          case 'sdcard':
+            avdInfo.sdCard = value;
+            break;
+        }
       }
       key = null;
       value = null;

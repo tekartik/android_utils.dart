@@ -49,6 +49,18 @@ void main() {
       var avdInfo = avdInfos.first;
       expect(avdInfo.name, 'Nexus_4_API_25');
       expect(avdInfo.skin, 'nexus_4');
+
+      output = '''
+    Skin: Dummy content before
+    Name: Nexus_4_API_25
+  Device: Nexus 4 (Google)
+  ''';
+      lines = LineSplitter.split(output).toList();
+      avdInfos = avdInfosParseLines(lines);
+      expect(avdInfos.length, 1);
+      avdInfo = avdInfos.first;
+      expect(avdInfo.name, 'Nexus_4_API_25');
+      expect(avdInfo.skin, isNull);
     });
   });
 }

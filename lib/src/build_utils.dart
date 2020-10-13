@@ -68,6 +68,7 @@ Future<AndroidBuildContext> getAndroidBuildContent({int sdkVersion}) async {
   String asDir;
   String sdkDir;
 
+  // devPrint(shellEnvironment);
   // Try env var
   var envAndroidSdkRoot = shellEnvironment['ANDROID_SDK_ROOT'];
   if (envAndroidSdkRoot != null) {
@@ -105,7 +106,14 @@ Future<AndroidBuildContext> getAndroidBuildContent({int sdkVersion}) async {
   }
   if (Platform.isMacOS) {
     asDirs.addAll(['/Applications/Android Studio.app/Contents']);
-    sdkDirs.addAll(['/Users/alex/Library/Android/sdk']);
+    sdkDirs.addAll([join(userHomePath, 'Library', 'Android', 'sdk')]);
+  }
+  if (Platform.isWindows) {
+    asDirs.addAll(['C:\\Program Files\\Android\\Android Studio']);
+    var localAppData = shellEnvironment['LOCALAPPDATA'];
+    if (localAppData != null) {
+      sdkDirs.addAll([join(localAppData, 'Android', 'Sdk')]);
+    }
   }
 
   for (var dir in asDirs) {
