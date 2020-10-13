@@ -188,6 +188,10 @@ Future<void> initAndroidBuildEnvironment({int sdkVersion}) async {
     if (context.androidSdkPlatformToolsPath != null) {
       shellEnvironmentPrependPath(join(context.androidSdkPlatformToolsPath));
     }
+    // emulator
+    if (context.androidSdkPath != null) {
+      shellEnvironmentPrependPath(join(context.androidSdkPath, 'emulator'));
+    }
   }();
 }
 
