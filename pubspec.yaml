@@ -22,7 +22,7 @@ dependencies:
     version: '>=0.2.2'
   googleapis_auth: any
   googleapis: any
-  process_run: '>=0.11.0+2'
+  process_run: '>=0.11.2-dev.1'
   glob: any
   xml: '>=4.0.0'
 #  tekartik_build_utils:
