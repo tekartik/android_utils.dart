@@ -35,3 +35,4 @@ tmp/
 /.local/
 
 /test/data/com.tekartik.miniexp*
+/.local/
