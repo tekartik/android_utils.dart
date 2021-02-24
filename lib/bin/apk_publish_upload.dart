@@ -15,7 +15,7 @@ import 'package:tekartik_io_utils/io_utils_import.dart';
 
 final List<String> scopes = [
   //emailScope,
-  AndroidpublisherApi.AndroidpublisherScope
+  AndroidPublisherApi.androidpublisherScope
 ]; //['email'];
 
 const String alphaTrackName = 'alpha';
@@ -101,14 +101,14 @@ Future main(List<String> args) async {
         var authClient = await authClientInfo.getClient(scopes);
 
         try {
-          var peopleApi = PeopleApi(authClient);
+          var peopleApi = PeopleServiceApi(authClient);
           var person = await peopleApi.people.get('me');
           print(person.toJson());
         } catch (e) {
           stderr.writeln('PlusApi error $e');
         }
 
-        var api = AndroidpublisherApi(authClient);
+        var api = AndroidPublisherApi(authClient);
         /*
         String packageName = 'com.tekartik.buvettekpcm';
         AppEdit appEdit = await api.edits.insert(null, packageName);
