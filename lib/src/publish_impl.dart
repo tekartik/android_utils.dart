@@ -9,7 +9,7 @@ import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
 //import 'package:googleapis'
 
-const _scopes = [AndroidpublisherApi.AndroidpublisherScope];
+const _scopes = [AndroidPublisherApi.androidpublisherScope];
 
 class LocalAab {
   String path;
@@ -101,7 +101,7 @@ Future manageBundle(LocalAab localAab,
     throw exception;
   }
   var client = await clientViaServiceAccount(credentials, _scopes);
-  var publish = AndroidpublisherApi(client);
+  var publish = AndroidPublisherApi(client);
 
   var appEdit = AppEdit();
   var packageName = localAab.packageName;

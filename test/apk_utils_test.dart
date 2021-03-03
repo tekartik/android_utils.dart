@@ -13,6 +13,9 @@ void main() => defineTests();
 String inFolder = join('test', 'data');
 String outFolder = join(inFolder, 'tmp');
 
+/// Apk for testing
+var testAppkFilePath = join(inFolder, 'app-release.apk');
+
 void defineTests() {
   group('apk_utils', () {
     test('public', () {

@@ -17,6 +17,7 @@ import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
 export 'package:tekartik_android_utils/src/apk_info.dart';
+export 'src/bin/keytool_io.dart' show apkExtractSha1Digest;
 
 bool _aaptSupported;
 
