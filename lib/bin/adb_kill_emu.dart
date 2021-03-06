@@ -33,7 +33,7 @@ Future main(List<String> args) async {
   var emulatorName = results[_optionEmulatorName]?.toString();
 
   void _usage() {
-    print('${scriptName} [<emulator_name>');
+    print('$scriptName [<emulator_name>');
     print(parser.usage);
   }
 

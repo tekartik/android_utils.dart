@@ -23,7 +23,7 @@ void defineTests() {
 
       var flavor = 'prod';
       var sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',
-          flavor, 'release', 'app-${flavor}-release.apk');
+          flavor, 'release', 'app-$flavor-release.apk');
       expect(project.getApkPath(flavor: flavor), sourceApk);
 
       expect(

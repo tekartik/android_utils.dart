@@ -24,7 +24,7 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp]);
 
   void _usage() {
-    print('${scriptName}');
+    print('$scriptName');
     print(parser.usage);
   }
 
