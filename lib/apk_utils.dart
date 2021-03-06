@@ -25,7 +25,8 @@ bool _aaptSupported;
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
 Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
-  var result = await run('aapt', ['dump', 'badging', apkFilePath],
+  var result = await runExecutableArguments(
+      'aapt', ['dump', 'badging', apkFilePath],
       commandVerbose: verbose);
   var lines = LineSplitter.split(result.stdout.toString());
   ApkInfo apkInfo;
@@ -43,7 +44,7 @@ Future nameApk(String apkFilePath, {String outFolderPath}) async {
     throw ('$apkFilePath does not exist');
   }
 
-  var content = '${apkFilePath}.content';
+  var content = '$apkFilePath.content';
   try {
     await Directory(content).delete(recursive: true);
   } catch (_) {}

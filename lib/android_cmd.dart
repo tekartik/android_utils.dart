@@ -36,7 +36,7 @@ List<String> shellPsAdbArgs() {
 }
 
 List<String> shellKill(int pid) {
-  return ['shell', 'kill', '${pid}'];
+  return ['shell', 'kill', '$pid'];
 }
 
 class AdbTarget {
@@ -58,7 +58,7 @@ ProcessCmd nameApkCommand({String flavor}) {
   if (flavor == null) {
     filename = 'app-release';
   } else {
-    filename = join(flavor, 'release', 'app-${flavor}-release');
+    filename = join(flavor, 'release', 'app-$flavor-release');
   }
   return ProcessCmd(
       'apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);

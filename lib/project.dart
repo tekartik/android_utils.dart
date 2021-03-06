@@ -1,9 +1,9 @@
-import 'package:fs_shim/utils/part.dart';
+import 'package:fs_shim/utils/path.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart' as utils;
-import 'package:tekartik_io_utils/io_utils_import.dart';
 import 'package:tekartik_build_utils/gradle/gradle.dart';
+import 'package:tekartik_io_utils/io_utils_import.dart';
 
 class AndroidProject {
   String path;
@@ -24,14 +24,14 @@ class AndroidProject {
     var targetPath = targetToPath(target);
     var baseTarget = basename(targetPath);
     return utils.nameApk(join(path, targetPath, 'build', 'outputs', 'apk',
-        '${baseTarget}-release.apk'));
+        '$baseTarget-release.apk'));
   }
 
   static List<String> targetToParts(String target) {
     var parts = <String>[];
     var segments = target.split(':');
     for (var segment in segments) {
-      parts.addAll(splitParts(segment));
+      parts.addAll(contextPathSplit(context, segment));
     }
     return parts;
   }
@@ -62,7 +62,7 @@ class AndroidProject {
           path, module, 'build', 'outputs', 'apk', mode, '$module-$mode.apk');
     } else {
       return join(path, 'app', 'build', 'outputs', 'apk', flavor, mode,
-          '${module}-${flavor}-${mode}.apk');
+          '$module-$flavor-$mode.apk');
     }
   }
 }

@@ -22,7 +22,7 @@ bool get bundleToolSupported =>
 class AabInfo extends ManifestInfo {}
 
 Future<AabInfo> getAabInfo(String aabFilePath, {bool verbose}) async {
-  var result = await run(
+  var result = await runExecutableArguments(
       'bundletool', ['dump', 'manifest', '--bundle', aabFilePath],
       commandVerbose: verbose);
   var lines = result.stdout.toString().trim();

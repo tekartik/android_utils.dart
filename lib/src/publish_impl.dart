@@ -95,7 +95,7 @@ Future manageBundle(LocalAab localAab,
   }
   if (credentials == null) {
     if (!serviceAccountFileFound) {
-      stderr.writeln('No service account file found in ${serviceAccountFile}');
+      stderr.writeln('No service account file found in $serviceAccountFile');
     }
     print(exception);
     throw exception;
@@ -113,7 +113,7 @@ Future manageBundle(LocalAab localAab,
       print(track.track);
     }
 
-    print('package: ${packageName}, versionCode: ${localAab.versionCode}');
+    print('package: $packageName, versionCode: ${localAab.versionCode}');
     // Search in apks
     var apkListResponse =
         await publish.edits.apks.list(packageName, appEdit.id);
@@ -167,13 +167,13 @@ Future manageBundle(LocalAab localAab,
 
     int versionCode;
     if (uploadOptions != _noUploadOptions) {
-      print('uploading: $size bytes ${localAab}');
+      print('uploading: $size bytes $localAab');
       var aab = await publish.edits.bundles
           .upload(packageName, editId, uploadMedia: media);
       print(aab.versionCode);
       versionCode = aab.versionCode;
     } else {
-      print('publishing ${localAab}');
+      print('publishing $localAab');
       versionCode = localAab.versionCode;
     }
 

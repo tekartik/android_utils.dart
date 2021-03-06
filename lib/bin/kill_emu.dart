@@ -23,7 +23,7 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp]);
   void _usage() {
     stdout.writeln('kill the android (qemu) emulator process(es)');
-    stdout.writeln('  ${scriptName}');
+    stdout.writeln('  $scriptName');
     print(parser.usage);
   }
 

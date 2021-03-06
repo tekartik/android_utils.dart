@@ -1,7 +1,7 @@
 import 'apk_info.dart';
 
 String _get(String line, String key) {
-  var prefix = " ${key}='";
+  var prefix = " $key='";
   var index = line.indexOf(prefix);
   if (index != -1) {
     var value = line.substring(index + prefix.length);

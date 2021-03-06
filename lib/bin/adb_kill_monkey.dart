@@ -34,7 +34,7 @@ Future main(List<String> args) async {
   var serialNumber = results[_optionSerialNumber]?.toString();
 
   void _usage() {
-    print('${scriptName} [-s <serial_number>]');
+    print('$scriptName [-s <serial_number>]');
     print(parser.usage);
   }
 
@@ -51,7 +51,7 @@ Future main(List<String> args) async {
   var processName = 'com.android.commands.monkey';
   var psLine = shellPsParser.findByName(processName);
   if (psLine == null) {
-    stderr.writeln('Process ${processName} not found');
+    stderr.writeln('Process $processName not found');
   } else {
     stdout.writeln(psLine);
     cmd = target.adbCmd(shellKill(psLine.pid));
