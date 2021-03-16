@@ -1,5 +1,5 @@
 import 'package:process_run/shell.dart';
-import 'package:tekartik_build_utils/common_import.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 Future main() async {
   var shell = Shell();

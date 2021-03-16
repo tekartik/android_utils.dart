@@ -2,7 +2,7 @@ import 'package:fs_shim/utils/path.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart' as utils;
-import 'package:tekartik_build_utils/gradle/gradle.dart';
+import 'package:tekartik_android_utils/src/gradle/gradle.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
 class AndroidProject {

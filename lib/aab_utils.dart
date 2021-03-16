@@ -6,7 +6,7 @@ library apk_utils;
 
 import 'dart:async';
 
-import 'package:process_run/cmd_run.dart';
+import 'package:process_run/shell.dart';
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/src/manifest_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
@@ -21,11 +21,11 @@ bool get bundleToolSupported =>
 
 class AabInfo extends ManifestInfo {}
 
-Future<AabInfo> getAabInfo(String aabFilePath, {bool verbose}) async {
-  var result = await runExecutableArguments(
-      'bundletool', ['dump', 'manifest', '--bundle', aabFilePath],
-      commandVerbose: verbose);
-  var lines = result.stdout.toString().trim();
+Future<AabInfo> getAabInfo(String aabFilePath, {bool verbose = false}) async {
+  var result = await run(
+      'bundletool dump manifest --bundle ${shellArgument(aabFilePath)}',
+      verbose: verbose);
+  var lines = result.outText;
   var manifestInfo = AabInfo()..fromXml(lines);
   return manifestInfo;
 }
