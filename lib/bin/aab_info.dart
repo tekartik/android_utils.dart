@@ -3,12 +3,9 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/aab_utils.dart';
-import 'package:tekartik_android_utils/apk_utils.dart';
-import 'package:tekartik_android_utils/src/bin/keytool_io.dart';
 import 'package:tekartik_common_utils/bool_utils.dart';
 
 const String _flagHelp = 'help';
