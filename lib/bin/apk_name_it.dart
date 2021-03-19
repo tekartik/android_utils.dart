@@ -22,7 +22,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
   //String versionName = results[_flagVersionName];
 
   void _usage() {
@@ -38,7 +38,7 @@ Future main(List<String> args) async {
   if (results.rest.isNotEmpty) {
     // New just give the apk
     var apkFilePath = results.rest[0];
-    String outFolderPath;
+    String? outFolderPath;
 
     if (results.rest.length > 1) {
       outFolderPath = results.rest[1];

@@ -58,7 +58,7 @@ void defineTests() {
   group('badging_parser', () {
     test('parse', () {
       var apkInfo = parseBadgingLine(
-          "package: name='com.test.app' versionCode='2' versionName='0.1' platformBuildVersionName=''");
+          "package: name='com.test.app' versionCode='2' versionName='0.1' platformBuildVersionName=''")!;
       expect(apkInfo.name, 'com.test.app');
       expect(apkInfo.versionCode, '2');
       expect(apkInfo.versionName, '0.1');

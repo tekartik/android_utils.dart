@@ -2,42 +2,42 @@ import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
 
 class AvdInfo {
-  String name;
-  String device;
-  String path;
-  String target;
-  String skin;
-  String sdCard;
+  String? name;
+  String? device;
+  String? path;
+  String? target;
+  String? skin;
+  String? sdCard;
 }
 
-List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
-  var list = <AvdInfo>[];
-  AvdInfo avdInfo;
-  String key;
-  String value;
+List<AvdInfo?> avdInfosParseLines(Iterable<String> lines) {
+  var list = <AvdInfo?>[];
+  AvdInfo? avdInfo;
+  String? key;
+  String? value;
 
   void validatePreviousValue() {
     if (avdInfo != null && key != null && value != null) {
       // We expect the name first
-      if (avdInfo.name != null || key == 'name') {
+      if (avdInfo!.name != null || key == 'name') {
         switch (key) {
           case 'name':
-            avdInfo.name = value;
+            avdInfo!.name = value;
             break;
           case 'device':
-            avdInfo.device = value;
+            avdInfo!.device = value;
             break;
           case 'path':
-            avdInfo.path = value;
+            avdInfo!.path = value;
             break;
           case 'target':
-            avdInfo.target = value;
+            avdInfo!.target = value;
             break;
           case 'skin':
-            avdInfo.skin = value;
+            avdInfo!.skin = value;
             break;
           case 'sdcard':
-            avdInfo.sdCard = value;
+            avdInfo!.sdCard = value;
             break;
         }
       }
@@ -47,7 +47,7 @@ List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
   }
 
   void validatePreviousAvd() {
-    if (avdInfo != null && avdInfo.name != null) {
+    if (avdInfo != null && avdInfo!.name != null) {
       list.add(avdInfo);
       avdInfo = null;
     }
@@ -68,7 +68,7 @@ List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
     if (parts.length > 1) {
       var partValue = parts.sublist(1).join(':').trim();
       if (value != null) {
-        value += '\n$partValue';
+        value = '$value\n$partValue';
       } else {
         value = partValue;
       }
@@ -80,7 +80,7 @@ List<AvdInfo> avdInfosParseLines(Iterable<String> lines) {
 }
 
 /// [initAndroidBuildEnvironment] must have been called first
-Future<List<AvdInfo>> getAvdInfos() async {
+Future<List<AvdInfo?>> getAvdInfos() async {
   var lines = (await run('avdmanager list avd')).outLines;
   return avdInfosParseLines(lines);
 }

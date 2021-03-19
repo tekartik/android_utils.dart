@@ -21,7 +21,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
 
   void _usage() {
     print('$scriptName');
@@ -40,7 +40,7 @@ Future main(List<String> args) async {
 
   await sleep(2000);
 
-  String ipAddress;
+  String? ipAddress;
   for (var i = 0; i < 5; i++) {
     cmd = adbCmd(['-d', 'shell', 'ip', '-f', 'inet', 'addr', 'show', 'wlan0']);
     var result = await runCmd(cmd, verbose: true);

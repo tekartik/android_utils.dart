@@ -4,11 +4,11 @@ import 'package:tekartik_android_utils/build_utils.dart';
 import 'build_utils.dart';
 
 class AdbDeviceInfo {
-  String serial;
-  String type;
-  String product;
-  String model;
-  String device;
+  String? serial;
+  String? type;
+  String? product;
+  String? model;
+  String? device;
 }
 
 List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {

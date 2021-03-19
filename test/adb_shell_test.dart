@@ -27,7 +27,7 @@ root      2     0     0      0       kthreadd 00000000 S kthreadd
 root      3     2     0      0     smpboot_th 00000000 S ksoftirqd/0
 ''';
       var parser = ShellPsParser(out);
-      expect(parser.findByName('/init').pid, 1);
+      expect(parser.findByName('/init')!.pid, 1);
     });
   });
 }

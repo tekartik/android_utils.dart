@@ -19,7 +19,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
 
   void _usage() {
     print('apk_info <path_to_apk_file>');

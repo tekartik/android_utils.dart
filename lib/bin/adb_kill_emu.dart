@@ -29,7 +29,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
   var emulatorName = results[_optionEmulatorName]?.toString();
 
   void _usage() {

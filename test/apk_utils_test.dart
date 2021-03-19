@@ -24,8 +24,8 @@ void defineTests() {
     });
     group('aapt', () {
       test('getApkInfo', () async {
-        var apkInfo =
-            await getApkInfo(join(inFolder, 'app-release.apk'), verbose: true);
+        var apkInfo = (await getApkInfo(join(inFolder, 'app-release.apk'),
+            verbose: true))!;
         expect(apkInfo.name, 'com.tekartik.miniexp');
         expect(apkInfo.versionCode, '2');
         expect(apkInfo.versionName, '1.0.1');

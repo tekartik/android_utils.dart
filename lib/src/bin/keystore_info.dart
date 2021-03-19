@@ -10,7 +10,7 @@ Future<void> main() async {
   await dumpKeystoreInfo(keystorePath: ks.keystorePath);
 }
 
-Future<void> dumpKeystoreInfo({String keystorePath}) async {
+Future<void> dumpKeystoreInfo({required String keystorePath}) async {
   var file = keystorePath;
   if (!File(file).existsSync()) {
     stderr.writeln('Missing keystore file $file');

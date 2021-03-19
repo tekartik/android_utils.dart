@@ -13,7 +13,7 @@ import 'package:tekartik_io_utils/io_utils_import.dart';
 
 export 'package:tekartik_android_utils/src/apk_info.dart';
 
-bool _bundleToolSupported;
+bool? _bundleToolSupported;
 
 /// True if aapt si present and supported
 bool get bundleToolSupported =>

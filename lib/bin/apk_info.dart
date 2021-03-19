@@ -24,7 +24,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
   var versionName = results[_flagVersionName]?.toString();
 
   void _usage() {
@@ -68,7 +68,7 @@ Future main(List<String> args) async {
       exit(1);
     }
     */
-    var apkInfo = await getApkInfo(apkFilePath);
+    var apkInfo = (await getApkInfo(apkFilePath))!;
     print('name : ${apkInfo.name}');
     print('versionCode : ${apkInfo.versionCode}');
     print('versionName : ${apkInfo.versionName}');

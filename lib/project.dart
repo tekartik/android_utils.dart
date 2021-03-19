@@ -11,7 +11,7 @@ class AndroidProject {
   AndroidProject(this.path);
 
   // target can be :app ot app
-  ProcessCmd buildApkCmd(String target, {String flavor}) {
+  ProcessCmd buildApkCmd(String target, {String? flavor}) {
     var gradleTarget = targetToGradleTarget(target);
     var cmd = ProcessCmd(
         gradleExecutable, ['$gradleTarget:assemble${flavor}Release'],
@@ -54,7 +54,7 @@ class AndroidProject {
   String get gradleExecutable => join(path, gradleShellExecutableFilename);
 
   // mode: debug/release
-  String getApkPath({String flavor, String module, String mode}) {
+  String getApkPath({String? flavor, String? module, String? mode}) {
     module ??= moduleApp;
     mode ??= modeRelease;
     if (flavor == null) {
