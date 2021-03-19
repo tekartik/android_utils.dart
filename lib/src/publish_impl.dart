@@ -49,7 +49,7 @@ Future uploadBundle(LocalAab localAab) async {
 
 /// Publish to internal by default
 Future publishBundle(LocalAab localAab, {String track}) async {
-  track ??= _internalTrack;
+  track ??= internalTrack;
   return await manageBundle(localAab,
       publishOptions: PublishOptions(track: track));
 }
@@ -68,7 +68,7 @@ class PublishOptions {
 
 final _noPublishOptions = PublishOptions(track: _noTrack);
 final _noUploadOptions = UploadOptions(upload: false);
-const _internalTrack = 'internal';
+const internalTrack = 'internal';
 
 Future manageBundle(LocalAab localAab,
     {String serviceAccountPath,
