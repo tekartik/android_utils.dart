@@ -5,7 +5,7 @@
 /// will give:
 ///
 ///  40:F1:83:3D:77:C2:F4:E1:55:66:EA:EA:1F:87:DC:7A:90:24:6C:48
-String keytoolOutLinesExtractSha1Digest(Iterable<String> lines) {
+String? keytoolOutLinesExtractSha1Digest(Iterable<String> lines) {
   var before = 'Certificate fingerprints';
   var beforeNeeded = true;
   for (var line in lines) {

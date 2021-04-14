@@ -30,7 +30,7 @@ Future main(List<String> args) async {
   parser.parse(args);
   //bool verbose = false;
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
   var serialNumber = results[_optionSerialNumber]?.toString();
 
   void _usage() {

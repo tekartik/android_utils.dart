@@ -19,17 +19,17 @@ import 'package:tekartik_io_utils/io_utils_import.dart';
 export 'package:tekartik_android_utils/src/apk_info.dart';
 export 'src/bin/keytool_io.dart' show apkExtractSha1Digest;
 
-bool _aaptSupported;
+bool? _aaptSupported;
 
 /// True if aapt si present and supported
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
-Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
+Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
   var result = await runExecutableArguments(
       'aapt', ['dump', 'badging', apkFilePath],
       commandVerbose: verbose);
   var lines = LineSplitter.split(result.stdout.toString());
-  ApkInfo apkInfo;
+  ApkInfo? apkInfo;
   for (var line in lines) {
     apkInfo = parseBadgingLine(line);
     if (apkInfo != null) {
@@ -39,7 +39,7 @@ Future<ApkInfo> getApkInfo(String apkFilePath, {bool verbose}) async {
   return apkInfo;
 }
 
-Future nameApk(String apkFilePath, {String outFolderPath}) async {
+Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   if (!File(apkFilePath).existsSync()) {
     throw ('$apkFilePath does not exist');
   }
@@ -71,7 +71,7 @@ Future nameApk(String apkFilePath, {String outFolderPath}) async {
 }
 
 Future copyApk(String apkFilePath, ApkInfo apkInfo,
-    {String outFolderPath}) async {
+    {String? outFolderPath}) async {
   var dstFileName =
       '${apkInfo.name}-${apkInfo.versionName}-${apkInfo.versionCode}.apk';
 
@@ -94,7 +94,7 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
 }
 
 Future nameIt(String apkFilePath, String manifestFilePath,
-    {String versionName}) {
+    {String? versionName}) {
   if (extension(apkFilePath) != '.apk') {
     throw '$apkFilePath is not an android .apk file';
   }

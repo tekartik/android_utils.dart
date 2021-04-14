@@ -46,7 +46,7 @@ void main() {
       var lines = LineSplitter.split(output).toList();
       var avdInfos = avdInfosParseLines(lines);
       expect(avdInfos.length, 2);
-      var avdInfo = avdInfos.first;
+      var avdInfo = avdInfos.first!;
       expect(avdInfo.name, 'Nexus_4_API_25');
       expect(avdInfo.skin, 'nexus_4');
 
@@ -58,7 +58,7 @@ void main() {
       lines = LineSplitter.split(output).toList();
       avdInfos = avdInfosParseLines(lines);
       expect(avdInfos.length, 1);
-      avdInfo = avdInfos.first;
+      avdInfo = avdInfos.first!;
       expect(avdInfo.name, 'Nexus_4_API_25');
       expect(avdInfo.skin, isNull);
     });

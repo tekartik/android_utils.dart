@@ -1,7 +1,7 @@
 import 'package:tekartik_common_utils/common_utils_import.dart';
 
 class ShellPsParser {
-  PsHeader header;
+  PsHeader? header;
   List<PsLine> lines = [];
 
   ShellPsParser(String shellPsStdout) {
@@ -16,7 +16,7 @@ class ShellPsParser {
     }
   }
 
-  PsLine findByName(String name) {
+  PsLine? findByName(String name) {
     for (var line in lines) {
       try {
         if (line.name == name) {
@@ -46,17 +46,17 @@ PsHeader _defaultHeader =
     PsHeader('USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME');
 
 class PsLine extends _PsLineBase {
-  PsHeader _header;
+  late PsHeader _header;
 
-  PsLine(String line, {PsHeader header}) : super(line) {
+  PsLine(String line, {PsHeader? header}) : super(line) {
     _header = header ?? _defaultHeader;
   }
 
-  int get pid => int.parse(_getColumn('PID'));
+  int get pid => int.parse(_getColumn('PID')!);
 
-  String _getColumn(String name) {
+  String? _getColumn(String name) {
     var index = _header.findPartIndex(name);
-    if (index != null && index >= 0) {
+    if (index >= 0) {
       return _parts[index];
     }
     return null;
@@ -70,7 +70,7 @@ class PsLine extends _PsLineBase {
 var spaceSplitRegExp = RegExp('\\s+');
 
 class _PsLineBase {
-  List<String> _parts;
+  late List<String> _parts;
 
   _PsLineBase(String line) {
     _parts = line.split(spaceSplitRegExp);

@@ -7,10 +7,10 @@ import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 
 class KeystoreCredentials {
-  String password;
+  String? password;
 }
 
-KeystoreCredentials get credentialsFromEnv {
+KeystoreCredentials? get credentialsFromEnv {
   var password = shellEnvironment['TEKARTIK_KEYSTORE_PASSWORD'];
   if (password != null) {
     return KeystoreCredentials()..password = password;

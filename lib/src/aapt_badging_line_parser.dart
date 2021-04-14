@@ -1,6 +1,6 @@
 import 'apk_info.dart';
 
-String _get(String line, String key) {
+String? _get(String line, String key) {
   var prefix = " $key='";
   var index = line.indexOf(prefix);
   if (index != -1) {
@@ -13,7 +13,7 @@ String _get(String line, String key) {
   return null;
 }
 
-ApkInfo parseBadgingLine(String line) {
+ApkInfo? parseBadgingLine(String line) {
   if (line.startsWith('package:')) {
     var name = _get(line, 'name');
     var versionName = _get(line, 'versionName');

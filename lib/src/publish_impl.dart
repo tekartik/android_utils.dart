@@ -13,11 +13,11 @@ const _scopes = [AndroidPublisherApi.androidpublisherScope];
 
 class LocalAab {
   String path;
-  AabInfo aabInfo;
+  AabInfo? aabInfo;
 
   LocalAab(this.path, [this.aabInfo]);
 
-  int get versionCode => int.parse(aabInfo.versionCode);
+  int get versionCode => int.parse(aabInfo!.versionCode!);
 
   Future init() async {
     if (aabInfo == null) {
@@ -28,10 +28,10 @@ class LocalAab {
     }
   }
 
-  String get packageName => aabInfo.name;
+  String? get packageName => aabInfo!.name;
 
   Map<String, dynamic> toMap() {
-    var map = aabInfo.toMap();
+    var map = aabInfo!.toMap();
     map['path'] = path;
     return map;
   }
@@ -48,8 +48,8 @@ Future uploadBundle(LocalAab localAab) async {
 }
 
 /// Publish to internal by default
-Future publishBundle(LocalAab localAab, {String track}) async {
-  track ??= _internalTrack;
+Future publishBundle(LocalAab localAab, {String? track}) async {
+  track ??= internalTrack;
   return await manageBundle(localAab,
       publishOptions: PublishOptions(track: track));
 }
@@ -57,30 +57,30 @@ Future publishBundle(LocalAab localAab, {String track}) async {
 class UploadOptions {
   final bool upload;
 
-  UploadOptions({@required this.upload});
+  UploadOptions({required this.upload});
 }
 
 class PublishOptions {
   final String track;
 
-  PublishOptions({@required this.track});
+  PublishOptions({required this.track});
 }
 
 final _noPublishOptions = PublishOptions(track: _noTrack);
 final _noUploadOptions = UploadOptions(upload: false);
-const _internalTrack = 'internal';
+const internalTrack = 'internal';
 
 Future manageBundle(LocalAab localAab,
-    {String serviceAccountPath,
-    UploadOptions uploadOptions,
-    PublishOptions publishOptions}) async {
+    {String? serviceAccountPath,
+    UploadOptions? uploadOptions,
+    PublishOptions? publishOptions}) async {
   uploadOptions ??= _noUploadOptions;
   publishOptions ??= _noPublishOptions;
   await localAab.init();
 
-  ServiceAccountCredentials credentials;
+  ServiceAccountCredentials? credentials;
   // Try to look for a local service account
-  var exception;
+  Object? exception;
   var serviceAccountFileFound = false;
   var serviceAccountFile =
       File(serviceAccountPath ?? join('.local', 'service_account.json'));
@@ -93,33 +93,33 @@ Future manageBundle(LocalAab localAab,
     print(e);
     exception = e;
   }
-  if (credentials == null) {
+  if (exception != null) {
     if (!serviceAccountFileFound) {
       stderr.writeln('No service account file found in $serviceAccountFile');
     }
     print(exception);
     throw exception;
   }
-  var client = await clientViaServiceAccount(credentials, _scopes);
+  var client = await clientViaServiceAccount(credentials!, _scopes);
   var publish = AndroidPublisherApi(client);
 
   var appEdit = AppEdit();
-  var packageName = localAab.packageName;
-  appEdit = await publish.edits.insert(appEdit, localAab.packageName);
+  var packageName = localAab.packageName!;
+  appEdit = await publish.edits.insert(appEdit, localAab.packageName!);
   var editId = appEdit.id;
   try {
-    var response = await publish.edits.tracks.list(packageName, appEdit.id);
-    for (var track in response.tracks) {
+    var response = await publish.edits.tracks.list(packageName, appEdit.id!);
+    for (var track in response.tracks!) {
       print(track.track);
     }
 
     print('package: $packageName, versionCode: ${localAab.versionCode}');
     // Search in apks
     var apkListResponse =
-        await publish.edits.apks.list(packageName, appEdit.id);
+        await publish.edits.apks.list(packageName, appEdit.id!);
     var found = false;
     if (apkListResponse.apks != null) {
-      for (var apk in apkListResponse.apks) {
+      for (var apk in apkListResponse.apks!) {
         print('apk: ${apk.versionCode}');
         if (apk.versionCode == localAab.versionCode) {
           found = true;
@@ -136,9 +136,9 @@ Future manageBundle(LocalAab localAab,
 
     // Search and aabs
     var aabListResponse =
-        await publish.edits.bundles.list(packageName, appEdit.id);
+        await publish.edits.bundles.list(packageName, appEdit.id!);
     if (aabListResponse.bundles != null) {
-      for (var bundle in aabListResponse.bundles) {
+      for (var bundle in aabListResponse.bundles!) {
         print('aab: ${bundle.versionCode}');
         //print(bundle.versionCode);
         if (bundle.versionCode == localAab.versionCode) {
@@ -165,11 +165,11 @@ Future manageBundle(LocalAab localAab,
     var size = file.statSync().size;
     var media = Media(file.openRead(), size);
 
-    int versionCode;
+    int? versionCode;
     if (uploadOptions != _noUploadOptions) {
       print('uploading: $size bytes $localAab');
       var aab = await publish.edits.bundles
-          .upload(packageName, editId, uploadMedia: media);
+          .upload(packageName, editId!, uploadMedia: media);
       print(aab.versionCode);
       versionCode = aab.versionCode;
     } else {
@@ -185,9 +185,9 @@ Future manageBundle(LocalAab localAab,
           ..versionCodes = [versionCode.toString()]
           ..status = 'completed'
       ]; // v2:versionCodes = [versionCode];
-      print('updating track: ${track.releases.first.toJson()}');
+      print('updating track: ${track.releases!.first.toJson()}');
       await publish.edits.tracks
-          .update(track, packageName, appEdit.id, trackName);
+          .update(track, packageName, appEdit.id!, trackName);
     }
 
     print('uploaded');
@@ -197,11 +197,11 @@ Future manageBundle(LocalAab localAab,
       await publishTrack(publishOptions.track);
     }
 
-    await publish.edits.validate(packageName, editId);
+    await publish.edits.validate(packageName, editId!);
     await publish.edits.commit(packageName, editId);
   } catch (e) {
     print(e);
-    await publish.edits.delete(packageName, editId);
+    await publish.edits.delete(packageName, editId!);
     rethrow;
   } finally {
     // await publish.edits.delete(packageName, appEdit.id);

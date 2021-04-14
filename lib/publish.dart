@@ -5,4 +5,5 @@ export 'package:tekartik_android_utils/src/publish_impl.dart'
         PublishOptions,
         manageBundle,
         uploadBundle,
-        publishBundle;
+        publishBundle,
+        internalTrack;

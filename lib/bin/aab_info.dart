@@ -5,28 +5,24 @@
 import 'dart:async';
 
 import 'package:args/args.dart';
-import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_common_utils/bool_utils.dart';
 
 const String _flagHelp = 'help';
-const String _flagVersionName = 'versionName';
 
 Future main(List<String> args) async {
   var parser = ArgParser();
 
   parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addOption(_flagVersionName,
-      abbr: 'v', help: 'Version name', defaultsTo: null);
 
   var results = parser.parse(args);
 
   parser.parse(args);
 
   var help = parseBool(results[_flagHelp])!;
-  //String versionName = results[_flagVersionName];
 
   void _usage() {
-    print('apk_name_it <path_to_apk_file> [<dst_folder>]');
+    print('apk_info <path_to_apk_file>');
     print(parser.usage);
   }
 
@@ -35,14 +31,9 @@ Future main(List<String> args) async {
     return;
   }
 
-  if (results.rest.isNotEmpty) {
+  if (results.rest.length == 1) {
     // New just give the apk
-    var apkFilePath = results.rest[0];
-    String? outFolderPath;
-
-    if (results.rest.length > 1) {
-      outFolderPath = results.rest[1];
-    }
+    var aabFilePath = results.rest[0];
     /*
     if (!await new File(apkFile).exists()) {
       print('$apkFile does not exist');
@@ -71,18 +62,9 @@ Future main(List<String> args) async {
       exit(1);
     }
     */
-    await nameApk(apkFilePath, outFolderPath: outFolderPath);
-  }
-
-  /*
-    //nameIt(apkFile, join(content, 'AndroidManifest.xml'));
-  } else {
-    if (results.rest.length == 2) {
-      nameIt(results.rest[0], results.rest[1], versionName: versionName);
-    }
-    */
-  else {
-    print('Missing apk file name');
-    _usage();
+    var aabInfo = await getAabInfo(aabFilePath);
+    print('name : ${aabInfo.name}');
+    print('versionCode : ${aabInfo.versionCode}');
+    print('versionName : ${aabInfo.versionName}');
   }
 }

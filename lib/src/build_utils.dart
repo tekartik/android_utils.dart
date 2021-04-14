@@ -28,46 +28,46 @@ import 'package:tekartik_common_utils/version_utils.dart';
 // String adb;
 
 abstract class AndroidBuildContext {
-  String get androidStudioPath;
+  String? get androidStudioPath;
 
-  String get androidStudioJdkPath;
+  String? get androidStudioJdkPath;
 
-  String get androidSdkPath;
+  String? get androidSdkPath;
 
-  String get androidSdkBuildToolsPath;
+  String? get androidSdkBuildToolsPath;
 
-  String get androidSdkPlatformToolsPath;
+  String? get androidSdkPlatformToolsPath;
 
-  String get androidSdkToolsPath;
+  String? get androidSdkToolsPath;
 }
 
 class AndroidBuildContextImpl implements AndroidBuildContext {
   @override
-  String androidStudioPath;
+  String? androidStudioPath;
   @override
-  String androidStudioJdkPath;
+  String? androidStudioJdkPath;
   @override
-  String androidSdkPath;
+  String? androidSdkPath;
   @override
-  String androidSdkBuildToolsPath;
+  String? androidSdkBuildToolsPath;
 
   @override
-  String get androidSdkPlatformToolsPath =>
-      androidSdkPath == null ? null : join(androidSdkPath, 'platform-tools');
+  String? get androidSdkPlatformToolsPath =>
+      androidSdkPath == null ? null : join(androidSdkPath!, 'platform-tools');
 
   @override
-  String get androidSdkToolsPath =>
-      androidSdkPath == null ? null : join(androidSdkPath, 'tools');
+  String? get androidSdkToolsPath =>
+      androidSdkPath == null ? null : join(androidSdkPath!, 'tools');
 }
 
-Future<AndroidBuildContext> getAndroidBuildContent({int sdkVersion}) async {
+Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   AndroidBuildContext context;
 
   var asDirs = <String>[];
   var sdkDirs = <String>[];
 
-  String asDir;
-  String sdkDir;
+  String? asDir;
+  String? sdkDir;
 
   // devPrint(shellEnvironment);
   // Try env var
@@ -130,8 +130,8 @@ Future<AndroidBuildContext> getAndroidBuildContent({int sdkVersion}) async {
     }
   }
 
-  String sdkBuildToolsDir;
-  String asJdkDir;
+  String? sdkBuildToolsDir;
+  String? asJdkDir;
 
   if (sdkDir != null) {
     var versions = (Directory(join(sdkDir, 'build-tools'))
@@ -170,64 +170,65 @@ Future<AndroidBuildContext> getAndroidBuildContent({int sdkVersion}) async {
   return context;
 }
 
-Future<ShellEnvironment> _androidBuildEnvironmentFuture;
+Future<ShellEnvironment>? _androidBuildEnvironmentFuture;
 
 /// Prepend a path to the shell environment used
 void shellEnvironmentPrependPath(String path) {
   print('Adding path $path');
   var env = Map<String, String>.from(shellEnvironment);
-  var paths = env[envPathKey].split(envPathSeparator);
+  var paths = env[envPathKey]!.split(envPathSeparator);
   env[envPathKey] = (paths..insert(0, path)).join(envPathSeparator);
   shellEnvironment = env;
 }
 
 // Extra shell to merge
-Future<ShellEnvironment> getAndroidBuildEnvironment({int sdkVersion}) async {
+Future<ShellEnvironment> getAndroidBuildEnvironment({int? sdkVersion}) async {
   var environment = ShellEnvironment.empty();
   // Add proper Java from Android Studio
   var context = await getAndroidBuildContent(sdkVersion: sdkVersion);
   if (context.androidStudioJdkPath != null) {
-    environment.paths.prepend(join(context.androidStudioJdkPath, 'bin'));
+    environment.paths.prepend(join(context.androidStudioJdkPath!, 'bin'));
   }
   if (context.androidSdkBuildToolsPath != null) {
-    environment.paths.prepend(context.androidSdkBuildToolsPath);
+    environment.paths.prepend(context.androidSdkBuildToolsPath!);
   }
   if (context.androidSdkToolsPath != null) {
-    environment.paths.prepend(join(context.androidSdkToolsPath, 'bin'));
+    environment.paths.prepend(join(context.androidSdkToolsPath!, 'bin'));
   }
   if (context.androidSdkPlatformToolsPath != null) {
-    environment.paths.prepend(join(context.androidSdkPlatformToolsPath));
+    environment.paths.prepend(join(context.androidSdkPlatformToolsPath!));
   }
   // emulator
   if (context.androidSdkPath != null) {
-    environment.paths.prepend(join(context.androidSdkPath, 'emulator'));
+    environment.paths.prepend(join(context.androidSdkPath!, 'emulator'));
   }
   return environment;
 }
 
-Future<void> initAndroidBuildEnvironment({int sdkVersion}) async {
-  return _androidBuildEnvironmentFuture ??= () async {
+Future<void> initAndroidBuildEnvironment({int? sdkVersion}) async {
+  _androidBuildEnvironmentFuture ??= () async {
     var environment = ShellEnvironment()
       ..merge(await getAndroidBuildEnvironment());
     // Add proper Java from Android Studio
     var context = await getAndroidBuildContent(sdkVersion: sdkVersion);
     if (context.androidStudioJdkPath != null) {
-      environment.paths.prepend(join(context.androidStudioJdkPath, 'bin'));
+      environment.paths.prepend(join(context.androidStudioJdkPath!, 'bin'));
     }
     if (context.androidSdkBuildToolsPath != null) {
-      environment.paths.prepend(context.androidSdkBuildToolsPath);
+      environment.paths.prepend(context.androidSdkBuildToolsPath!);
     }
     if (context.androidSdkToolsPath != null) {
-      environment.paths.prepend(join(context.androidSdkToolsPath, 'bin'));
+      environment.paths.prepend(join(context.androidSdkToolsPath!, 'bin'));
     }
     if (context.androidSdkPlatformToolsPath != null) {
-      environment.paths.prepend(join(context.androidSdkPlatformToolsPath));
+      environment.paths.prepend(join(context.androidSdkPlatformToolsPath!));
     }
     // emulator
     if (context.androidSdkPath != null) {
-      environment.paths.prepend(join(context.androidSdkPath, 'emulator'));
+      environment.paths.prepend(join(context.androidSdkPath!, 'emulator'));
     }
     shellEnvironment = environment;
+    return environment;
   }();
 }
 

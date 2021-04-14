@@ -33,7 +33,7 @@ Future main(List<String> args) async {
 
   parser.parse(args);
 
-  var help = parseBool(results[_flagHelp]);
+  var help = parseBool(results[_flagHelp])!;
   var versionName = results[_optionAuth]?.toString();
 
   void _usage() {
@@ -92,11 +92,11 @@ Future main(List<String> args) async {
 
       if (File(testAuthJsonPath).existsSync()) {
         foundTestData = true;
-        Map map = parseJsonObject(await File(testAuthJsonPath).readAsString());
+        Map? map = parseJsonObject(await File(testAuthJsonPath).readAsString());
         print(map);
 
         var authClientInfo =
-            await AuthClientInfo.load(filePath: testAuthJsonPath);
+            (await AuthClientInfo.load(filePath: testAuthJsonPath))!;
         print(authClientInfo);
         var authClient = await authClientInfo.getClient(scopes);
 
@@ -117,13 +117,14 @@ Future main(List<String> args) async {
         */
 
         var packageName = 'com.tekartik.miniexp';
-        var appEdit = await api.edits.insert(null, packageName);
+        var appEdit = AppEdit();
+        appEdit = await api.edits.insert(appEdit, packageName);
         try {
           print(appEdit.toJson());
 
           var apkFilePath = join('test', 'data', 'app-release.apk');
 
-          var apkInfo = await getApkInfo(apkFilePath);
+          var apkInfo = (await getApkInfo(apkFilePath))!;
           print('name : ${apkInfo.name}');
           print('versionCode : ${apkInfo.versionCode}');
           print('versionName : ${apkInfo.versionName}');
@@ -132,7 +133,7 @@ Future main(List<String> args) async {
           var media = commons.Media(Stream.fromIterable([data]), data.length);
           print('uploading ${data.length}...');
           var apk = await api.edits.apks
-              .upload(packageName, appEdit.id, uploadMedia: media);
+              .upload(packageName, appEdit.id!, uploadMedia: media);
           print('uploaded');
           print('versionCode: ${apk.versionCode}');
 
@@ -144,14 +145,14 @@ Future main(List<String> args) async {
               ..status = 'completed'
           ]; // v2:versionCodes = [versionCode];
           track = await api.edits.tracks
-              .update(track, packageName, appEdit.id, alphaTrackName);
-          print('versionCodes: ${track.releases.first.versionCodes}');
+              .update(track, packageName, appEdit.id!, alphaTrackName);
+          print('versionCodes: ${track.releases!.first.versionCodes}');
 
-          await api.edits.commit(packageName, appEdit.id);
+          await api.edits.commit(packageName, appEdit.id!);
           print('commited');
         } catch (e) {
           try {
-            await api.edits.delete(packageName, appEdit.id);
+            await api.edits.delete(packageName, appEdit.id!);
           } catch (e2) {
             stderr.writeln('edits.delete error $e2');
           }
