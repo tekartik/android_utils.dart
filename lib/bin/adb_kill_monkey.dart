@@ -6,9 +6,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/adb_shell.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
-import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_common_utils/bool_utils.dart';
 
 const String _flagHelp = 'help';
