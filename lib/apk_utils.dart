@@ -12,6 +12,7 @@ import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
+export 'src/apk_get_sha1.dart' show getApkSha1;
 export 'src/apk_info.dart' show ApkInfo;
 export 'src/bin/keytool_io.dart' show apkExtractSha1Digest;
 

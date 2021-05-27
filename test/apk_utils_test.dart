@@ -21,6 +21,8 @@ void defineTests() {
     test('public', () {
       // ignore: unnecessary_statements
       ApkInfo;
+      // ignore: unnecessary_statements
+      getApkSha1;
     });
     group('aapt', () {
       test('getApkInfo', () async {
