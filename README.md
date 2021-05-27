@@ -9,7 +9,7 @@ dependency:
   tekartik_android_utils:
     git:
       url: git://github.com/tekartik/android_utils.dart
-      ref: dart2
+      ref: null_safety
     version: '>=0.1.0'
 ``` 
 ## Activation

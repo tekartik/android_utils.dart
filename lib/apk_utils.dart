@@ -4,19 +4,15 @@
 /// The apk_utils library.
 library apk_utils;
 
-import 'dart:async';
-import 'dart:io';
-
 import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
-import 'package:tekartik_android_utils/src/apk_info.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
-export 'package:tekartik_android_utils/src/apk_info.dart';
+export 'src/apk_info.dart' show ApkInfo;
 export 'src/bin/keytool_io.dart' show apkExtractSha1Digest;
 
 bool? _aaptSupported;

@@ -2,8 +2,6 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'dart:io';
-
 import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' as commons;
 import 'package:args/args.dart';
 import 'package:googleapis/androidpublisher/v3.dart';
