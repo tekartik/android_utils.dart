@@ -43,7 +43,7 @@ class AndroidProject {
 
   String targetToPath(String target) {
     var parts = targetToParts(target);
-    return '${joinAll(parts)}';
+    return joinAll(parts);
   }
 
   static const String modeRelease = 'release';

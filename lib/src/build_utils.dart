@@ -140,7 +140,7 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
             .map((e) => parseVersion(basename(e.path)))
             .where((v) => sdkVersion == null || v.major == sdkVersion)
             .toList()
-              ..sort())
+          ..sort())
         .reversed
         .toList();
     if (versions.isNotEmpty) {
