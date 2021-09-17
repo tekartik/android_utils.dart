@@ -52,7 +52,7 @@ Future<void> adbLog(AdbLogOptions options) async {
             var minDate = deviceDate.toIso8601String().replaceAll('T', ' ');
             try {
               var shell =
-                  logcatShell = Shell(throwOnError: false, verbose: false);
+                  logcatShell = Shell(throwOnError: false, verbose: true);
               await shell.run(
                   '$adb logcat --pid=$newPid -T ${shellArgument(minDate)}');
             } catch (_) {}
