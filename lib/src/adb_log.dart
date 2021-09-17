@@ -15,8 +15,7 @@ class AdbLogOptions {
 
 /// Log for a given device and package
 Future<void> adbLog(AdbLogOptions options) async {
-  var serial =
-      options.serial != null ? await findDevice(options.serial!) : null;
+  var serial = await findDevice(serial: options.serial);
 
   var adb = 'adb';
   if (serial != null) {
