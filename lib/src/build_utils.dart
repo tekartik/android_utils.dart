@@ -60,6 +60,31 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
       androidSdkPath == null ? null : join(androidSdkPath!, 'tools');
 }
 
+Future<String?> readRegistryString(String path, String key) async {
+  // Find registry
+  // Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+  // Key Path
+  try {
+    // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+    //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
+    var lines = (await run(
+            'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
+            verbose: false))
+        .outLines
+        .map((e) => e.trim())
+        .where((element) => element.startsWith('Path'));
+    var regSz = 'REG_SZ';
+    var line = lines.first;
+    var index = line.indexOf(regSz);
+    if (index != -1) {
+      var asDir = line.substring(index + regSz.length).trim();
+      return asDir;
+    }
+  } catch (_) {
+    return null;
+  }
+}
+
 Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   AndroidBuildContext context;
 
@@ -110,6 +135,34 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
     sdkDirs.addAll([join(userHomePath, 'Library', 'Android', 'sdk')]);
   }
   if (Platform.isWindows) {
+    // Find registry
+    // Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+    // Key Path
+    try {
+      // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+      //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
+      var asDir =
+          await readRegistryString('HKLM\\SOFTWARE\\Android Studio', 'Path');
+
+      if (asDir?.isNotEmpty ?? false) {
+        asDirs.add(asDir!);
+      }
+    } catch (_) {}
+
+    // Find registry
+    // Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+    // Key Path
+    try {
+      // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
+      //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
+      var sdkDir =
+          await readRegistryString('HKLM\\SOFTWARE\\Android Studio', 'SdkPath');
+
+      if (sdkDir?.isNotEmpty ?? false) {
+        sdkDirs.add(sdkDir!);
+      }
+    } catch (_) {}
+    // Default old location
     asDirs.addAll(['C:\\Program Files\\Android\\Android Studio']);
     var localAppData = shellEnvironment['LOCALAPPDATA'];
     if (localAppData != null) {
