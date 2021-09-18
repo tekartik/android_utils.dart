@@ -1,5 +1,5 @@
 name: tekartik_android_utils
-version: 0.6.1
+version: 0.6.1+1
 description: Android utilities
 publish_to: none
 environment:
@@ -7,6 +7,7 @@ environment:
 dependencies:
   intl:
   args: any
+  path:
   fs_shim: '>=0.7.1'
   tekartik_io_auth_utils:
     git:

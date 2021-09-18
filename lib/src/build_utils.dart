@@ -39,6 +39,8 @@ abstract class AndroidBuildContext {
   String? get androidSdkPlatformToolsPath;
 
   String? get androidSdkToolsPath;
+
+  String? get androidSdkCommandLineToolsPath;
 }
 
 class AndroidBuildContextImpl implements AndroidBuildContext {
@@ -58,6 +60,9 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
   @override
   String? get androidSdkToolsPath =>
       androidSdkPath == null ? null : join(androidSdkPath!, 'tools');
+
+  @override
+  String? androidSdkCommandLineToolsPath;
 }
 
 Future<String?> readRegistryString(String path, String key) async {
@@ -184,20 +189,53 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   }
 
   String? sdkBuildToolsDir;
+  String? sdkCommandLineToolsDir;
   String? asJdkDir;
 
   if (sdkDir != null) {
-    var versions = (Directory(join(sdkDir, 'build-tools'))
-            .listSync()
-            .whereType<Directory>()
-            .map((e) => parseVersion(basename(e.path)))
-            .where((v) => sdkVersion == null || v.major == sdkVersion)
-            .toList()
-          ..sort())
-        .reversed
-        .toList();
-    if (versions.isNotEmpty) {
-      sdkBuildToolsDir = join(sdkDir, 'build-tools', versions.first.toString());
+    {
+      // build tools
+      var versions = (Directory(join(sdkDir, 'build-tools'))
+              .listSync()
+              .whereType<Directory>()
+              .map((e) => parseVersion(basename(e.path)))
+              .where((v) => sdkVersion == null || v.major == sdkVersion)
+              .toList()
+            ..sort())
+          .reversed
+          .toList();
+      if (versions.isNotEmpty) {
+        sdkBuildToolsDir =
+            join(sdkDir, 'build-tools', versions.first.toString());
+      }
+    }
+    {
+      // command line tools
+      var commandLineToolsBasePath = join(sdkDir, 'cmdline-tools');
+      var versionTexts = (Directory(commandLineToolsBasePath)
+          .listSync()
+          .whereType<Directory>()
+          .map((e) => basename(e.path))
+          .toList());
+
+      if (versionTexts.isNotEmpty) {
+        // Use latest if found
+        if (versionTexts.contains('latest')) {
+          sdkCommandLineToolsDir = join(commandLineToolsBasePath, 'latest');
+        } else {
+          var versions = (versionTexts
+                  .map((e) => parseVersion(e))
+                  .where((v) => sdkVersion == null || v.major == sdkVersion)
+                  .toList()
+                ..sort())
+              .reversed
+              .toList();
+          if (versions.isNotEmpty) {
+            sdkCommandLineToolsDir =
+                join(commandLineToolsBasePath, versions.first.toString());
+          }
+        }
+      }
     }
   }
   if (asDir != null) {
@@ -219,7 +257,8 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
     ..androidStudioPath = asDir
     ..androidStudioJdkPath = asJdkDir
     ..androidSdkPath = sdkDir
-    ..androidSdkBuildToolsPath = sdkBuildToolsDir;
+    ..androidSdkBuildToolsPath = sdkBuildToolsDir
+    ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir;
   return context;
 }
 
@@ -251,6 +290,10 @@ Future<ShellEnvironment> getAndroidBuildEnvironment({int? sdkVersion}) async {
   if (context.androidSdkPlatformToolsPath != null) {
     environment.paths.prepend(join(context.androidSdkPlatformToolsPath!));
   }
+  if (context.androidSdkCommandLineToolsPath != null) {
+    environment.paths
+        .prepend(join(context.androidSdkCommandLineToolsPath!, 'bin'));
+  }
   // emulator
   if (context.androidSdkPath != null) {
     environment.paths.prepend(join(context.androidSdkPath!, 'emulator'));
@@ -259,30 +302,13 @@ Future<ShellEnvironment> getAndroidBuildEnvironment({int? sdkVersion}) async {
 }
 
 Future<void> initAndroidBuildEnvironment({int? sdkVersion}) async {
-  _androidBuildEnvironmentFuture ??= () async {
+  await (_androidBuildEnvironmentFuture ??= () async {
     var environment = ShellEnvironment()
       ..merge(await getAndroidBuildEnvironment());
-    // Add proper Java from Android Studio
-    var context = await getAndroidBuildContent(sdkVersion: sdkVersion);
-    if (context.androidStudioJdkPath != null) {
-      environment.paths.prepend(join(context.androidStudioJdkPath!, 'bin'));
-    }
-    if (context.androidSdkBuildToolsPath != null) {
-      environment.paths.prepend(context.androidSdkBuildToolsPath!);
-    }
-    if (context.androidSdkToolsPath != null) {
-      environment.paths.prepend(join(context.androidSdkToolsPath!, 'bin'));
-    }
-    if (context.androidSdkPlatformToolsPath != null) {
-      environment.paths.prepend(join(context.androidSdkPlatformToolsPath!));
-    }
-    // emulator
-    if (context.androidSdkPath != null) {
-      environment.paths.prepend(join(context.androidSdkPath!, 'emulator'));
-    }
+
     shellEnvironment = environment;
     return environment;
-  }();
+  }());
 }
 
 /*
