@@ -32,7 +32,7 @@ dependencies:
 dev_dependencies:
   test: any
   dev_test: any
-  grinder: any
+
 dependency_overrides:
 #  fs_shim:
 #    path: ../fs_shim.dart
