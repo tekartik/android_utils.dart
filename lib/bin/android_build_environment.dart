@@ -5,13 +5,12 @@ import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
-import 'dart:io';
 
 Future<void> main(List<String> arguments) async {
   var parser = ArgParser()
     ..addFlag('env',
-        help: 'Write env source file and output its name (Mac/Linux).\n\n'
-            'Mac/Linux/windows: . \$(android_build_environment --env)')
+        help: 'Write env source file and output its name (Mac/Linux/Windows).\n'
+            'Usage: . \$(android_build_environment --env)')
     ..addFlag('help', abbr: 'h', help: 'Usage help', negatable: false);
   var result = parser.parse(arguments);
 
