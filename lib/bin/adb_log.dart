@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/adb_log.dart';
+import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
 
 Future<void> main(List<String> arguments) async {
@@ -27,5 +28,6 @@ Future<void> main(List<String> arguments) async {
   var package = results['package'] as String?;
 
   var options = AdbLogOptions(package: package, serial: serial);
+  await initAndroidBuildEnvironment();
   await adbLog(options);
 }

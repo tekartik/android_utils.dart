@@ -29,9 +29,10 @@ Future<void> main(List<String> arguments) async {
   var context = await getAndroidBuildContent();
 
   if (result['env'] as bool) {
-    // Test on windows locally:
+    // Test locally on windows/mac/linux:
+    // which java
     // . $(dart run bin/android_build_environment.dart --env)
-
+    // which java
     var envRc = Platform.isWindows ? 'android_env.ps1' : 'android_env.rc';
 
     var env = await getAndroidBuildEnvironment(context: context);
