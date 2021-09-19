@@ -12,8 +12,22 @@ Future<void> main(List<String> arguments) async {
   var parser = ArgParser()
     ..addFlag('env',
         help:
-            'Write env source file and output its name (Mac/Linux). Usage: source \$(android_build_environment --env)');
+            'Write env source file and output its name (Mac/Linux). Usage: source \$(android_build_environment --env)')
+    ..addFlag('help', abbr: 'h', help: 'Usage help', negatable: false);
   var result = parser.parse(arguments);
+
+  var help = result['help'] as bool;
+
+  void _usage() {
+    print('android_build_environment');
+    print(parser.usage);
+  }
+
+  if (help) {
+    _usage();
+    return;
+  }
+
   var context = await getAndroidBuildContent();
 
   if (result['env'] as bool) {
