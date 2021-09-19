@@ -29,6 +29,9 @@ Future<void> main(List<String> arguments) async {
   var context = await getAndroidBuildContent();
 
   if (result['env'] as bool) {
+    // Test on windows locally:
+    // . $(dart run bin/android_build_environment.dart --env)
+
     var envRc = Platform.isWindows ? 'android_env.ps1' : 'android_env.rc';
 
     var env = await getAndroidBuildEnvironment(context: context);
@@ -36,15 +39,13 @@ Future<void> main(List<String> arguments) async {
     final content = Platform.isWindows
         ?
         // https://stackoverflow.com/questions/714877/setting-windows-powershell-environment-variables
-        // Test on windows locally:
-        // . $(dart run bin/android_build_environment.dart --env)
         '''
 # Add Android path
 \$ENV:PATH="${env.paths.join(';')};\$ENV:PATH"
 '''
         : '''
 # Add Android path
-export PATH=${env.paths.join(':')}:\$PATH
+export PATH="${env.paths.join(':')}:\$PATH"
 ''';
     try {
       await dst.writeAsString(content);

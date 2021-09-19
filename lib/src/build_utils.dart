@@ -248,7 +248,13 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
       // Linux
       join('jre', 'bin'),
       // Macos
-      if (Platform.isMacOS) 'jre/jdk/Contents/Home/bin'
+      if (Platform.isMacOS) ...[
+        // 2021-09 Android studio
+        'jre/Contents/Home/bin',
+
+        // Pre 2021-08 android studio
+        'jre/jdk/Contents/Home/bin'
+      ]
     ]) {
       var dir = join(asDir, subDir);
       if (Directory(dir).existsSync()) {
