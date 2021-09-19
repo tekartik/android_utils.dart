@@ -3,10 +3,6 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
-
-// ignore: implementation_imports
-import 'package:process_run/src/shell_utils.dart'
-    show envPathSeparator, envPathKey;
 import 'package:process_run/src/shell_utils.dart' // ignore: implementation_imports
     show
         shellSplit;
@@ -41,6 +37,8 @@ abstract class AndroidBuildContext {
   String? get androidSdkToolsPath;
 
   String? get androidSdkCommandLineToolsPath;
+
+  Version? get sdkVersion;
 }
 
 class AndroidBuildContextImpl implements AndroidBuildContext {
@@ -52,6 +50,9 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
   String? androidSdkPath;
   @override
   String? androidSdkBuildToolsPath;
+
+  @override
+  Version? sdkVersion;
 
   @override
   String? get androidSdkPlatformToolsPath =>
@@ -191,6 +192,7 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   String? sdkBuildToolsDir;
   String? sdkCommandLineToolsDir;
   String? asJdkDir;
+  Version? readSdkVersion;
 
   if (sdkDir != null) {
     {
@@ -205,34 +207,37 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
           .reversed
           .toList();
       if (versions.isNotEmpty) {
+        readSdkVersion = versions.first;
         sdkBuildToolsDir =
-            join(sdkDir, 'build-tools', versions.first.toString());
+            join(sdkDir, 'build-tools', readSdkVersion.toString());
       }
     }
     {
       // command line tools
       var commandLineToolsBasePath = join(sdkDir, 'cmdline-tools');
-      var versionTexts = (Directory(commandLineToolsBasePath)
-          .listSync()
-          .whereType<Directory>()
-          .map((e) => basename(e.path))
-          .toList());
+      if (Directory(commandLineToolsBasePath).existsSync()) {
+        var versionTexts = await (Directory(commandLineToolsBasePath)
+            .list()
+            .where((e) => e is Directory)
+            .map((e) => basename(e.path))
+            .toList());
 
-      if (versionTexts.isNotEmpty) {
-        // Use latest if found
-        if (versionTexts.contains('latest')) {
-          sdkCommandLineToolsDir = join(commandLineToolsBasePath, 'latest');
-        } else {
-          var versions = (versionTexts
-                  .map((e) => parseVersion(e))
-                  .where((v) => sdkVersion == null || v.major == sdkVersion)
-                  .toList()
-                ..sort())
-              .reversed
-              .toList();
-          if (versions.isNotEmpty) {
-            sdkCommandLineToolsDir =
-                join(commandLineToolsBasePath, versions.first.toString());
+        if (versionTexts.isNotEmpty) {
+          // Use latest if found
+          if (versionTexts.contains('latest')) {
+            sdkCommandLineToolsDir = join(commandLineToolsBasePath, 'latest');
+          } else {
+            var versions = (versionTexts
+                    .map((e) => parseVersion(e))
+                    .where((v) => sdkVersion == null || v.major == sdkVersion)
+                    .toList()
+                  ..sort())
+                .reversed
+                .toList();
+            if (versions.isNotEmpty) {
+              sdkCommandLineToolsDir =
+                  join(commandLineToolsBasePath, versions.first.toString());
+            }
           }
         }
       }
@@ -258,26 +263,19 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
     ..androidStudioJdkPath = asJdkDir
     ..androidSdkPath = sdkDir
     ..androidSdkBuildToolsPath = sdkBuildToolsDir
-    ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir;
+    ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir
+    ..sdkVersion = readSdkVersion;
   return context;
 }
 
 Future<ShellEnvironment>? _androidBuildEnvironmentFuture;
 
-/// Prepend a path to the shell environment used
-void shellEnvironmentPrependPath(String path) {
-  print('Adding path $path');
-  var env = Map<String, String>.from(shellEnvironment);
-  var paths = env[envPathKey]!.split(envPathSeparator);
-  env[envPathKey] = (paths..insert(0, path)).join(envPathSeparator);
-  shellEnvironment = env;
-}
-
-// Extra shell to merge
-Future<ShellEnvironment> getAndroidBuildEnvironment({int? sdkVersion}) async {
+/// Get shell environment to merge
+Future<ShellEnvironment> getAndroidBuildEnvironment(
+    {AndroidBuildContext? context, int? sdkVersion}) async {
   var environment = ShellEnvironment.empty();
   // Add proper Java from Android Studio
-  var context = await getAndroidBuildContent(sdkVersion: sdkVersion);
+  context ??= await getAndroidBuildContent(sdkVersion: sdkVersion);
   if (context.androidStudioJdkPath != null) {
     environment.paths.prepend(join(context.androidStudioJdkPath!, 'bin'));
   }
@@ -301,10 +299,13 @@ Future<ShellEnvironment> getAndroidBuildEnvironment({int? sdkVersion}) async {
   return environment;
 }
 
-Future<void> initAndroidBuildEnvironment({int? sdkVersion}) async {
+/// If specified, [context] and [sdkVersion] are used
+Future<void> initAndroidBuildEnvironment(
+    {AndroidBuildContext? context, int? sdkVersion}) async {
   await (_androidBuildEnvironmentFuture ??= () async {
-    var environment = ShellEnvironment()
-      ..merge(await getAndroidBuildEnvironment());
+    var buildEnvironment = await getAndroidBuildEnvironment(
+        context: context, sdkVersion: sdkVersion);
+    var environment = ShellEnvironment()..merge(buildEnvironment);
 
     shellEnvironment = environment;
     return environment;
