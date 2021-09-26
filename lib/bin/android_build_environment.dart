@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
-import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
 
 Future<void> main(List<String> arguments) async {
