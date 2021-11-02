@@ -38,6 +38,10 @@ abstract class AndroidBuildContext {
 
   String? get androidSdkCommandLineToolsPath;
 
+fea:  /// ANDROID_AVD_HOME or ~/.android/avd
+  /// Tested on linux for now
+  String? get androidAvdHomePath;
+
   Version? get sdkVersion;
 }
 
@@ -64,6 +68,11 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
 
   @override
   String? androidSdkCommandLineToolsPath;
+
+  @override
+  String? get androidAvdHomePath =>
+      shellEnvironment['ANDROID_AVD_HOME'] ??
+      join(userHomePath, '.android', 'avd');
 }
 
 Future<String?> readRegistryString(String path, String key) async {
