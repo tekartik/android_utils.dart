@@ -38,7 +38,7 @@ abstract class AndroidBuildContext {
 
   String? get androidSdkCommandLineToolsPath;
 
-fea:  /// ANDROID_AVD_HOME or ~/.android/avd
+  /// ANDROID_AVD_HOME or ~/.android/avd
   /// Tested on linux for now
   String? get androidAvdHomePath;
 
