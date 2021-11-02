@@ -8,8 +8,8 @@ Android utilities
 dependency:
   tekartik_android_utils:
     git:
-      url: git://github.com/tekartik/android_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/android_utils.dart
+      ref: dart2_3
     version: '>=0.1.0'
 ``` 
 ## Activation
@@ -17,7 +17,7 @@ dependency:
 ### From git repository
 
 ```
-pub global activate -s git git://github.com/tekartik/android_utils.dart
+pub global activate -s git https://github.com/tekartik/android_utils.dart
 ```
 
 ### From local path

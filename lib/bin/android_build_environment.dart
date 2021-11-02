@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
 
+/// See https://developer.android.com/studio/command-line/variables
 Future<void> main(List<String> arguments) async {
   var parser = ArgParser()
     ..addFlag('env',
@@ -64,6 +65,7 @@ export PATH="${env.paths.join(':')}:\$PATH"
     print('           androidSdkToolsPath: ${context.androidSdkToolsPath}');
     print(
         'androidSdkCommandLineToolsPath: ${context.androidSdkCommandLineToolsPath}');
+    print('            androidAvdHomePath: ${context.androidAvdHomePath}');
     print('                    sdkVersion: ${context.sdkVersion}');
 
     await initAndroidBuildEnvironment();
