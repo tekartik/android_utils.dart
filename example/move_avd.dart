@@ -1,15 +1,21 @@
-import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:tekartik_android_utils/src/build_utils.dart';
-import 'package:tekartik_common_utils/ini_file_utils.dart';
-import 'package:tekartik_io_utils/directory_utils.dart';
+import 'package:args/args.dart';
+import 'package:tekartik_android_utils/src/avd_utils.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
 Future<void> main(List<String> arguments) async {
-  /*var parser = ArgParser();
+  var parser = ArgParser()
+    ..addFlag('force', abbr: 'f', help: 'Force')
+    ..addFlag('help', abbr: 'h', help: 'This help');
   var result = parser.parse(arguments);
   var rest = result.rest;
+  var force = result['force'] as bool;
+  var help = result['help'] as bool;
 
+  if (help) {
+    stdout.writeln('usage mode_avd <avd_name> <folder>');
+    print(parser.usage);
+    return;
+  }
   String? avd;
   String? folder;
   if (rest.isNotEmpty) {
@@ -17,29 +23,10 @@ Future<void> main(List<String> arguments) async {
   }
   if (rest.length > 1) {
     folder = rest[1];
-  }*/
-  var bc = await getAndroidBuildContent();
-  var iniFiles = (await Directory(bc.androidAvdHomePath!)
-      .list()
-      .where((event) => extension(event.path) == '.ini')
-      .map((event) => event.path)
-      .toList())
-    ..sort();
-
-  var fmt = NumberFormat();
-  for (var iniFile in iniFiles) {
-    var lines = await File(iniFile).readAsLines();
-    var map = parseIniLines(lines);
-    var path = await File(map['path'] as String).resolveSymbolicLinks();
-
-    var sb = StringBuffer();
-    sb.write(basenameWithoutExtension(iniFile).padLeft(30));
-    sb.write(' ');
-    sb.write(fmt.format(await dirSize(path)).toString().padLeft(15));
-    if (dirname(path) != dirname(iniFile)) {
-      sb.write(' ');
-      sb.write(path);
-    }
-    stdout.writeln(sb);
   }
+  if (avd == null || folder == null) {
+    stderr.writeln('usage mode_avd <avd_name> <folder>');
+    exit(1);
+  }
+  await moveAvdFolder(avd: avd, dst: folder, force: force);
 }
