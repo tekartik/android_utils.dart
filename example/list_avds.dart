@@ -1,18 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
-import 'package:tekartik_android_utils/src/build_utils.dart';
+import 'package:tekartik_android_utils/avd_utils.dart';
 import 'package:tekartik_common_utils/ini_file_utils.dart';
 import 'package:tekartik_io_utils/directory_utils.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
 Future<void> main() async {
-  var bc = await getAndroidBuildContent();
-  var iniFiles = (await Directory(bc.androidAvdHomePath!)
-      .list()
-      .where((event) => extension(event.path) == '.ini')
-      .map((event) => event.path)
-      .toList())
-    ..sort();
+  var iniFiles = await getAvdIniFileNames();
 
   var fmt = NumberFormat();
   for (var iniFile in iniFiles) {

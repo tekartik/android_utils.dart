@@ -95,9 +95,8 @@ Future<String?> readRegistryString(String path, String key) async {
       var asDir = line.substring(index + regSz.length).trim();
       return asDir;
     }
-  } catch (_) {
-    return null;
-  }
+  } catch (_) {}
+  return null;
 }
 
 Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {

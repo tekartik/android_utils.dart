@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:fs_shim/utils/io/copy.dart';
+import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
+import 'package:tekartik_common_utils/common_utils_import.dart';
+import 'package:tekartik_common_utils/ini_file_utils.dart';
 
 class AvdInfo {
   String? name;
@@ -83,4 +89,79 @@ List<AvdInfo?> avdInfosParseLines(Iterable<String> lines) {
 Future<List<AvdInfo?>> getAvdInfos() async {
   var lines = (await run('avdmanager list avd')).outLines;
   return avdInfosParseLines(lines);
+}
+
+Future<List<String>> getAvdIniFileNames() async {
+  var bc = await getAndroidBuildContent();
+  var iniFiles = (await Directory(bc.androidAvdHomePath!)
+      .list()
+      .where((event) => extension(event.path).toLowerCase() == '.ini')
+      .map((event) => normalize(absolute(event.path)))
+      .toList())
+    ..sort();
+  return iniFiles;
+}
+
+Future<void> moveAvdFolder(
+    {required String avd, required String dst, bool force = false}) async {
+  var iniFiles = await getAvdIniFileNames();
+
+  var found = false;
+  for (var iniFile in iniFiles) {
+    // devPrint(basename(iniFile));
+    if (basenameWithoutExtension(iniFile) == avd) {
+      found = true;
+      var lines = await File(iniFile).readAsLines();
+      var map = parseIniLines(lines);
+      var pathInIniFile = map['path'] as String;
+
+      late String path;
+      try {
+        path = await File(pathInIniFile).resolveSymbolicLinks();
+      } catch (_) {
+        path = join(dirname(iniFile), '$avd.avd');
+        stdout.writeln('Missing dest folder try local avd file $path');
+        path = await File(path).resolveSymbolicLinks();
+      }
+
+      var sb = StringBuffer();
+
+      var avdTopDir = dirname(path);
+      if (avdTopDir != dst) {
+        var dstPath = join(dst, '$avd.avd');
+        stdout.writeln('Moving $path to $dstPath...');
+
+        if (Directory(dstPath).existsSync()) {
+          stdout.writeln('Directory already exists');
+          if (!force) {
+            return;
+          }
+        }
+
+        try {
+          await Directory(dstPath).delete(recursive: true);
+        } catch (_) {}
+        await copyDirectory(Directory(path), Directory(dstPath));
+
+        stdout.writeln('Updating $iniFile');
+        var content = (await File(iniFile).readAsString())
+            .replaceAll(pathInIniFile, dstPath);
+        await File(iniFile).writeAsString(content);
+
+        stdout.writeln('Deleting $path');
+        // Delete source
+        await Directory(path).delete(recursive: true);
+      }
+      sb.write(basenameWithoutExtension(iniFile).padLeft(30));
+      if (dirname(path) != dirname(iniFile)) {
+        sb.write(' ');
+        sb.write(path);
+      }
+      stdout.writeln(sb);
+    }
+  }
+
+  if (!found) {
+    stderr.writeln('Could not find avd $avd');
+  }
 }
