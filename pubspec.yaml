@@ -3,7 +3,7 @@ version: 0.6.3
 description: Android utilities
 publish_to: none
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.16.0 <3.0.0'
 dependencies:
   intl:
   args: any

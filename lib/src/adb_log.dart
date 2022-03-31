@@ -10,12 +10,17 @@ class AdbLogOptions {
   /// Optional `any` for first device, `any:<port>` for device by ip
   final String? serial;
 
-  AdbLogOptions({required this.package, required this.serial});
+  /// Verbose commands
+  final bool verbose;
+
+  AdbLogOptions(
+      {required this.package, required this.serial, this.verbose = false});
 }
 
 /// Log for a given device and package
 Future<void> adbLog(AdbLogOptions options) async {
   var serial = await findDevice(serial: options.serial);
+  var verbose = options.verbose;
 
   var adb = 'adb';
   if (serial != null) {
@@ -24,7 +29,8 @@ Future<void> adbLog(AdbLogOptions options) async {
 
   var package = options.package;
   if (package != null) {
-    var pidShell = Shell(throwOnError: false, verbose: false);
+    var pidShell =
+        Shell(throwOnError: false, verbose: false, commandVerbose: false);
     Shell? logcatShell;
     int? pid;
     while (true) {
