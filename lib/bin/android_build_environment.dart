@@ -26,7 +26,7 @@ Future<void> main(List<String> arguments) async {
     return;
   }
 
-  var context = await getAndroidBuildContent();
+  var context = await getAndroidBuildContext();
 
   if (result['env'] as bool) {
     // Test locally on windows/mac/linux:

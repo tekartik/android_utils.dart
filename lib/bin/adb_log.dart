@@ -2,7 +2,6 @@ import 'package:args/args.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_log.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
 
 Future<void> main(List<String> arguments) async {
   var parser = ArgParser()

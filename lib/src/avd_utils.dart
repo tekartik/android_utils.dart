@@ -4,8 +4,7 @@ import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
-import 'package:tekartik_common_utils/ini_file_utils.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 
 class AvdInfo {
   String? name;
@@ -92,7 +91,7 @@ Future<List<AvdInfo?>> getAvdInfos() async {
 }
 
 Future<List<String>> getAvdIniFileNames() async {
-  var bc = await getAndroidBuildContent();
+  var bc = await getAndroidBuildContext();
   var iniFiles = (await Directory(bc.androidAvdHomePath!)
       .list()
       .where((event) => extension(event.path).toLowerCase() == '.ini')

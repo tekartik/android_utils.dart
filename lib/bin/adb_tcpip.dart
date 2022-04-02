@@ -5,7 +5,7 @@
 import 'package:args/args.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
-import 'package:tekartik_io_utils/io_utils_import.dart';
+import 'package:tekartik_android_utils/src/import_io.dart';
 
 const String _flagHelp = 'help';
 

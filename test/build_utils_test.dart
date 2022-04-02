@@ -12,13 +12,13 @@ void main() {
       await initAndroidBuildEnvironment();
     });
     test('context', () async {
-      var context = await getAndroidBuildContent();
+      var context = await getAndroidBuildContext();
       print(context.androidStudioPath);
       print(context.androidSdkPath);
       print(context.androidStudioJdkPath);
     });
     test('cmdline-tools', () async {
-      var context = await getAndroidBuildContent();
+      var context = await getAndroidBuildContext();
       if (context.androidSdkCommandLineToolsPath != null) {
         // sdkmanager should be found in cmdline tools instead of tools
         expect(dirname(dirname((await which('sdkmanager'))!)),

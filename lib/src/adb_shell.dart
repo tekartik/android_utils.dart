@@ -1,4 +1,4 @@
-import 'package:tekartik_common_utils/common_utils_import.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 
 class ShellPsParser {
   PsHeader? header;

@@ -2,14 +2,17 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' as commons;
+import 'dart:io';
+
+import 'package:_discoveryapis_commons/_discoveryapis_commons.dart' // ignore: depend_on_referenced_packages
+    as commons;
 import 'package:args/args.dart';
 import 'package:googleapis/androidpublisher/v3.dart';
 import 'package:googleapis/people/v1.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 import 'package:tekartik_io_auth_utils/io_auth_utils.dart';
-import 'package:tekartik_io_utils/io_utils_import.dart';
 
 final List<String> scopes = [
   //emailScope,

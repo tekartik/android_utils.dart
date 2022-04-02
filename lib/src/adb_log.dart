@@ -1,6 +1,6 @@
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_device.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 
 /// Adb log options
 class AdbLogOptions {

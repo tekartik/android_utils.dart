@@ -3,9 +3,10 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'dart:io';
+
 import 'package:args/args.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 import 'package:tekartik_cmd_utils/kill_cmd.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
 
 const String _flagHelp = 'help';
 
