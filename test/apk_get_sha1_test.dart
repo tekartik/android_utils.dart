@@ -6,9 +6,13 @@ library apk_utils_test;
 
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
+import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_android_utils/src/apk_get_sha1.dart';
 
-void main() => defineTests();
+Future<void> main() async {
+  await initAndroidBuildEnvironment();
+  defineTests();
+}
 
 String inFolder = join('test', 'data');
 
