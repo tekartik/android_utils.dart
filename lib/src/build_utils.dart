@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:process_run/src/shell_utils.dart' // ignore: implementation_imports
     show
         shellSplit;
-//import 'package:tekartik_build_utils/common_import.dart';
-import 'package:tekartik_common_utils/version_utils.dart';
+
+import 'import_io.dart';
 
 /// Initialized using [initAndroidBuildEnvironment]
 /// Valid actions are composed of a verb and an optional direct object:
@@ -99,7 +96,14 @@ Future<String?> readRegistryString(String path, String key) async {
   return null;
 }
 
+/// To deprecate, type error
+///
+/// DO NOT REMOVE
 Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
+  return getAndroidBuildContext(sdkVersion: sdkVersion);
+}
+
+Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   AndroidBuildContext context;
 
   var asDirs = <String>[];
@@ -289,7 +293,7 @@ Future<ShellEnvironment> getAndroidBuildEnvironment(
     {AndroidBuildContext? context, int? sdkVersion}) async {
   var environment = ShellEnvironment.empty();
   // Add proper Java from Android Studio
-  context ??= await getAndroidBuildContent(sdkVersion: sdkVersion);
+  context ??= await getAndroidBuildContext(sdkVersion: sdkVersion);
   if (context.androidStudioJdkPath != null) {
     environment.paths.prepend(join(context.androidStudioJdkPath!, 'bin'));
   }

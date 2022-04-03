@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/avd_utils.dart';
-import 'package:tekartik_common_utils/ini_file_utils.dart';
+import 'package:tekartik_android_utils/src/import.dart';
 import 'package:tekartik_io_utils/directory_utils.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 

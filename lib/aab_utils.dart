@@ -8,7 +8,6 @@ import 'dart:async';
 
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/src/manifest_info.dart';
-import 'package:tekartik_io_utils/io_utils_import.dart';
 
 export 'package:tekartik_android_utils/src/apk_info.dart';
 

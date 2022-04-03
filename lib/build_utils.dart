@@ -1,2 +1,6 @@
 export 'src/build_utils.dart'
-    show getAndroidBuildContent, initAndroidBuildEnvironment;
+    show
+        getAndroidBuildContext,
+        initAndroidBuildEnvironment,
+        // Deprecated(Typo)
+        getAndroidBuildContent;
