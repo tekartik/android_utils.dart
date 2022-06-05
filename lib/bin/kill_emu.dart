@@ -22,14 +22,14 @@ Future main(List<String> args) async {
   parser.parse(args);
 
   var help = parseBool(results[_flagHelp])!;
-  void _usage() {
+  void usage() {
     stdout.writeln('kill the android (qemu) emulator process(es)');
     stdout.writeln('  $scriptName');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 

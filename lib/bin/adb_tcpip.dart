@@ -23,13 +23,13 @@ Future main(List<String> args) async {
 
   var help = parseBool(results[_flagHelp])!;
 
-  void _usage() {
+  void usage() {
     print(scriptName);
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 

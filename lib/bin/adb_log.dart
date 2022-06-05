@@ -16,13 +16,13 @@ Future<void> main(List<String> arguments) async {
 
   var help = results['help'] as bool;
 
-  void _usage() {
+  void usage() {
     print('android_build_environment');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
   await initAndroidBuildEnvironment();

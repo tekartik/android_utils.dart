@@ -30,13 +30,13 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp])!;
   var emulatorName = results[_optionEmulatorName]?.toString();
 
-  void _usage() {
+  void usage() {
     print('$scriptName [<emulator_name>');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 
