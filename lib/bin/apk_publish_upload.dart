@@ -37,13 +37,13 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp])!;
   var versionName = results[_optionAuth]?.toString();
 
-  void _usage() {
+  void usage() {
     print('apk_publish_upload <path_to_apk_file> --auth auth.json');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 
@@ -162,7 +162,7 @@ Future main(List<String> args) async {
       }
       if (!foundTestData) {
         print('Missing apk file name');
-        _usage();
+        usage();
       }
     }
   }

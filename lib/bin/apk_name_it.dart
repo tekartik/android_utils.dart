@@ -23,13 +23,13 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp])!;
   //String versionName = results[_flagVersionName];
 
-  void _usage() {
+  void usage() {
     print('apk_name_it <path_to_apk_file> [<dst_folder>]');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 
@@ -81,6 +81,6 @@ Future main(List<String> args) async {
     */
   else {
     print('Missing apk file name');
-    _usage();
+    usage();
   }
 }

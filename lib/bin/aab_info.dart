@@ -19,13 +19,13 @@ Future main(List<String> args) async {
 
   var help = parseBool(results[_flagHelp])!;
 
-  void _usage() {
+  void usage() {
     print('apk_info <path_to_apk_file>');
     print(parser.usage);
   }
 
   if (help) {
-    _usage();
+    usage();
     return;
   }
 
