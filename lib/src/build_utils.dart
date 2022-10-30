@@ -72,25 +72,29 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
       join(userHomePath, '.android', 'avd');
 }
 
+/// read registry key at give path.
+///
+/// Not fully safe (for example does not handle content starting with a space) but ok for many scenarios
 Future<String?> readRegistryString(String path, String key) async {
-  // Find registry
-  // Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
-  // Key Path
   try {
+    // We'll get lines like
     // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
-    //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
+    //    Path    REG_SZ    C:\Program Files\Android\Android Studio New
+    //
     var lines = (await run(
             'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
             verbose: false))
         .outLines
-        .map((e) => e.trim())
-        .where((element) => element.startsWith('Path'));
-    var regSz = 'REG_SZ';
-    var line = lines.first;
-    var index = line.indexOf(regSz);
-    if (index != -1) {
-      var asDir = line.substring(index + regSz.length).trim();
-      return asDir;
+        .map((e) => e.trimLeft())
+        .where((element) => element.split(' ').first == key);
+    if (lines.isNotEmpty) {
+      // Ok skip the key and look for REG_SZ
+      var regSz = 'REG_SZ';
+      var line = lines.first.substring(key.length).trimLeft();
+      if (line.startsWith(regSz)) {
+        var content = line.substring(regSz.length).trimLeft();
+        return content;
+      }
     }
   } catch (_) {}
   return null;
