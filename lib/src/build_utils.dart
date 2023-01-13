@@ -327,6 +327,7 @@ Future<void> initAndroidBuildEnvironment(
   await (_androidBuildEnvironmentFuture ??= () async {
     var buildEnvironment = await getAndroidBuildEnvironment(
         context: context, sdkVersion: sdkVersion);
+    // devPrint(buildEnvironment.paths.toList());
     var environment = ShellEnvironment()..merge(buildEnvironment);
 
     shellEnvironment = environment;

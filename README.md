@@ -23,5 +23,5 @@ pub global activate -s git https://github.com/tekartik/android_utils.dart
 ### From local path
 
 ```
-pub global activate -s path .
+dart pub global activate -s path .
 ```
