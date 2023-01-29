@@ -1,10 +1,14 @@
 @TestOn('vm')
 library tekartik_android_util.test.build_utils_test;
 
-import 'package:dev_test/test.dart';
+import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
+import 'package:tekartik_android_utils/src/build_utils.dart'
+    show readRegistryString;
+import 'package:test/test.dart';
 
 void main() {
   group('build_utils', () {
@@ -31,5 +35,13 @@ void main() {
             context.androidSdkCommandLineToolsPath);
       }
     });
+    if (Platform.isWindows) {
+      test('readRegistryString', () async {
+        var displayVersion = await readRegistryString(
+            'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
+            'DisplayVersion');
+        expect(displayVersion, isNotNull);
+      });
+    }
   });
 }

@@ -87,7 +87,6 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
     }
     */
     //await new File(apkFilePath).copy(dst);
-
   }
   stdout.writeln('  size: ${File(dst).statSync().size}');
 }

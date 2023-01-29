@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_android_utils/src/import.dart';
 
 const String _flagHelp = 'help';
@@ -38,34 +39,7 @@ Future main(List<String> args) async {
   if (results.rest.length == 1) {
     // New just give the apk
     var apkFilePath = results.rest[0];
-    /*
-    if (!await new File(apkFile).exists()) {
-      print('$apkFile does not exist');
-      exit(1);
-    }
-
-    String content = '${apkFile}.content';
-    try {
-      await new Directory(content).delete(recursive: true);
-    } catch (_) {}
-
-    ProcessResult result = await Process.run('aapt', ['dump', 'badging', apkFile]);
-    List<String> lines = LineSplitter.split(result.stdout.toString());
-    ApkInfo apkInfo;
-    for (String line in lines) {
-      apkInfo = parseBadgingLine(line);
-      if (apkInfo != null) {
-        break;
-      }
-    }
-
-    if (apkInfo != null) {
-      copyApk(apkFile, apkInfo);
-    } else {
-      print('cannot read info on $apkFile');
-      exit(1);
-    }
-    */
+    await initAndroidBuildEnvironment();
     var apkInfo = (await getApkInfo(apkFilePath))!;
     print('name : ${apkInfo.name}');
     print('versionCode : ${apkInfo.versionCode}');
