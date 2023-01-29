@@ -5,6 +5,7 @@ publish_to: none
 environment:
   sdk: '>=2.18.0 <3.0.0'
 dependencies:
+  dev_test:
   intl:
   args: any
   path:
@@ -31,7 +32,6 @@ dependencies:
 
 dev_dependencies:
   test: any
-  dev_test: any
   tekartik_io_utils:
     git:
       url: https://github.com/tekartik/io_utils.dart

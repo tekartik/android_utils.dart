@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:dev_test/src/run_ci.dart' // ignore: implementation_imports, depend_on_referenced_packages
-    show
-        checkAndActivatePackage;
+import 'package:dev_test/build_support.dart' show checkAndActivatePackage;
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 
