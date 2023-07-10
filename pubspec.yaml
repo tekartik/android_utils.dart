@@ -3,7 +3,7 @@ version: 0.6.5
 description: Android utilities
 publish_to: none
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies:
   dev_test:
   intl:
@@ -13,7 +13,7 @@ dependencies:
   tekartik_io_auth_utils:
     git:
       url: https://github.com/tekartik/io_auth_utils.dart
-      ref: dart2_3
+      ref: dart3a
   #tekartik_build_utils:
   #  git:
   #    url: https://github.com/tekartik/build_utils.dart
@@ -22,7 +22,7 @@ dependencies:
   tekartik_cmd_utils:
     git:
       url: https://github.com/tekartik/cmd_utils.dart
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.2.2'
   googleapis_auth: any
   googleapis: any
@@ -35,7 +35,7 @@ dev_dependencies:
   tekartik_io_utils:
     git:
       url: https://github.com/tekartik/io_utils.dart
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.7.0'
 
 dependency_overrides:
