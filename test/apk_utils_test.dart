@@ -4,9 +4,12 @@
 
 library apk_utils_test;
 
+import 'dart:convert';
+
 import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:tekartik_android_utils/src/apk_get_sha1.dart';
 
 void main() => defineTests();
 
@@ -39,5 +42,12 @@ void defineTests() {
             outFolderPath: join(outFolder, joinAll(testDescriptions)));
       });
     }, skip: !aaptSupported);
+  });
+
+  test('getApkSignInfo', () async {
+    var output =
+        'Signer #1 certificate SHA-1 digest: 40f1833d77c2f4e15566eaea1f87dc7a90246c48';
+    expect(extractApkSignerSha1Digest(LineSplitter.split(output)),
+        '40f1833d77c2f4e15566eaea1f87dc7a90246c48');
   });
 }
