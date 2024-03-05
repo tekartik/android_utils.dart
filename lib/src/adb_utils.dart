@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
 
@@ -60,4 +62,42 @@ List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
 Future<List<AdbDeviceInfo>> getAdbDeviceInfos() async {
   var lines = (await run('adb devices -l')).outLines;
   return adbDeviceInfosParseLines(lines);
+}
+
+class DeviceAdb {
+  final String serial;
+  var shell = Shell();
+  var shellNoThrow = Shell(throwOnError: false);
+  DeviceAdb(this.serial);
+
+  Future<List<String>> runAdbCommandOutLines(String command) async {
+    return (await shell.run('adb -s $serial $command')).outLines.toList();
+  }
+
+  Future<ProcessResult> runAdbCommand(String command) async {
+    return (await shell.run('adb -s $serial $command')).first;
+  }
+
+  Future<ProcessResult> runAdbCommandNoThrow(String command) async {
+    return (await shellNoThrow.run('adb -s $serial $command')).first;
+  }
+
+  Future<bool> fileExists(String androidLocation) async {
+    var result = await runAdbCommandNoThrow('shell ls $androidLocation');
+    // ls: /storage/emulated/0/Android/data/com.hublot.loves.football.ucl2022.dev/files/Documents/fan_dnk_dummy: No such file or directory
+    // exit code 1
+    if (result.exitCode == 1) {
+      return false;
+    }
+    return result.outLines.isNotEmpty;
+  }
+
+  Future<void> pullDirectory(String androidFrom, String localTo) async {
+    await Directory(localTo).create(recursive: true);
+    await runAdbCommandOutLines('pull $androidFrom $localTo');
+  }
+
+  Future<void> pushDirectory(String localFrom, String androidTo) async {
+    await runAdbCommandOutLines('push $localFrom $androidTo');
+  }
 }
