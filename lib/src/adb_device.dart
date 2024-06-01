@@ -11,7 +11,7 @@ Future<String?> findDevice({String? serial}) async {
   } else if (serial == 'any' || serial == 'null') {
     return await findFirstDevice();
   }
-  return serial;
+  return null;
 }
 
 Future<String?> findIpDevice({int port = 5555}) async {
