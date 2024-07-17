@@ -4,8 +4,8 @@
 
 library apk_utils_test;
 
-import 'package:dev_test/test.dart';
 import 'package:tekartik_android_utils/adb_shell.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('adb_shell', () {

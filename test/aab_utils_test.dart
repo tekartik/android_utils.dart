@@ -4,10 +4,10 @@
 
 library aab_utils_test;
 
-import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/aab_utils.dart';
+import 'package:test/test.dart';
 
 void main() => defineTests();
 

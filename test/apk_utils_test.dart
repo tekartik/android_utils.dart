@@ -6,10 +6,10 @@ library apk_utils_test;
 
 import 'dart:convert';
 
-import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/apk_get_sha1.dart';
+import 'package:test/test.dart';
 
 void main() => defineTests();
 
@@ -39,7 +39,7 @@ void defineTests() {
       test('nameIt', () async {
         var apkFilePath = join(inFolder, 'app-release.apk');
         await nameApk(apkFilePath,
-            outFolderPath: join(outFolder, joinAll(testDescriptions)));
+            outFolderPath: join(outFolder, join(outFolder, 'appt_name_it')));
       });
     }, skip: !aaptSupported);
   });

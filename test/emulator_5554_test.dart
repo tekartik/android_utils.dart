@@ -1,7 +1,7 @@
-import 'package:dev_test/test.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_device.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
+import 'package:test/test.dart';
 
 Future<void> main() async {
   var androidFromEnv = ShellEnvironment().vars['TK_ANDROID_UTILS_ANDROID_FROM'];

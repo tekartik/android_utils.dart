@@ -3,10 +3,10 @@ library tekartik_android_util.test.avd_utils_test;
 
 import 'dart:convert';
 
-import 'package:dev_test/test.dart';
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/avd_utils.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('avd_utils', () {

@@ -3,11 +3,11 @@ library tekartik_android_util.test.adb_utils_test;
 
 import 'dart:convert';
 
-import 'package:dev_test/test.dart';
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
 import 'package:tekartik_android_utils/src/adb_utils.dart';
 import 'package:tekartik_android_utils/src/build_utils.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('adb_utils', () {

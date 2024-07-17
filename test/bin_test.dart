@@ -1,10 +1,10 @@
 @TestOn('vm')
 library;
 
-import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
+import 'package:test/test.dart';
 
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
@@ -35,7 +35,7 @@ void defineTests() {
           DartCmd([
             join('bin', 'apk_name_it.dart'),
             join(inFolder, 'app-release.apk'),
-            join(outFolder, joinAll(testDescriptions))
+            join(outFolder, 'bin_name_it')
           ]),
           verbose: true);
       expect(result.exitCode, 0);
@@ -63,7 +63,7 @@ void defineTests() {
             'run',
             'apk_name_it.dart',
             join(inFolder, 'app-release.apk'),
-            join(outFolder, joinAll(testDescriptions))
+            join(outFolder, 'bin_pub_name_it')
           ]),
           verbose: true);
       expect(result.exitCode, 0);

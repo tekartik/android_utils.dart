@@ -3,8 +3,8 @@ library;
 
 import 'dart:io';
 
-import 'package:dev_test/test.dart';
 import 'package:tekartik_android_utils/android_cmd.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('android_cmd', () {

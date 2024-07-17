@@ -4,9 +4,9 @@
 
 library apk_utils_test;
 
-import 'package:dev_test/test.dart';
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/manifest_info.dart';
+import 'package:test/test.dart';
 
 void main() => defineTests();
 
