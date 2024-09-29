@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_android_util.test.build_utils_test;
+library;
 
 import 'dart:io';
 

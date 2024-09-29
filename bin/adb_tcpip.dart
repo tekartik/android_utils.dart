@@ -1,6 +1,6 @@
 #!/usr/bin/env dart
 
-library tekartik_script.bin.adb_tcpip;
+library;
 
 import 'dart:async';
 

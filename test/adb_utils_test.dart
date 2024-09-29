@@ -1,5 +1,5 @@
 @TestOn('vm')
-library tekartik_android_util.test.adb_utils_test;
+library;
 
 import 'dart:convert';
 

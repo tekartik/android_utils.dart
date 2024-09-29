@@ -2,7 +2,7 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-library apk_utils_test;
+library;
 
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
 import 'package:tekartik_android_utils/src/manifest_info.dart';

@@ -2,7 +2,7 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 /// The apk_utils library.
-library apk_utils;
+library;
 
 import 'dart:async';
 

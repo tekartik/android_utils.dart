@@ -1,6 +1,6 @@
 #!/usr/bin/env dart
 
-library tekartik_script.bin.kill_emu;
+library;
 
 import 'dart:async';
 
