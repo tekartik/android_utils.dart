@@ -3,8 +3,8 @@ import 'package:process_run/shell.dart';
 /// Supports:
 ///
 /// `any:5555`: first ip device
-/// `any` or <null>: first device
-/// <serial>
+/// `any` or `<null>`: first device
+/// `<serial>`
 Future<String?> findDevice({String? serial}) async {
   if (serial?.startsWith('any:') ?? false) {
     return await findIpDevice(port: int.parse(serial!.split(':').last));
