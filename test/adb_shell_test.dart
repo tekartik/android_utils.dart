@@ -1,7 +1,6 @@
 @TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
 library;
 
 import 'package:tekartik_android_utils/adb_shell.dart';
@@ -12,11 +11,14 @@ void main() {
     test('ps_line', () async {
       // await runCmd(adbCmd(['shell', 'ps']));
       var psLine = PsLine(
-          'shell     7398  1310  1217116 16816 binder_thr a9529424 S com.android.commands.monkey');
+        'shell     7398  1310  1217116 16816 binder_thr a9529424 S com.android.commands.monkey',
+      );
       expect(psLine.pid, 7398);
       expect(psLine.name, 'com.android.commands.monkey');
-      expect(psLine.toString(),
-          'shell 7398 1310 1217116 16816 binder_thr a9529424 S com.android.commands.monkey');
+      expect(
+        psLine.toString(),
+        'shell 7398 1310 1217116 16816 binder_thr a9529424 S com.android.commands.monkey',
+      );
     });
 
     test('ps_parser', () {

@@ -7,15 +7,18 @@ ProcessCmd _adbCmd(List<String?> args) {
 
 ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
 
-List<String> adbMonkeyArgs(
-    {String? packageName, int? count, int sysKeysPercent = 0}) {
+List<String> adbMonkeyArgs({
+  String? packageName,
+  int? count,
+  int sysKeysPercent = 0,
+}) {
   count ??= 50000;
   var args = <String>[
     'shell',
     'monkey',
     if (packageName != null) ...['-p', packageName],
     ...['--pct-syskeys', '$sysKeysPercent'],
-    '$count'
+    '$count',
   ];
 
   return args;
@@ -57,6 +60,7 @@ ProcessCmd nameApkCommand({String? flavor}) {
   } else {
     filename = join(flavor, 'release', 'app-$flavor-release');
   }
-  return ProcessCmd(
-      'apk_name_it', [join('app', 'build', 'outputs', 'apk', '$filename.apk')]);
+  return ProcessCmd('apk_name_it', [
+    join('app', 'build', 'outputs', 'apk', '$filename.apk'),
+  ]);
 }

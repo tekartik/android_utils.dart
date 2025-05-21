@@ -1,7 +1,6 @@
 @TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
 library;
 
 import 'package:path/path.dart';
@@ -22,14 +21,30 @@ void defineTests() {
       var project = AndroidProject(androidTopPath);
 
       var flavor = 'prod';
-      var sourceApk = join(androidTopPath, 'app', 'build', 'outputs', 'apk',
-          flavor, 'release', 'app-$flavor-release.apk');
+      var sourceApk = join(
+        androidTopPath,
+        'app',
+        'build',
+        'outputs',
+        'apk',
+        flavor,
+        'release',
+        'app-$flavor-release.apk',
+      );
       expect(project.getApkPath(flavor: flavor), sourceApk);
 
       expect(
-          project.getApkPath(),
-          join(androidTopPath, 'app', 'build', 'outputs', 'apk', 'release',
-              'app-release.apk'));
+        project.getApkPath(),
+        join(
+          androidTopPath,
+          'app',
+          'build',
+          'outputs',
+          'apk',
+          'release',
+          'app-release.apk',
+        ),
+      );
     });
   });
 }

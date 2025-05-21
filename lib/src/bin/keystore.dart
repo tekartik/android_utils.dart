@@ -24,12 +24,14 @@ Future<void> main() async {
 Future<void> enterCredentials() async {
   var credentials = credentialsFromEnv;
   var existing = credentials?.password;
-  var password =
-      await prompt('Enter password${existing != null ? '[$existing]' : ''}');
+  var password = await prompt(
+    'Enter password${existing != null ? '[$existing]' : ''}',
+  );
   if (password.length >= 8) {
     await checkAndActivatePackage('process_run');
     await Shell().run(
-        'pub global run process_run:shell env var set TEKARTIK_KEYSTORE_PASSWORD $password');
+      'pub global run process_run:shell env var set TEKARTIK_KEYSTORE_PASSWORD $password',
+    );
   } else {
     stderr.writeln('Password too short');
   }

@@ -13,7 +13,7 @@ void main() {
         if (Platform.isWindows)
           'app\\build\\outputs\\apk\\staging\\release\\app-staging-release.apk'
         else
-          'app/build/outputs/apk/staging/release/app-staging-release.apk'
+          'app/build/outputs/apk/staging/release/app-staging-release.apk',
       ]);
     });
   });

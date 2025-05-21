@@ -13,8 +13,11 @@ class AdbLogOptions {
   /// Verbose commands
   final bool verbose;
 
-  AdbLogOptions(
-      {required this.package, required this.serial, this.verbose = false});
+  AdbLogOptions({
+    required this.package,
+    required this.serial,
+    this.verbose = false,
+  });
 }
 
 /// Log for a given device and package
@@ -29,27 +32,30 @@ Future<void> adbLog(AdbLogOptions options) async {
 
   var package = options.package;
   if (package != null) {
-    var pidShell =
-        Shell(throwOnError: false, verbose: false, commandVerbose: false);
+    var pidShell = Shell(
+      throwOnError: false,
+      verbose: false,
+      commandVerbose: false,
+    );
     Shell? logcatShell;
     int? pid;
     while (true) {
       var output =
-          (await pidShell.run('$adb shell pidof ${shellArgument(package)}'))
-              .outText
-              .trim();
+          (await pidShell.run(
+            '$adb shell pidof ${shellArgument(package)}',
+          )).outText.trim();
       var newPid = int.tryParse(output);
       if (newPid != pid) {
         pid = newPid;
         () async {
           logcatShell?.kill();
           if (newPid != null) {
-            var deviceDate = DateTime.parse((await run(
-                        '$adb shell date +%Y-%m-%dT%H:%M:%S',
-                        verbose: false))
-                    .outText
-                    .trim())
-                .subtract(Duration(seconds: 5));
+            var deviceDate = DateTime.parse(
+              (await run(
+                '$adb shell date +%Y-%m-%dT%H:%M:%S',
+                verbose: false,
+              )).outText.trim(),
+            ).subtract(Duration(seconds: 5));
             //   -T '<time>'     Print most recent lines since specified time (not imply -d)
             //                   count is pure numerical, time is 'MM-DD hh:mm:ss.mmm...'
             //                   'YYYY-MM-DD hh:mm:ss.mmm...' or 'sssss.mmm...' format
@@ -59,11 +65,11 @@ Future<void> adbLog(AdbLogOptions options) async {
               var shell =
                   logcatShell = Shell(throwOnError: false, verbose: true);
               await shell.run(
-                  '$adb logcat --pid=$newPid -T ${shellArgument(minDate)}');
+                '$adb logcat --pid=$newPid -T ${shellArgument(minDate)}',
+              );
             } catch (_) {}
           }
-        }()
-            .unawait();
+        }().unawait();
       }
       await sleep(1000);
     }

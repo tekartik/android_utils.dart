@@ -24,9 +24,11 @@ bool? _aaptSupported;
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
 Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
-  var result = await runExecutableArguments(
-      'aapt', ['dump', 'badging', apkFilePath],
-      commandVerbose: verbose);
+  var result = await runExecutableArguments('aapt', [
+    'dump',
+    'badging',
+    apkFilePath,
+  ], commandVerbose: verbose);
   var lines = LineSplitter.split(result.stdout.toString());
   ApkInfo? apkInfo;
   for (var line in lines) {
@@ -69,8 +71,11 @@ Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   }
 }
 
-Future copyApk(String apkFilePath, ApkInfo apkInfo,
-    {String? outFolderPath}) async {
+Future copyApk(
+  String apkFilePath,
+  ApkInfo apkInfo, {
+  String? outFolderPath,
+}) async {
   var dstFileName =
       '${apkInfo.name}-${apkInfo.versionName}-${apkInfo.versionCode}.apk';
 
@@ -91,8 +96,11 @@ Future copyApk(String apkFilePath, ApkInfo apkInfo,
   stdout.writeln('  size: ${File(dst).statSync().size}');
 }
 
-Future nameIt(String apkFilePath, String manifestFilePath,
-    {String? versionName}) {
+Future nameIt(
+  String apkFilePath,
+  String manifestFilePath, {
+  String? versionName,
+}) {
   if (extension(apkFilePath) != '.apk') {
     throw '$apkFilePath is not an android .apk file';
   }
@@ -110,9 +118,11 @@ Future nameIt(String apkFilePath, String manifestFilePath,
   versionName ??= info.versionName;
 
   return copyApk(
-      apkFilePath,
-      ApkInfo(
-          name: info.name,
-          versionName: versionName,
-          versionCode: info.versionCode));
+    apkFilePath,
+    ApkInfo(
+      name: info.name,
+      versionName: versionName,
+      versionCode: info.versionCode,
+    ),
+  );
 }

@@ -1,8 +1,7 @@
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:process_run/src/shell_utils.dart' // ignore: implementation_imports
-    show
-        shellSplit;
+    show shellSplit;
 
 import 'import_io.dart';
 
@@ -82,9 +81,9 @@ Future<String?> readRegistryString(String path, String key) async {
     //    Path    REG_SZ    C:\Program Files\Android\Android Studio New
     //
     var lines = (await run(
-            'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
-            verbose: false))
-        .outLines
+          'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
+          verbose: false,
+        )).outLines
         .map((e) => e.trimLeft())
         .where((element) => element.split(' ').first == key);
     if (lines.isNotEmpty) {
@@ -127,7 +126,9 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   if (Platform.isLinux) {
     // Look for shortcut
     var shortcutFile = join(
-        userHomePath, '.local/share/applications/jetbrains-studio.desktop');
+      userHomePath,
+      '.local/share/applications/jetbrains-studio.desktop',
+    );
 
     // [Desktop Entry]
     // Version=1.0
@@ -163,8 +164,10 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     try {
       // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
       //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
-      var asDir =
-          await readRegistryString('HKLM\\SOFTWARE\\Android Studio', 'Path');
+      var asDir = await readRegistryString(
+        'HKLM\\SOFTWARE\\Android Studio',
+        'Path',
+      );
 
       if (asDir?.isNotEmpty ?? false) {
         asDirs.add(asDir!);
@@ -177,8 +180,10 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     try {
       // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
       //     Path    REG_SZ    C:\Program Files\Android\Android Studio New
-      var sdkDir =
-          await readRegistryString('HKLM\\SOFTWARE\\Android Studio', 'SdkPath');
+      var sdkDir = await readRegistryString(
+        'HKLM\\SOFTWARE\\Android Studio',
+        'SdkPath',
+      );
 
       if (sdkDir?.isNotEmpty ?? false) {
         sdkDirs.add(sdkDir!);
@@ -213,46 +218,56 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   if (sdkDir != null) {
     {
       // build tools
-      var versions = (Directory(join(sdkDir, 'build-tools'))
-              .listSync()
-              .whereType<Directory>()
-              .map((e) => parseVersion(basename(e.path)))
-              .where((v) => sdkVersion == null || v.major == sdkVersion)
-              .toList()
-            ..sort())
-          .reversed
-          .toList();
+      var versions =
+          (Directory(join(sdkDir, 'build-tools'))
+                  .listSync()
+                  .whereType<Directory>()
+                  .map((e) => parseVersion(basename(e.path)))
+                  .where((v) => sdkVersion == null || v.major == sdkVersion)
+                  .toList()
+                ..sort())
+              .reversed
+              .toList();
       if (versions.isNotEmpty) {
         readSdkVersion = versions.first;
-        sdkBuildToolsDir =
-            join(sdkDir, 'build-tools', readSdkVersion.toString());
+        sdkBuildToolsDir = join(
+          sdkDir,
+          'build-tools',
+          readSdkVersion.toString(),
+        );
       }
     }
     {
       // command line tools
       var commandLineToolsBasePath = join(sdkDir, 'cmdline-tools');
       if (Directory(commandLineToolsBasePath).existsSync()) {
-        var versionTexts = await (Directory(commandLineToolsBasePath)
-            .list()
-            .where((e) => e is Directory)
-            .map((e) => basename(e.path))
-            .toList());
+        var versionTexts =
+            await (Directory(commandLineToolsBasePath)
+                .list()
+                .where((e) => e is Directory)
+                .map((e) => basename(e.path))
+                .toList());
 
         if (versionTexts.isNotEmpty) {
           // Use latest if found
           if (versionTexts.contains('latest')) {
             sdkCommandLineToolsDir = join(commandLineToolsBasePath, 'latest');
           } else {
-            var versions = (versionTexts
-                    .map((e) => parseVersion(e))
-                    .where((v) => sdkVersion == null || v.major == sdkVersion)
-                    .toList()
-                  ..sort())
-                .reversed
-                .toList();
+            var versions =
+                (versionTexts
+                        .map((e) => parseVersion(e))
+                        .where(
+                          (v) => sdkVersion == null || v.major == sdkVersion,
+                        )
+                        .toList()
+                      ..sort())
+                    .reversed
+                    .toList();
             if (versions.isNotEmpty) {
-              sdkCommandLineToolsDir =
-                  join(commandLineToolsBasePath, versions.first.toString());
+              sdkCommandLineToolsDir = join(
+                commandLineToolsBasePath,
+                versions.first.toString(),
+              );
             }
           }
         }
@@ -269,8 +284,8 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
         'jre/Contents/Home/bin',
 
         // Pre 2021-08 android studio
-        'jre/jdk/Contents/Home/bin'
-      ]
+        'jre/jdk/Contents/Home/bin',
+      ],
     ]) {
       var dir = join(asDir, subDir);
       if (Directory(dir).existsSync()) {
@@ -280,21 +295,24 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     }
   }
 
-  context = AndroidBuildContextImpl()
-    ..androidStudioPath = asDir
-    ..androidStudioJdkPath = asJdkDir
-    ..androidSdkPath = sdkDir
-    ..androidSdkBuildToolsPath = sdkBuildToolsDir
-    ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir
-    ..sdkVersion = readSdkVersion;
+  context =
+      AndroidBuildContextImpl()
+        ..androidStudioPath = asDir
+        ..androidStudioJdkPath = asJdkDir
+        ..androidSdkPath = sdkDir
+        ..androidSdkBuildToolsPath = sdkBuildToolsDir
+        ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir
+        ..sdkVersion = readSdkVersion;
   return context;
 }
 
 Future<ShellEnvironment>? _androidBuildEnvironmentFuture;
 
 /// Get shell environment to merge
-Future<ShellEnvironment> getAndroidBuildEnvironment(
-    {AndroidBuildContext? context, int? sdkVersion}) async {
+Future<ShellEnvironment> getAndroidBuildEnvironment({
+  AndroidBuildContext? context,
+  int? sdkVersion,
+}) async {
   var environment = ShellEnvironment.empty();
   // Add proper Java from Android Studio
   context ??= await getAndroidBuildContext(sdkVersion: sdkVersion);
@@ -311,8 +329,9 @@ Future<ShellEnvironment> getAndroidBuildEnvironment(
     environment.paths.prepend(join(context.androidSdkPlatformToolsPath!));
   }
   if (context.androidSdkCommandLineToolsPath != null) {
-    environment.paths
-        .prepend(join(context.androidSdkCommandLineToolsPath!, 'bin'));
+    environment.paths.prepend(
+      join(context.androidSdkCommandLineToolsPath!, 'bin'),
+    );
   }
   // emulator
   if (context.androidSdkPath != null) {
@@ -322,11 +341,15 @@ Future<ShellEnvironment> getAndroidBuildEnvironment(
 }
 
 /// If specified, [context] and [sdkVersion] are used
-Future<void> initAndroidBuildEnvironment(
-    {AndroidBuildContext? context, int? sdkVersion}) async {
+Future<void> initAndroidBuildEnvironment({
+  AndroidBuildContext? context,
+  int? sdkVersion,
+}) async {
   await (_androidBuildEnvironmentFuture ??= () async {
     var buildEnvironment = await getAndroidBuildEnvironment(
-        context: context, sdkVersion: sdkVersion);
+      context: context,
+      sdkVersion: sdkVersion,
+    );
     // devPrint(buildEnvironment.paths.toList());
     var environment = ShellEnvironment()..merge(buildEnvironment);
 

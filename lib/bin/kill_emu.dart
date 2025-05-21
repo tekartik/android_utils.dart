@@ -41,7 +41,7 @@ Future main(List<String> args) async {
     await killAllCommandsByName('qemu');
   }
 
-/*
+  /*
   ProcessCmd cmd = new ProcessCmd('ps', ['x', '-o', 'pid,cmd']);
   ProcessResult processResult = await runCmd(cmd, commandVerbose: true);
   PsParser psParser = new PsParser(processResult.stdout.toString());

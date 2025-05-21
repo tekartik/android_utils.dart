@@ -1,7 +1,6 @@
 @TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
 library;
 
 import 'package:path/path.dart';
@@ -29,8 +28,10 @@ void defineTests() {
       });
 
       test('getAabInfo', () async {
-        var manifestInfo =
-            await getAabInfo(join(inFolder, 'app-release.aab'), verbose: true);
+        var manifestInfo = await getAabInfo(
+          join(inFolder, 'app-release.aab'),
+          verbose: true,
+        );
         expect(manifestInfo.name, 'com.tekartik.miniexp');
         expect(manifestInfo.versionCode, '2');
         expect(manifestInfo.versionName, '1.0.1');

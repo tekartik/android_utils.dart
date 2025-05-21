@@ -1,7 +1,6 @@
 @TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
 library;
 
 import 'dart:convert';
@@ -29,8 +28,11 @@ void defineTests() {
     });
     group('aapt', () {
       test('getApkInfo', () async {
-        var apkInfo = (await getApkInfo(join(inFolder, 'app-release.apk'),
-            verbose: true))!;
+        var apkInfo =
+            (await getApkInfo(
+              join(inFolder, 'app-release.apk'),
+              verbose: true,
+            ))!;
         expect(apkInfo.name, 'com.tekartik.miniexp');
         expect(apkInfo.versionCode, '2');
         expect(apkInfo.versionName, '1.0.1');
@@ -38,8 +40,10 @@ void defineTests() {
 
       test('nameIt', () async {
         var apkFilePath = join(inFolder, 'app-release.apk');
-        await nameApk(apkFilePath,
-            outFolderPath: join(outFolder, join(outFolder, 'appt_name_it')));
+        await nameApk(
+          apkFilePath,
+          outFolderPath: join(outFolder, join(outFolder, 'appt_name_it')),
+        );
       });
     }, skip: !aaptSupported);
   });
@@ -47,7 +51,9 @@ void defineTests() {
   test('getApkSignInfo', () async {
     var output =
         'Signer #1 certificate SHA-1 digest: 40f1833d77c2f4e15566eaea1f87dc7a90246c48';
-    expect(extractApkSignerSha1Digest(LineSplitter.split(output)),
-        '40f1833d77c2f4e15566eaea1f87dc7a90246c48');
+    expect(
+      extractApkSignerSha1Digest(LineSplitter.split(output)),
+      '40f1833d77c2f4e15566eaea1f87dc7a90246c48',
+    );
   });
 }

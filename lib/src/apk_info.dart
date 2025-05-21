@@ -15,7 +15,7 @@ class ApkInfo {
     var map = <String, dynamic>{
       'name': name,
       'versionName': versionName,
-      'versionCode': versionCode
+      'versionCode': versionCode,
     };
     return map;
   }

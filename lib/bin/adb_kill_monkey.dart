@@ -19,8 +19,12 @@ Future main(List<String> args) async {
 
   parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
   //parser.addFlag(_flagVersionName, abbr: 'v', help: 'Version name', negatable: false);
-  parser.addOption(_optionSerialNumber,
-      abbr: 's', help: 'Serial name', defaultsTo: defaultEmulatorSerialNumber);
+  parser.addOption(
+    _optionSerialNumber,
+    abbr: 's',
+    help: 'Serial name',
+    defaultsTo: defaultEmulatorSerialNumber,
+  );
 
   var results = parser.parse(args);
 

@@ -1,7 +1,6 @@
 @TestOn('vm')
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
 library;
 
 import 'package:tekartik_android_utils/src/aapt_badging_line_parser.dart';
@@ -57,8 +56,10 @@ void defineTests() {
 
   group('badging_parser', () {
     test('parse', () {
-      var apkInfo = parseBadgingLine(
-          "package: name='com.test.app' versionCode='2' versionName='0.1' platformBuildVersionName=''")!;
+      var apkInfo =
+          parseBadgingLine(
+            "package: name='com.test.app' versionCode='2' versionName='0.1' platformBuildVersionName=''",
+          )!;
       expect(apkInfo.name, 'com.test.app');
       expect(apkInfo.versionCode, '2');
       expect(apkInfo.versionName, '0.1');

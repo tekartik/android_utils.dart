@@ -31,15 +31,18 @@ void main() {
       var context = await getAndroidBuildContext();
       if (context.androidSdkCommandLineToolsPath != null) {
         // sdkmanager should be found in cmdline tools instead of tools
-        expect(dirname(dirname((await which('sdkmanager'))!)),
-            context.androidSdkCommandLineToolsPath);
+        expect(
+          dirname(dirname((await which('sdkmanager'))!)),
+          context.androidSdkCommandLineToolsPath,
+        );
       }
     });
     if (Platform.isWindows) {
       test('readRegistryString', () async {
         var displayVersion = await readRegistryString(
-            'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
-            'DisplayVersion');
+          'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
+          'DisplayVersion',
+        );
         expect(displayVersion, isNotNull);
       });
     }

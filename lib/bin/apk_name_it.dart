@@ -13,8 +13,12 @@ Future main(List<String> args) async {
   var parser = ArgParser();
 
   parser.addFlag(_flagHelp, abbr: 'h', help: 'Usage help', negatable: false);
-  parser.addOption(_flagVersionName,
-      abbr: 'v', help: 'Version name', defaultsTo: null);
+  parser.addOption(
+    _flagVersionName,
+    abbr: 'v',
+    help: 'Version name',
+    defaultsTo: null,
+  );
 
   var results = parser.parse(args);
 
@@ -71,7 +75,6 @@ Future main(List<String> args) async {
     */
     await nameApk(apkFilePath, outFolderPath: outFolderPath);
   }
-
   /*
     //nameIt(apkFile, join(content, 'AndroidManifest.xml'));
   } else {

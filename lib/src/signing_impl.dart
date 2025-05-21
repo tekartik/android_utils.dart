@@ -23,20 +23,22 @@ class KeytoolGenKeyOptions {
   final String? stateOrProvince;
   final String? countryCode;
 
-  KeytoolGenKeyOptions(
-      {this.alias = keystoreAliasDefault,
-      this.firstAndLastName,
-      this.organizationUnit,
-      this.organization,
-      this.cityOrLocality,
-      this.stateOrProvince,
-      this.countryCode}); // 2 letters
+  KeytoolGenKeyOptions({
+    this.alias = keystoreAliasDefault,
+    this.firstAndLastName,
+    this.organizationUnit,
+    this.organization,
+    this.cityOrLocality,
+    this.stateOrProvince,
+    this.countryCode,
+  }); // 2 letters
 }
 
 extension AndroidModuleSigningExt on AndroidModule {
-  Future<void> generateKey(
-      {required SigningOptions signinOptions,
-      required KeytoolGenKeyOptions keytoolGenOptions}) async {
+  Future<void> generateKey({
+    required SigningOptions signinOptions,
+    required KeytoolGenKeyOptions keytoolGenOptions,
+  }) async {
     var keystore = signinOptions.keystore;
     var password = signinOptions.password;
     var shell = Shell().cd(join(project.path, module));
@@ -47,34 +49,36 @@ extension AndroidModuleSigningExt on AndroidModule {
       return null;
     }
 
-    var dnames = [
-      dname('CN', keytoolGenOptions.firstAndLastName),
-      dname('OU', keytoolGenOptions.organizationUnit),
-      dname('O', keytoolGenOptions.organization),
-      dname('L', keytoolGenOptions.cityOrLocality),
-      dname('ST', keytoolGenOptions.stateOrProvince),
-      dname('C', keytoolGenOptions.countryCode),
-    ].nonNulls;
+    var dnames =
+        [
+          dname('CN', keytoolGenOptions.firstAndLastName),
+          dname('OU', keytoolGenOptions.organizationUnit),
+          dname('O', keytoolGenOptions.organization),
+          dname('L', keytoolGenOptions.cityOrLocality),
+          dname('ST', keytoolGenOptions.stateOrProvince),
+          dname('C', keytoolGenOptions.countryCode),
+        ].nonNulls;
     await shell.run(
-        'keytool -genkey -v -keystore $keystore -storepass $password'
-        ' -alias ${keytoolGenOptions.alias} -keypass $password -keyalg RSA -keysize 2048'
-        '${dnames.isNotEmpty ? ' -dname ${dnames.join(',')}' : ''}'
-        ' -validity 100000');
+      'keytool -genkey -v -keystore $keystore -storepass $password'
+      ' -alias ${keytoolGenOptions.alias} -keypass $password -keyalg RSA -keysize 2048'
+      '${dnames.isNotEmpty ? ' -dname ${dnames.join(',')}' : ''}'
+      ' -validity 100000',
+    );
   }
 
-  Future<void> printKeyInfo({
-    required SigningOptions signinOptions,
-  }) async {
+  Future<void> printKeyInfo({required SigningOptions signinOptions}) async {
     var keystore = signinOptions.keystore;
     var password = signinOptions.password;
     var shell = Shell().cd(join(project.path, module));
-    await shell
-        .run('keytool -list -v -keystore $keystore -storepass $password');
+    await shell.run(
+      'keytool -list -v -keystore $keystore -storepass $password',
+    );
   }
 
-  Future<void> printGradleConfig(
-      {required SigningOptions signinOptions,
-      String alias = keystoreAliasDefault}) async {
+  Future<void> printGradleConfig({
+    required SigningOptions signinOptions,
+    String alias = keystoreAliasDefault,
+  }) async {
     stdout.writeln('''
     signingConfigs {
         release {

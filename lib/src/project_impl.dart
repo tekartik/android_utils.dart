@@ -21,9 +21,9 @@ class AndroidProject {
   // target can be :app ot app
   ProcessCmd buildApkCmd(String target, {String? flavor}) {
     var gradleTarget = targetToGradleTarget(target);
-    var cmd = ProcessCmd(
-        gradleExecutable, ['$gradleTarget:assemble${flavor}Release'],
-        workingDirectory: path);
+    var cmd = ProcessCmd(gradleExecutable, [
+      '$gradleTarget:assemble${flavor}Release',
+    ], workingDirectory: path);
     return cmd;
   }
 
@@ -31,8 +31,16 @@ class AndroidProject {
   Future nameApk(String target) {
     var targetPath = targetToPath(target);
     var baseTarget = basename(targetPath);
-    return utils.nameApk(join(path, targetPath, 'build', 'outputs', 'apk',
-        '$baseTarget-release.apk'));
+    return utils.nameApk(
+      join(
+        path,
+        targetPath,
+        'build',
+        'outputs',
+        'apk',
+        '$baseTarget-release.apk',
+      ),
+    );
   }
 
   static List<String> targetToParts(String target) {
@@ -67,10 +75,25 @@ class AndroidProject {
     mode ??= modeRelease;
     if (flavor == null) {
       return join(
-          path, module, 'build', 'outputs', 'apk', mode, '$module-$mode.apk');
+        path,
+        module,
+        'build',
+        'outputs',
+        'apk',
+        mode,
+        '$module-$mode.apk',
+      );
     } else {
-      return join(path, 'app', 'build', 'outputs', 'apk', flavor, mode,
-          '$module-$flavor-$mode.apk');
+      return join(
+        path,
+        'app',
+        'build',
+        'outputs',
+        'apk',
+        flavor,
+        mode,
+        '$module-$flavor-$mode.apk',
+      );
     }
   }
 }

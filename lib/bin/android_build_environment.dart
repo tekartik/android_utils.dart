@@ -7,11 +7,15 @@ import 'package:tekartik_android_utils/src/build_utils.dart';
 
 /// See https://developer.android.com/studio/command-line/variables
 Future<void> main(List<String> arguments) async {
-  var parser = ArgParser()
-    ..addFlag('env',
-        help: 'Write env source file and output its name (Mac/Linux/Windows).\n'
-            'Usage: . \$(android_build_environment --env)')
-    ..addFlag('help', abbr: 'h', help: 'Usage help', negatable: false);
+  var parser =
+      ArgParser()
+        ..addFlag(
+          'env',
+          help:
+              'Write env source file and output its name (Mac/Linux/Windows).\n'
+              'Usage: . \$(android_build_environment --env)',
+        )
+        ..addFlag('help', abbr: 'h', help: 'Usage help', negatable: false);
   var result = parser.parse(arguments);
 
   var help = result['help'] as bool;
@@ -37,14 +41,15 @@ Future<void> main(List<String> arguments) async {
 
     var env = await getAndroidBuildEnvironment(context: context);
     final dst = File(join(Directory.systemTemp.path, envRc));
-    final content = Platform.isWindows
-        ?
-        // https://stackoverflow.com/questions/714877/setting-windows-powershell-environment-variables
-        '''
+    final content =
+        Platform.isWindows
+            ?
+            // https://stackoverflow.com/questions/714877/setting-windows-powershell-environment-variables
+            '''
 # Add Android path
 \$ENV:PATH="${env.paths.join(';')};\$ENV:PATH"
 '''
-        : '''
+            : '''
 # Add Android path
 export PATH="${env.paths.join(':')}:\$PATH"
 ''';
@@ -59,12 +64,15 @@ export PATH="${env.paths.join(':')}:\$PATH"
     print('             androidStudioPath: ${context.androidStudioPath}');
     print('          androidStudioJdkPath: ${context.androidStudioJdkPath}');
     print(
-        '      androidSdkBuildToolsPath: ${context.androidSdkBuildToolsPath}');
+      '      androidSdkBuildToolsPath: ${context.androidSdkBuildToolsPath}',
+    );
     print(
-        '   androidSdkPlatformToolsPath: ${context.androidSdkPlatformToolsPath}');
+      '   androidSdkPlatformToolsPath: ${context.androidSdkPlatformToolsPath}',
+    );
     print('           androidSdkToolsPath: ${context.androidSdkToolsPath}');
     print(
-        'androidSdkCommandLineToolsPath: ${context.androidSdkCommandLineToolsPath}');
+      'androidSdkCommandLineToolsPath: ${context.androidSdkCommandLineToolsPath}',
+    );
     print('            androidAvdHomePath: ${context.androidAvdHomePath}');
     print('                    sdkVersion: ${context.sdkVersion}');
 

@@ -21,8 +21,9 @@ class AabInfo extends ManifestInfo {}
 
 Future<AabInfo> getAabInfo(String aabFilePath, {bool verbose = false}) async {
   var result = await run(
-      'bundletool dump manifest --bundle ${shellArgument(aabFilePath)}',
-      verbose: verbose);
+    'bundletool dump manifest --bundle ${shellArgument(aabFilePath)}',
+    verbose: verbose,
+  );
   var lines = result.outText;
   var manifestInfo = AabInfo()..fromXml(lines);
   return manifestInfo;

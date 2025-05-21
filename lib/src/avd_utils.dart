@@ -92,17 +92,21 @@ Future<List<AvdInfo?>> getAvdInfos() async {
 
 Future<List<String>> getAvdIniFileNames() async {
   var bc = await getAndroidBuildContext();
-  var iniFiles = (await Directory(bc.androidAvdHomePath!)
-      .list()
-      .where((event) => extension(event.path).toLowerCase() == '.ini')
-      .map((event) => normalize(absolute(event.path)))
-      .toList())
-    ..sort();
+  var iniFiles =
+      (await Directory(bc.androidAvdHomePath!)
+            .list()
+            .where((event) => extension(event.path).toLowerCase() == '.ini')
+            .map((event) => normalize(absolute(event.path)))
+            .toList())
+        ..sort();
   return iniFiles;
 }
 
-Future<void> moveAvdFolder(
-    {required String avd, required String dst, bool force = false}) async {
+Future<void> moveAvdFolder({
+  required String avd,
+  required String dst,
+  bool force = false,
+}) async {
   var iniFiles = await getAvdIniFileNames();
 
   var found = false;
@@ -143,8 +147,10 @@ Future<void> moveAvdFolder(
         await copyDirectory(Directory(path), Directory(dstPath));
 
         stdout.writeln('Updating $iniFile');
-        var content = (await File(iniFile).readAsString())
-            .replaceAll(pathInIniFile, dstPath);
+        var content = (await File(iniFile).readAsString()).replaceAll(
+          pathInIniFile,
+          dstPath,
+        );
         await File(iniFile).writeAsString(content);
 
         stdout.writeln('Deleting $path');
