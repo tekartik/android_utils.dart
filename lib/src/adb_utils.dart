@@ -5,6 +5,11 @@ import 'package:tekartik_android_utils/build_utils.dart';
 
 import 'build_utils.dart';
 
+/// Check if adb is supported
+bool isAdbSupportedSync() {
+  return whichSync('adb') != null;
+}
+
 class AdbDeviceInfo {
   String? serial;
   String? type;

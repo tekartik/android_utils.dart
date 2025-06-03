@@ -1,2 +1,7 @@
 export 'src/adb_utils.dart'
-    show AdbDeviceInfo, getAdbDeviceInfos, adbDeviceInfosParseLines, DeviceAdb;
+    show
+        isAdbSupportedSync,
+        AdbDeviceInfo,
+        getAdbDeviceInfos,
+        adbDeviceInfosParseLines,
+        DeviceAdb;
