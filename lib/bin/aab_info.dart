@@ -2,6 +2,8 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:tekartik_android_utils/src/import.dart';
@@ -20,8 +22,8 @@ Future main(List<String> args) async {
   var help = parseBool(results[_flagHelp])!;
 
   void usage() {
-    print('apk_info <path_to_apk_file>');
-    print(parser.usage);
+    stdout.writeln('apk_info <path_to_apk_file>');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -61,8 +63,8 @@ Future main(List<String> args) async {
     }
     */
     var aabInfo = await getAabInfo(aabFilePath);
-    print('name : ${aabInfo.name}');
-    print('versionCode : ${aabInfo.versionCode}');
-    print('versionName : ${aabInfo.versionName}');
+    stdout.writeln('name : ${aabInfo.name}');
+    stdout.writeln('versionCode : ${aabInfo.versionCode}');
+    stdout.writeln('versionName : ${aabInfo.versionName}');
   }
 }

@@ -3,6 +3,7 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:args/args.dart';
+import 'package:process_run/stdio.dart';
 import 'package:tekartik_android_utils/apk_utils.dart';
 import 'package:tekartik_android_utils/src/import.dart';
 
@@ -28,8 +29,8 @@ Future main(List<String> args) async {
   //String versionName = results[_flagVersionName];
 
   void usage() {
-    print('apk_name_it <path_to_apk_file> [<dst_folder>]');
-    print(parser.usage);
+    stdout.writeln('apk_name_it <path_to_apk_file> [<dst_folder>]');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -47,7 +48,7 @@ Future main(List<String> args) async {
     }
     /*
     if (!await new File(apkFile).exists()) {
-      print('$apkFile does not exist');
+      stdout.writeln('$apkFile does not exist');
       exit(1);
     }
 
@@ -69,7 +70,7 @@ Future main(List<String> args) async {
     if (apkInfo != null) {
       copyApk(apkFile, apkInfo);
     } else {
-      print('cannot read info on $apkFile');
+      stdout.writeln('cannot read info on $apkFile');
       exit(1);
     }
     */
@@ -83,7 +84,7 @@ Future main(List<String> args) async {
     }
     */
   else {
-    print('Missing apk file name');
+    stderr.writeln('Missing apk file name');
     usage();
   }
 }

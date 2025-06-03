@@ -24,8 +24,8 @@ Future main(List<String> args) async {
   var help = results[_flagHelp] as bool;
 
   void usage() {
-    print(scriptName);
-    print(parser.usage);
+    stdout.writeln(scriptName);
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -51,7 +51,7 @@ Future main(List<String> args) async {
         line = line.substring(index + prefix.length);
         index = line.indexOf('/');
         ipAddress = line.substring(0, index);
-        print(ipAddress);
+        stdout.writeln(ipAddress);
         break;
       }
     }

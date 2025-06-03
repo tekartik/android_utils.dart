@@ -7,6 +7,6 @@ Future<void> main() async {
       'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
       'DisplayVersion',
     );
-    print(displayVersion);
+    stdout.writeln(displayVersion);
   }
 }

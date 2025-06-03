@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_log.dart';
@@ -20,8 +22,8 @@ Future<void> main(List<String> arguments) async {
   var help = results['help'] as bool;
 
   void usage() {
-    print('android_build_environment');
-    print(parser.usage);
+    stdout.writeln('android_build_environment');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -36,10 +38,10 @@ Future<void> main(List<String> arguments) async {
   var verbose = results['verbose'] as bool;
 
   if (serial != null) {
-    print('serial: $serial');
+    stdout.writeln('serial: $serial');
   }
   if (package != null) {
-    print('package: $package');
+    stdout.writeln('package: $package');
   }
   var options = AdbLogOptions(
     package: package,

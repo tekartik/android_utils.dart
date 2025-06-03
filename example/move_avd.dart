@@ -14,7 +14,7 @@ Future<void> main(List<String> arguments) async {
 
   if (help) {
     stdout.writeln('usage mode_avd <avd_name> <folder>');
-    print(parser.usage);
+    stdout.writeln(parser.usage);
     return;
   }
   String? avd;

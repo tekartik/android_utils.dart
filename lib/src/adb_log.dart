@@ -55,7 +55,7 @@ Future<void> adbLog(AdbLogOptions options) async {
                 '$adb shell date +%Y-%m-%dT%H:%M:%S',
                 verbose: false,
               )).outText.trim(),
-            ).subtract(Duration(seconds: 5));
+            ).subtract(const Duration(seconds: 5));
             //   -T '<time>'     Print most recent lines since specified time (not imply -d)
             //                   count is pure numerical, time is 'MM-DD hh:mm:ss.mmm...'
             //                   'YYYY-MM-DD hh:mm:ss.mmm...' or 'sssss.mmm...' format

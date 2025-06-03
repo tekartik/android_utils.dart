@@ -107,11 +107,11 @@ Future nameIt(
   if (extension(manifestFilePath) != '.xml') {
     throw '$manifestFilePath is not an android .xml file';
   }
-  print(apkFilePath);
-  print(manifestFilePath);
+  stdout.writeln(apkFilePath);
+  stdout.writeln(manifestFilePath);
 
   var xmlText = File(manifestFilePath).readAsStringSync();
-  print(xmlText);
+  stdout.writeln(xmlText);
 
   var info = AabInfo()..fromXml(xmlText);
 

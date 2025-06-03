@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_device.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
@@ -6,7 +8,7 @@ import 'package:test/test.dart';
 Future<void> main() async {
   var androidFromEnv = ShellEnvironment().vars['TK_ANDROID_UTILS_ANDROID_FROM'];
   var firstDevice = await findDevice(serial: 'emulator-5554');
-  print('firstDevice: $firstDevice, androidFromEnv: $androidFromEnv');
+  stdout.writeln('firstDevice: $firstDevice, androidFromEnv: $androidFromEnv');
   group('device', () {
     var androidFrom = androidFromEnv;
     var device = firstDevice;

@@ -4,8 +4,10 @@ import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart' as utils;
 import 'package:tekartik_android_utils/src/gradle/gradle.dart';
 
+/// Default module name for Android projects
 const androidModuleDefault = 'app';
 
+/// Represents an Android module within a project
 class AndroidModule {
   final AndroidProject project;
   final String module;

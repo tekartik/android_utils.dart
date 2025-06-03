@@ -21,8 +21,8 @@ Future<void> main(List<String> arguments) async {
   var help = result['help'] as bool;
 
   void usage() {
-    print('android_build_environment');
-    print(parser.usage);
+    stdout.writeln('android_build_environment');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -60,25 +60,33 @@ export PATH="${env.paths.join(':')}:\$PATH"
       stderr.writeln('Failed to write to $dst');
     }
   } else {
-    print('                androidSdkPath: ${context.androidSdkPath}');
-    print('             androidStudioPath: ${context.androidStudioPath}');
-    print('          androidStudioJdkPath: ${context.androidStudioJdkPath}');
-    print(
+    stdout.writeln('                androidSdkPath: ${context.androidSdkPath}');
+    stdout.writeln(
+      '             androidStudioPath: ${context.androidStudioPath}',
+    );
+    stdout.writeln(
+      '          androidStudioJdkPath: ${context.androidStudioJdkPath}',
+    );
+    stdout.writeln(
       '      androidSdkBuildToolsPath: ${context.androidSdkBuildToolsPath}',
     );
-    print(
+    stdout.writeln(
       '   androidSdkPlatformToolsPath: ${context.androidSdkPlatformToolsPath}',
     );
-    print('           androidSdkToolsPath: ${context.androidSdkToolsPath}');
-    print(
+    stdout.writeln(
+      '           androidSdkToolsPath: ${context.androidSdkToolsPath}',
+    );
+    stdout.writeln(
       'androidSdkCommandLineToolsPath: ${context.androidSdkCommandLineToolsPath}',
     );
-    print('            androidAvdHomePath: ${context.androidAvdHomePath}');
-    print('                    sdkVersion: ${context.sdkVersion}');
+    stdout.writeln(
+      '            androidAvdHomePath: ${context.androidAvdHomePath}',
+    );
+    stdout.writeln('                    sdkVersion: ${context.sdkVersion}');
 
     await initAndroidBuildEnvironment();
-    print('');
-    print('sdkmanager: ${await which('sdkmanager')}');
-    print('      java: ${await which('java')}');
+    stdout.writeln('');
+    stdout.writeln('sdkmanager: ${await which('sdkmanager')}');
+    stdout.writeln('      java: ${await which('java')}');
   }
 }

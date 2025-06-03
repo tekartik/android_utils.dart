@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:tekartik_android_utils/src/import.dart';
 
+/// A parser for the output of the `ps` command in shell.
 class ShellPsParser {
+  /// Found header
   PsHeader? header;
+
+  /// List of parsed lines
   List<PsLine> lines = [];
 
+  /// Creates a [ShellPsParser] instance by parsing the provided [shellPsStdout].
   ShellPsParser(String shellPsStdout) {
     var lines = LineSplitter.split(shellPsStdout);
 
@@ -23,8 +30,8 @@ class ShellPsParser {
           return line;
         }
       } catch (e) {
-        print(e);
-        print(line);
+        stdout.writeln(e);
+        stdout.writeln(line);
       }
     }
     return null;
@@ -34,7 +41,7 @@ class ShellPsParser {
 // USER      PID   PPID  VSIZE  RSS   WCHAN            PC  NAME
 class PsHeader extends _PsLineBase {
   PsHeader(super.line) {
-    //devPrint(_parts);
+    //devstdout.writeln(_parts);
   }
 
   int findPartIndex(String name) {

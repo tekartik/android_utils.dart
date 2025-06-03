@@ -17,15 +17,15 @@ void main() {
     });
     test('compat', () async {
       var context = await getAndroidBuildContent();
-      print(context.androidStudioPath);
-      print(context.androidSdkPath);
-      print(context.androidStudioJdkPath);
+      stdout.writeln(context.androidStudioPath);
+      stdout.writeln(context.androidSdkPath);
+      stdout.writeln(context.androidStudioJdkPath);
     });
     test('context', () async {
       var context = await getAndroidBuildContext();
-      print(context.androidStudioPath);
-      print(context.androidSdkPath);
-      print(context.androidStudioJdkPath);
+      stdout.writeln(context.androidStudioPath);
+      stdout.writeln(context.androidSdkPath);
+      stdout.writeln(context.androidStudioJdkPath);
     });
     test('cmdline-tools', () async {
       var context = await getAndroidBuildContext();

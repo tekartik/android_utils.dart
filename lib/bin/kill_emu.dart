@@ -25,7 +25,7 @@ Future main(List<String> args) async {
   void usage() {
     stdout.writeln('kill the android (qemu) emulator process(es)');
     stdout.writeln('  $scriptName');
-    print(parser.usage);
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -50,7 +50,7 @@ Future main(List<String> args) async {
     stderr.writeln('qemu process not found');
   } else {
     for (PsLine line in lines) {
-      print(line);
+      stdout.writeln(line);
       ProcessCmd cmd = new ProcessCmd('kill', ['-9', '${line.pid}']);
       await runCmd(cmd, verbose: true);
     }

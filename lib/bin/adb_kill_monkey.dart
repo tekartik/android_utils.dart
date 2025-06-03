@@ -35,8 +35,8 @@ Future main(List<String> args) async {
   var serialNumber = results[_optionSerialNumber]?.toString();
 
   void usage() {
-    print('$scriptName [-s <serial_number>]');
-    print(parser.usage);
+    stdout.writeln('$scriptName [-s <serial_number>]');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {

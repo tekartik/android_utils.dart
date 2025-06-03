@@ -31,8 +31,8 @@ Future main(List<String> args) async {
   var versionName = results[_flagVersionName]?.toString();
 
   void usage() {
-    print('apk_info <path_to_apk_file>');
-    print(parser.usage);
+    stdout.writeln('apk_info <path_to_apk_file>');
+    stdout.writeln(parser.usage);
   }
 
   if (help) {
@@ -45,11 +45,11 @@ Future main(List<String> args) async {
     var apkFilePath = results.rest[0];
     await initAndroidBuildEnvironment();
     var apkInfo = (await getApkInfo(apkFilePath))!;
-    print('name : ${apkInfo.name}');
-    print('versionCode : ${apkInfo.versionCode}');
-    print('versionName : ${apkInfo.versionName}');
+    stdout.writeln('name : ${apkInfo.name}');
+    stdout.writeln('versionCode : ${apkInfo.versionCode}');
+    stdout.writeln('versionName : ${apkInfo.versionName}');
     try {
-      print('SHA1 : ${await apkExtractSha1Digest(apkFilePath)}');
+      stdout.writeln('SHA1 : ${await apkExtractSha1Digest(apkFilePath)}');
     } catch (e) {
       stderr.writeln('Fail to extract sha1: $e');
     }
@@ -59,7 +59,7 @@ Future main(List<String> args) async {
     if (results.rest.length == 2) {
       await nameIt(results.rest[0], results.rest[1], versionName: versionName);
     } else {
-      print('Missing apk file name');
+      stdout.writeln('Missing apk file name');
       usage();
     }
   }

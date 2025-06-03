@@ -1,2 +1,7 @@
 # tekartik analysis_options extension
-include: package:tekartik_lints/strict.yaml
+include: package:tekartik_lints/package.yaml
+
+linter:
+  rules:
+    # ignore: avoid_print
+    public_member_api_docs: false
