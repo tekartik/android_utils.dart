@@ -30,7 +30,7 @@ Future<void> enterCredentials() async {
   if (password.length >= 8) {
     await checkAndActivatePackage('process_run');
     await Shell().run(
-      'pub global run process_run:shell env var set TEKARTIK_KEYSTORE_PASSWORD $password',
+      'dart pub global run process_run:shell env var set TEKARTIK_KEYSTORE_PASSWORD $password',
     );
   } else {
     stderr.writeln('Password too short');
