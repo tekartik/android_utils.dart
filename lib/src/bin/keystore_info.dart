@@ -22,10 +22,9 @@ Future<void> dumpKeystoreInfo({required String keystorePath}) async {
     exit(1);
   }
   var shell = Shell();
-  var outLines =
-      (await shell.run(
-        'keytool -list -v -keystore $file -storepass ${credentials.password}',
-      )).outLines;
+  var outLines = (await shell.run(
+    'keytool -list -v -keystore $file -storepass ${credentials.password}',
+  )).outLines;
   await File(
     join(dirname(file), 'keystore_info.txt'),
   ).writeAsString(outLines.join('\n'));

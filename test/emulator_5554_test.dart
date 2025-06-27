@@ -10,8 +10,9 @@ Future<void> main() async {
   await initAndroidBuildEnvironment();
   var isAdbSupported = isAdbSupportedSync();
   var androidFromEnv = ShellEnvironment().vars['TK_ANDROID_UTILS_ANDROID_FROM'];
-  var firstDevice =
-      isAdbSupported ? await findDevice(serial: 'emulator-5554') : null;
+  var firstDevice = isAdbSupported
+      ? await findDevice(serial: 'emulator-5554')
+      : null;
   stdout.writeln('firstDevice: $firstDevice, androidFromEnv: $androidFromEnv');
   test('no adb', () {}, skip: !isAdbSupported);
   group('device', () {

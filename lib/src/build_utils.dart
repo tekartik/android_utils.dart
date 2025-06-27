@@ -80,12 +80,13 @@ Future<String?> readRegistryString(String path, String key) async {
     // HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
     //    Path    REG_SZ    C:\Program Files\Android\Android Studio New
     //
-    var lines = (await run(
-          'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
-          verbose: false,
-        )).outLines
-        .map((e) => e.trimLeft())
-        .where((element) => element.split(' ').first == key);
+    var lines =
+        (await run(
+              'reg query ${shellArgument(path)} /v ${shellArgument(key)}',
+              verbose: false,
+            )).outLines
+            .map((e) => e.trimLeft())
+            .where((element) => element.split(' ').first == key);
     if (lines.isNotEmpty) {
       // Ok skip the key and look for REG_SZ
       var regSz = 'REG_SZ';
@@ -241,12 +242,11 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
       // command line tools
       var commandLineToolsBasePath = join(sdkDir, 'cmdline-tools');
       if (Directory(commandLineToolsBasePath).existsSync()) {
-        var versionTexts =
-            await (Directory(commandLineToolsBasePath)
-                .list()
-                .where((e) => e is Directory)
-                .map((e) => basename(e.path))
-                .toList());
+        var versionTexts = await (Directory(commandLineToolsBasePath)
+            .list()
+            .where((e) => e is Directory)
+            .map((e) => basename(e.path))
+            .toList());
 
         if (versionTexts.isNotEmpty) {
           // Use latest if found
@@ -295,14 +295,13 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     }
   }
 
-  context =
-      AndroidBuildContextImpl()
-        ..androidStudioPath = asDir
-        ..androidStudioJdkPath = asJdkDir
-        ..androidSdkPath = sdkDir
-        ..androidSdkBuildToolsPath = sdkBuildToolsDir
-        ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir
-        ..sdkVersion = readSdkVersion;
+  context = AndroidBuildContextImpl()
+    ..androidStudioPath = asDir
+    ..androidStudioJdkPath = asJdkDir
+    ..androidSdkPath = sdkDir
+    ..androidSdkBuildToolsPath = sdkBuildToolsDir
+    ..androidSdkCommandLineToolsPath = sdkCommandLineToolsDir
+    ..sdkVersion = readSdkVersion;
   return context;
 }
 

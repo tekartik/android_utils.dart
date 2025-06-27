@@ -3,10 +3,9 @@ import 'package:tekartik_android_utils/src/avd_utils.dart';
 import 'package:tekartik_io_utils/io_utils_import.dart';
 
 Future<void> main(List<String> arguments) async {
-  var parser =
-      ArgParser()
-        ..addFlag('force', abbr: 'f', help: 'Force')
-        ..addFlag('help', abbr: 'h', help: 'This help');
+  var parser = ArgParser()
+    ..addFlag('force', abbr: 'f', help: 'Force')
+    ..addFlag('help', abbr: 'h', help: 'This help');
   var result = parser.parse(arguments);
   var rest = result.rest;
   var force = result['force'] as bool;

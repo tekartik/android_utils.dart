@@ -40,10 +40,9 @@ Future<void> adbLog(AdbLogOptions options) async {
     Shell? logcatShell;
     int? pid;
     while (true) {
-      var output =
-          (await pidShell.run(
-            '$adb shell pidof ${shellArgument(package)}',
-          )).outText.trim();
+      var output = (await pidShell.run(
+        '$adb shell pidof ${shellArgument(package)}',
+      )).outText.trim();
       var newPid = int.tryParse(output);
       if (newPid != pid) {
         pid = newPid;
@@ -62,8 +61,10 @@ Future<void> adbLog(AdbLogOptions options) async {
             // var outputDate = outputFormat.format(inputDate);
             var minDate = deviceDate.toIso8601String().replaceAll('T', ' ');
             try {
-              var shell =
-                  logcatShell = Shell(throwOnError: false, verbose: true);
+              var shell = logcatShell = Shell(
+                throwOnError: false,
+                verbose: true,
+              );
               await shell.run(
                 '$adb logcat --pid=$newPid -T ${shellArgument(minDate)}',
               );

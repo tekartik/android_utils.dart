@@ -27,17 +27,15 @@ List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
       listStarted = true;
       continue;
     } else if (listStarted) {
-      var parts =
-          line
-              .split(' ')
-              .map((part) => part.trim())
-              .where((part) => part.isNotEmpty)
-              .toList();
+      var parts = line
+          .split(' ')
+          .map((part) => part.trim())
+          .where((part) => part.isNotEmpty)
+          .toList();
       if (parts.length > 4) {
-        var info =
-            AdbDeviceInfo()
-              ..serial = parts[0]
-              ..type = parts[1];
+        var info = AdbDeviceInfo()
+          ..serial = parts[0]
+          ..type = parts[1];
         for (var i = 2; i < parts.length; i++) {
           var part = parts[i];
           var defParts = part.split(':');

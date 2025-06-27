@@ -49,15 +49,14 @@ extension AndroidModuleSigningExt on AndroidModule {
       return null;
     }
 
-    var dnames =
-        [
-          dname('CN', keytoolGenOptions.firstAndLastName),
-          dname('OU', keytoolGenOptions.organizationUnit),
-          dname('O', keytoolGenOptions.organization),
-          dname('L', keytoolGenOptions.cityOrLocality),
-          dname('ST', keytoolGenOptions.stateOrProvince),
-          dname('C', keytoolGenOptions.countryCode),
-        ].nonNulls;
+    var dnames = [
+      dname('CN', keytoolGenOptions.firstAndLastName),
+      dname('OU', keytoolGenOptions.organizationUnit),
+      dname('O', keytoolGenOptions.organization),
+      dname('L', keytoolGenOptions.cityOrLocality),
+      dname('ST', keytoolGenOptions.stateOrProvince),
+      dname('C', keytoolGenOptions.countryCode),
+    ].nonNulls;
     await shell.run(
       'keytool -genkey -v -keystore $keystore -storepass $password'
       ' -alias ${keytoolGenOptions.alias} -keypass $password -keyalg RSA -keysize 2048'

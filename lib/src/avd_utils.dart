@@ -147,10 +147,9 @@ Future<void> moveAvdFolder({
         await copyDirectory(Directory(path), Directory(dstPath));
 
         stdout.writeln('Updating $iniFile');
-        var content = (await File(iniFile).readAsString()).replaceAll(
-          pathInIniFile,
-          dstPath,
-        );
+        var content = (await File(
+          iniFile,
+        ).readAsString()).replaceAll(pathInIniFile, dstPath);
         await File(iniFile).writeAsString(content);
 
         stdout.writeln('Deleting $path');
