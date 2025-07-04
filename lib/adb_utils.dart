@@ -4,4 +4,7 @@ export 'src/adb_utils.dart'
         AdbDeviceInfo,
         getAdbDeviceInfos,
         adbDeviceInfosParseLines,
+        adbDumpsysPackageParseLines,
+        DumpsysPackageInfo,
+        DumpsysPackageResult,
         DeviceAdb;

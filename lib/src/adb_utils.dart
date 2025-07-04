@@ -130,6 +130,14 @@ class DeviceAdb {
   Future<void> pushDirectory(String localFrom, String androidTo) async {
     await runAdbCommandOutLines('push $localFrom $androidTo');
   }
+
+  /// Get package information from the device using `adb shell dumpsys package`
+  Future<DumpsysPackageResult> getDumpsysPackageInfo(String packageName) async {
+    var lines = await runAdbCommandOutLines(
+      'shell dumpsys package $packageName',
+    );
+    return adbDumpsysPackageParseLines(lines);
+  }
 }
 
 /// Package information from `adb shell dumpsys package`
@@ -150,4 +158,103 @@ class AdbPackageInfo {
   String toString() {
     return 'AdbPackageInfo{packageName: $packageName, versionName: $versionName, versionCode: $versionCode}';
   }
+}
+
+/// Package information from `adb shell dumpsys package` command
+class DumpsysPackageInfo {
+  /// Package name
+  final String packageName;
+
+  /// Version name
+  final String versionName;
+
+  /// Version code
+  final int versionCode;
+
+  /// Minimum SDK version
+  final int minSdkVersion;
+
+  /// Target SDK version
+  final int targetSdkVersion;
+
+  /// Creates an instance of [DumpsysPackageInfo].
+  DumpsysPackageInfo({
+    required this.packageName,
+    required this.versionName,
+    required this.versionCode,
+    required this.minSdkVersion,
+    required this.targetSdkVersion,
+  });
+}
+
+/// Result of `adb shell dumpsys package` command
+class DumpsysPackageResult {
+  /// Package information if available
+  final DumpsysPackageInfo? packageInfo;
+
+  /// Creates an instance of [DumpsysPackageResult].
+  DumpsysPackageResult({this.packageInfo});
+}
+
+/// Parses the output lines from `adb shell dumpsys package` command to extract package information.
+DumpsysPackageResult adbDumpsysPackageParseLines(List<String> lines) {
+  String levelPrefix(int level) {
+    return '  ' * level;
+  }
+
+  int findLevelSection(int level, List<String> lines, String section) {
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith('${levelPrefix(level)}$section')) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  var packagesIndex = findLevelSection(0, lines, 'Packages:');
+  DumpsysPackageInfo? packageInfo;
+  if (packagesIndex > -1) {
+    var subLines = lines.sublist(packagesIndex + 1);
+    // Package [com.tekartik.package1] (da25746):
+    var pkgLineIndex = findLevelSection(1, subLines, 'Package [');
+
+    if (pkgLineIndex > -1) {
+      var line = subLines[pkgLineIndex];
+      var start = line.indexOf('[');
+      if (start > 1) {
+        var packageName = line.substring(start + 1, line.indexOf(']')).trim();
+        // versionCode=20 minSdk=27 targetSdk=36
+        var versionCodeIndex = findLevelSection(2, subLines, 'versionCode=');
+        if (versionCodeIndex > -1) {
+          var map = <String, String>{};
+          void feedMap(String line) {
+            var parts = line.trim().split(' ');
+            for (var part in parts) {
+              var keyValue = part.split('=');
+              if (keyValue.length == 2) {
+                var key = keyValue[0].trim();
+                var value = keyValue[1].trim();
+                map[key] = value;
+              }
+            }
+          }
+
+          feedMap(subLines[versionCodeIndex]);
+          var versionNameIndex = findLevelSection(2, subLines, 'versionName=');
+          if (versionNameIndex > -1) {
+            feedMap(subLines[versionNameIndex]);
+          }
+          packageInfo = DumpsysPackageInfo(
+            packageName: packageName,
+            versionName: map['versionName'] ?? '',
+            versionCode: int.tryParse(map['versionCode'] ?? '') ?? 0,
+            minSdkVersion: int.tryParse(map['minSdk'] ?? '') ?? 0,
+            targetSdkVersion: int.tryParse(map['targetSdk'] ?? '') ?? 0,
+          );
+        }
+      }
+    }
+  }
+  var result = DumpsysPackageResult(packageInfo: packageInfo);
+  return result;
 }
