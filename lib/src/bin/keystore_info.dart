@@ -10,6 +10,7 @@ Future<void> main() async {
   await dumpKeystoreInfo(keystorePath: ks.keystorePath);
 }
 
+/// Dumps the keystore information to a file named `keystore_info.txt`
 Future<void> dumpKeystoreInfo({required String keystorePath}) async {
   var file = keystorePath;
   if (!File(file).existsSync()) {

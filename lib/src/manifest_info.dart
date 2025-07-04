@@ -1,7 +1,9 @@
 import 'package:tekartik_android_utils/aab_utils.dart';
 import 'package:xml/xml.dart';
 
+/// Manifest information for an APK or AAB file.
 class ManifestInfo extends ApkInfo {
+  /// build from an XML string.
   void fromXml(String xmlText) {
     // devPrint(xmlText);
     var xml = XmlDocument.parse(xmlText);

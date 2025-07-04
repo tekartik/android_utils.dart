@@ -13,6 +13,7 @@ class AdbLogOptions {
   /// Verbose commands
   final bool verbose;
 
+  /// Creates an [AdbLogOptions] instance.
   AdbLogOptions({
     required this.package,
     required this.serial,

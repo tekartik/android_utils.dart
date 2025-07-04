@@ -13,6 +13,7 @@ String? _get(String line, String key) {
   return null;
 }
 
+/// Parses a line from the output of the `aapt` command to extract APK information.
 ApkInfo? parseBadgingLine(String line) {
   if (line.startsWith('package:')) {
     var name = _get(line, 'name');

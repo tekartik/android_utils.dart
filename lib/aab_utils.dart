@@ -17,8 +17,10 @@ bool? _bundleToolSupported;
 bool get bundleToolSupported =>
     _bundleToolSupported ??= whichSync('bundletool') != null;
 
+/// Bundle information
 class AabInfo extends ManifestInfo {}
 
+/// Get the AAB information from the given AAB file path (required bundletool).
 Future<AabInfo> getAabInfo(String aabFilePath, {bool verbose = false}) async {
   var result = await run(
     'bundletool dump manifest --bundle ${shellArgument(aabFilePath)}',

@@ -6,15 +6,28 @@ import 'package:process_run/shell_run.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_android_utils/src/import.dart';
 
+/// AVD information
 class AvdInfo {
+  /// Name of the AVD
   String? name;
+
+  /// Device name
   String? device;
+
+  /// Path to the AVD
   String? path;
+
+  /// Target of the AVD
   String? target;
+
+  /// Skin of the AVD
   String? skin;
+
+  /// SD card of the AVD
   String? sdCard;
 }
 
+/// Parses the lines of avdmanager list avd output
 List<AvdInfo?> avdInfosParseLines(Iterable<String> lines) {
   var list = <AvdInfo?>[];
   AvdInfo? avdInfo;
@@ -90,6 +103,7 @@ Future<List<AvdInfo?>> getAvdInfos() async {
   return avdInfosParseLines(lines);
 }
 
+/// Returns the list of AVD ini file names
 Future<List<String>> getAvdIniFileNames() async {
   var bc = await getAndroidBuildContext();
   var iniFiles =
@@ -102,6 +116,7 @@ Future<List<String>> getAvdIniFileNames() async {
   return iniFiles;
 }
 
+/// Move an AVD folder to a new destination
 Future<void> moveAvdFolder({
   required String avd,
   required String dst,

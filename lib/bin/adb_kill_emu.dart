@@ -11,6 +11,7 @@ const String _flagHelp = 'help';
 //const String _flagVersionName = 'versionName';
 const String _optionEmulatorName = 'emulatorName';
 
+/// Script name
 const String scriptName = 'adb_kill_emu';
 
 Future main(List<String> args) async {

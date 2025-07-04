@@ -10,6 +10,7 @@ import 'package:tekartik_cmd_utils/kill_cmd.dart';
 
 const String _flagHelp = 'help';
 
+/// The name of the script.
 const String scriptName = 'kill_emu';
 
 Future main(List<String> args) async {

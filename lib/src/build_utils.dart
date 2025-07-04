@@ -19,28 +19,38 @@ import 'import_io.dart';
 /// Initialized using [initAndroidBuildEnvironment]
 // String adb;
 
+/// Initialized using [initAndroidBuildEnvironment]
 abstract class AndroidBuildContext {
+  /// The path to the Android Studio installation directory.
   String? get androidStudioPath;
 
+  /// The path to the Android Studio JDK directory.
   String? get androidStudioJdkPath;
 
+  /// The path to the Android SDK directory.
   String? get androidSdkPath;
 
+  /// The path to the Android SDK build tools directory.
   String? get androidSdkBuildToolsPath;
 
+  /// The path to the Android SDK platform tools directory.
   String? get androidSdkPlatformToolsPath;
 
+  /// The path to the Android SDK tools directory.
   String? get androidSdkToolsPath;
 
+  /// The path to the Android SDK command line tools directory.
   String? get androidSdkCommandLineToolsPath;
 
   /// ANDROID_AVD_HOME or ~/.android/avd
   /// Tested on linux for now
   String? get androidAvdHomePath;
 
+  /// The path to the Android SDK emulator directory.
   Version? get sdkVersion;
 }
 
+/// Implementation of [AndroidBuildContext]
 class AndroidBuildContextImpl implements AndroidBuildContext {
   @override
   String? androidStudioPath;
@@ -107,6 +117,7 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   return getAndroidBuildContext(sdkVersion: sdkVersion);
 }
 
+/// Get Android build context
 Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   AndroidBuildContext context;
 

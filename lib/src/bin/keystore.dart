@@ -4,10 +4,13 @@ import 'package:dev_build/build_support.dart' show checkAndActivatePackage;
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 
+/// Keystore credentials management.
 class KeystoreCredentials {
+  /// The password for the keystore.
   String? password;
 }
 
+/// Get the keystore credentials from the environment variable TEKARTIK_KEYSTORE_PASSWORD.
 KeystoreCredentials? get credentialsFromEnv {
   var password = shellEnvironment['TEKARTIK_KEYSTORE_PASSWORD'];
   if (password != null) {
@@ -21,6 +24,7 @@ Future<void> main() async {
   await enterCredentials();
 }
 
+/// Prompt the user to enter a password and store it in the environment variable TEKARTIK_KEYSTORE_PASSWORD.
 Future<void> enterCredentials() async {
   var credentials = credentialsFromEnv;
   var existing = credentials?.password;
@@ -38,4 +42,5 @@ Future<void> enterCredentials() async {
   await promptTerminate();
 }
 
+/// Get the path to the keystore file.
 String get keystorePath => join('.local', 'keystore.jks');

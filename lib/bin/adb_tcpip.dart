@@ -9,6 +9,7 @@ import 'package:tekartik_android_utils/src/import_io.dart';
 
 const String _flagHelp = 'help';
 
+/// The name of the script.
 const String scriptName = 'adb_tcpip';
 
 Future main(List<String> args) async {

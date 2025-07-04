@@ -51,6 +51,9 @@ Future<void> main(List<String> arguments) async {
   await adbLog(options);
 }
 
+/// The environment variable used to set the default serial id
 const globalSerialIdEnvKey = 'TK_ANDROID_UTILS_SERIAL_DEFAULT';
+
+/// The environment variable used to set the default package name
 const globalPackageNameEnvKey = 'TK_ANDROID_UTILS_PACKAGE_NAME_DEFAULT';
 // ds env vars set TK_ANDROID_UTILS_PACKAGE_NAME_DEFAULT xxx

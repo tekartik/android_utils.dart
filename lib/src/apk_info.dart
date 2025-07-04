@@ -9,8 +9,10 @@ class ApkInfo {
   /// Integer
   String? versionCode;
 
+  /// Creates an instance of [ApkInfo].
   ApkInfo({this.name, this.versionName, this.versionCode});
 
+  /// Debug to map
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'name': name,

@@ -4,25 +4,45 @@ import 'package:process_run/stdio.dart';
 
 import 'project_impl.dart';
 
+/// Signing options for Android module
 class SigningOptions {
   /// File name in Android module
   final String keystore;
+
+  /// Password for the keystore
   final String password;
 
+  /// Creates an instance of [SigningOptions]
   SigningOptions({required this.keystore, required this.password});
 }
 
+/// Default alias for the keystore
 const keystoreAliasDefault = 'app';
 
+/// Options for generating a key using keytool
 class KeytoolGenKeyOptions {
+  /// Default alias for the keystore
   final String alias;
+
+  /// Full name of the user
   final String? firstAndLastName;
+
+  /// Organization unit of the user
   final String? organizationUnit;
+
+  /// Organization of the user
   final String? organization;
+
+  /// City or locality of the user
   final String? cityOrLocality;
+
+  /// State or province of the user
   final String? stateOrProvince;
+
+  /// Country code of the user (2 letters)
   final String? countryCode;
 
+  /// Creates an instance of [KeytoolGenKeyOptions]
   KeytoolGenKeyOptions({
     this.alias = keystoreAliasDefault,
     this.firstAndLastName,
@@ -34,7 +54,9 @@ class KeytoolGenKeyOptions {
   }); // 2 letters
 }
 
+/// Extension on [AndroidModule] to handle signing operations
 extension AndroidModuleSigningExt on AndroidModule {
+  /// Generates a key in the Android module using keytool
   Future<void> generateKey({
     required SigningOptions signinOptions,
     required KeytoolGenKeyOptions keytoolGenOptions,
@@ -65,6 +87,7 @@ extension AndroidModuleSigningExt on AndroidModule {
     );
   }
 
+  /// Prints the key information from the keystore
   Future<void> printKeyInfo({required SigningOptions signinOptions}) async {
     var keystore = signinOptions.keystore;
     var password = signinOptions.password;
@@ -74,6 +97,7 @@ extension AndroidModuleSigningExt on AndroidModule {
     );
   }
 
+  /// Prints the Gradle configuration for signing the Android module
   Future<void> printGradleConfig({
     required SigningOptions signinOptions,
     String alias = keystoreAliasDefault,

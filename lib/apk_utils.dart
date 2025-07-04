@@ -23,6 +23,7 @@ bool? _aaptSupported;
 /// True if aapt si present and supported
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
+/// Get the apk info from the aapt badging command.
 Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
   var result = await runExecutableArguments('aapt', [
     'dump',
@@ -40,6 +41,7 @@ Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
   return apkInfo;
 }
 
+/// Names an android apk file based on its info.
 Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   if (!File(apkFilePath).existsSync()) {
     throw ('$apkFilePath does not exist');
@@ -71,6 +73,7 @@ Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   }
 }
 
+/// Copies an apk file to a new name based on its info.
 Future copyApk(
   String apkFilePath,
   ApkInfo apkInfo, {
@@ -96,6 +99,7 @@ Future copyApk(
   stdout.writeln('  size: ${File(dst).statSync().size}');
 }
 
+/// Names an android apk file based on its manifest file.
 Future nameIt(
   String apkFilePath,
   String manifestFilePath, {

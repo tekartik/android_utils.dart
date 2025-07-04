@@ -9,6 +9,7 @@ import 'package:tekartik_android_utils/src/import_io.dart';
 
 const String _flagHelp = 'help';
 
+/// Script name
 const String scriptName = 'adb_device_os_version';
 
 Future main(List<String> args) async {

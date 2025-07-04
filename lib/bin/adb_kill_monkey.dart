@@ -12,6 +12,7 @@ const String _flagHelp = 'help';
 //const String _flagVersionName = 'versionName';
 const String _optionSerialNumber = 'serial';
 
+/// Script name
 const String scriptName = 'adb_kill_monkey';
 
 Future main(List<String> args) async {
