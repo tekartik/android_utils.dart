@@ -6,7 +6,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:tekartik_android_utils/src/import.dart';
-import 'package:tekartik_cmd_utils/kill_cmd.dart';
+import 'package:tekartik_cmd_tools/kill_cmd.dart';
 
 const String _flagHelp = 'help';
 
