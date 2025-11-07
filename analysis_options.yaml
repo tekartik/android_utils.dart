@@ -2,6 +2,6 @@
 include: package:tekartik_lints/package.yaml
 
 linter:
-  rules:
+  rules: []
     # ignore: avoid_print
     # public_member_api_docs: false
