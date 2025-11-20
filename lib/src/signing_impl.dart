@@ -107,7 +107,7 @@ extension AndroidModuleSigningExt on AndroidModule {
         release {
             keyAlias $alias
             keyPassword '${signinOptions.password}'
-            storeFile file('${signinOptions.keystore}')
+            storeFile file(${signinOptions.keystore}')
             storePassword '${signinOptions.password}'
         }
     }
@@ -118,6 +118,35 @@ extension AndroidModuleSigningExt on AndroidModule {
         release {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    ''');
+  }
+
+  /// Prints the Gradle Kotlin DSL configuration for signing the Android module
+  Future<void> printGradleConfigKts({
+    required SigningOptions signinOptions,
+    String alias = keystoreAliasDefault,
+  }) async {
+    stdout.writeln('''
+    signingConfigs {
+        create("release") {
+            keyAlias = "$alias"
+            keyPassword = "${signinOptions.password}"
+            storeFile = file("${signinOptions.keystore}")
+            storePassword = "${signinOptions.password}"
+        }
+    }
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     ''');
