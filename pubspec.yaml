@@ -18,6 +18,10 @@ dependencies:
     git:
       url: https://github.com/tekartikprj/io_tools
       path: packages/cmd_tools
+  tekartik_app_dev_menu:
+    git:
+      url: https://github.com/tekartik/app_common_utils.dart
+      path: app_dev_menu
 
 
 dev_dependencies:
@@ -26,10 +30,6 @@ dev_dependencies:
     git:
       url: https://github.com/tekartik/io_utils.dart
     version: '>=0.7.0'
-  tekartik_app_dev_menu:
-    git:
-      url: https://github.com/tekartik/app_common_utils.dart
-      path: app_dev_menu
   tekartik_app_date:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
