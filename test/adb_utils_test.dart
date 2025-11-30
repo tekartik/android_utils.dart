@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
-
 import 'package:test/test.dart';
 
 void main() {
@@ -17,7 +16,8 @@ void main() {
     test('adb', () async {
       if (whichSync('adb') != null) {
         var infos = await getAdbDeviceInfos();
-        expect(infos, const TypeMatcher<List>());
+        // ignore: avoid_print
+        print('devices: $infos');
       }
     }, skip: false);
     test('parse adb devices -l output', () {

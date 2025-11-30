@@ -34,6 +34,10 @@ dev_dependencies:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
       path: app_date
+  tekartik_ci:
+    git:
+      url: https://github.com/tekartik/ci.dart
+      path: ci
 dependency_overrides:
 #  fs_shim:
 #    path: ../fs_shim.dart
