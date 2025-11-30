@@ -22,14 +22,14 @@ dependencies:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
       path: app_dev_menu
+  tekartik_io_utils:
+    git: https://github.com/tekartik/io_utils.dart
+  tekartik_common_utils:
+    git: https://github.com/tekartik/common_utils.dart
 
 
 dev_dependencies:
   test: ">=1.24.0"
-  tekartik_io_utils:
-    git:
-      url: https://github.com/tekartik/io_utils.dart
-    version: '>=0.7.0'
   tekartik_app_date:
     git:
       url: https://github.com/tekartik/app_common_utils.dart

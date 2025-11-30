@@ -1,11 +1,11 @@
 @TestOn('vm')
 library;
 
-import 'dart:convert';
-
 import 'package:process_run/which.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
+import 'package:tekartik_ci/ci_github.dart';
+import 'package:tekartik_io_utils/io_utils_import.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -15,9 +15,28 @@ void main() {
     });
     test('adb', () async {
       if (whichSync('adb') != null) {
-        var infos = await getAdbDeviceInfos();
-        // ignore: avoid_print
-        print('devices: $infos');
+        try {
+          var infos = await getAdbDeviceInfos();
+          // ignore: avoid_print
+          stdout.writeln('devices: $infos');
+        } catch (e) {
+          // ignore: avoid_print
+          // Try workaround github actions flakiness
+          // 11-30 17:55:09.364  2556  2556 F adb     : main.cpp:167 could not install *smartsocket* listener: Address already in use
+          //
+          // * failed to start daemon
+          // adb: failed to check server version: cannot connect to daemon
+          stdout.writeln('getAdbDeviceInfos error: $e');
+          if (runningInGithubActions) {
+            // Error in github actions, try twice...
+            await sleep(1000);
+            var infos = await getAdbDeviceInfos();
+
+            stdout.writeln('devices: $infos');
+          } else {
+            rethrow;
+          }
+        }
       }
     }, skip: false);
     test('parse adb devices -l output', () {
