@@ -1,7 +1,7 @@
 @TestOn('vm')
 library;
 
-import 'package:process_run/which.dart';
+import 'package:dev_build/shell.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
 import 'package:tekartik_ci/ci_github.dart';
@@ -12,6 +12,16 @@ void main() {
   group('adb_utils', () {
     setUpAll(() async {
       await initAndroidBuildEnvironment();
+    });
+    test('raw adb version', () async {
+      // tmp test to see if need to make this a generic test
+      if (whichSync('adb') != null) {
+        var result = await run('adb --version');
+        // ignore: avoid_print
+        stdout.writeln('adb version: ${result.outText}');
+      } else {
+        stderr.writeln('adb not found');
+      }
     });
     test('adb', () async {
       if (whichSync('adb') != null) {
