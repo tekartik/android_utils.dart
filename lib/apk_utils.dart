@@ -44,7 +44,7 @@ Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
 /// Names an android apk file based on its info.
 Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   if (!File(apkFilePath).existsSync()) {
-    throw ('$apkFilePath does not exist');
+    throw StateError('$apkFilePath does not exist');
   }
 
   var content = '$apkFilePath.content';
@@ -69,7 +69,7 @@ Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   if (apkInfo != null) {
     await copyApk(apkFilePath, apkInfo, outFolderPath: outFolderPath);
   } else {
-    throw ('cannot read info on $apkFilePath');
+    throw StateError('cannot read info on $apkFilePath');
   }
 }
 
@@ -106,10 +106,10 @@ Future nameIt(
   String? versionName,
 }) {
   if (extension(apkFilePath) != '.apk') {
-    throw '$apkFilePath is not an android .apk file';
+    throw StateError('$apkFilePath is not an android .apk file');
   }
   if (extension(manifestFilePath) != '.xml') {
-    throw '$manifestFilePath is not an android .xml file';
+    throw StateError('$manifestFilePath is not an android .xml file');
   }
   stdout.writeln(apkFilePath);
   stdout.writeln(manifestFilePath);
