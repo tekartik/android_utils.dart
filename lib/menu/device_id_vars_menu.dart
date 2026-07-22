@@ -1,13 +1,16 @@
 import 'package:tekartik_android_utils/adb_device.dart';
 import 'package:tekartik_app_dev_menu/dev_menu.dart';
 
-/// Show a menu to select device id and set it to the provided KeyValue
+/// Registers a dev-menu entry that lists connected `adb` devices and lets
+/// the user pick one to store into [kvDeviceId] (or clear it via `none`).
 void keyValueDeviceIdMenu(KeyValue kvDeviceId) {
   keyValuesMenu('vars', [kvDeviceId]);
   _keyValueDeviceIdMenu(kvDeviceId);
 }
 
-/// Show a menu to select device ids and set them to the provided KeyValues
+/// Registers a `'device ids config'` dev-menu that lists connected `adb`
+/// devices and lets the user pick a value for each entry in [deviceIds]
+/// (or clear it via `none`).
 void keyValuesDeviceIdMenu(List<KeyValue> deviceIds) {
   menu('device ids config', () {
     keyValuesMenu('vars', deviceIds);

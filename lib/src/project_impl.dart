@@ -4,30 +4,36 @@ import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_android_utils/apk_utils.dart' as utils;
 import 'package:tekartik_android_utils/src/gradle/gradle.dart';
 
-/// Default module name for Android projects
+/// Default module name for Android projects, used as [AndroidModule.module]
+/// when none is specified.
 const androidModuleDefault = 'app';
 
-/// Represents an Android module within a project
+/// A named module (e.g. Gradle sub-project) within an [AndroidProject].
 class AndroidModule {
-  /// Project
+  /// The project this module belongs to.
   final AndroidProject project;
 
-  /// Module name, defaults to [androidModuleDefault]
+  /// Module name, defaults to [androidModuleDefault].
   final String module;
 
-  /// Creates an instance of [AndroidModule]
+  /// Creates a reference to the module named [module] (defaults to
+  /// [androidModuleDefault]) within [project].
   AndroidModule({required this.project, this.module = androidModuleDefault});
 }
 
-/// Represents an Android project with methods to build and manage APKs
+/// An Android project on disk, providing helpers to resolve Gradle targets
+/// and build/locate/name its apk outputs.
 class AndroidProject {
-  /// Path to the Android project directory
+  /// Path to the Android project's root directory.
   String path;
 
-  /// Constructor for [AndroidProject]
+  /// Creates a reference to the Android project rooted at [path].
   AndroidProject(this.path);
 
-  /// target can be :app ot app
+  /// Builds the `ProcessCmd` for `./gradlew <target>:assemble<flavor>Release`,
+  /// where [target] is a Gradle target path (e.g. `':app'` or `'app'`,
+  /// see [targetToGradleTarget]) and [flavor] (if given) is prepended to
+  /// the `Release` build variant name.
   ProcessCmd buildApkCmd(String target, {String? flavor}) {
     var gradleTarget = targetToGradleTarget(target);
     var cmd = ProcessCmd(gradleExecutable, [
@@ -36,7 +42,8 @@ class AndroidProject {
     return cmd;
   }
 
-  /// target can be :app ot app
+  /// Renames the release apk built for the Gradle [target] (e.g. `':app'`
+  /// or `'app'`) to a name derived from its info, via `nameApk`.
   Future nameApk(String target) {
     var targetPath = targetToPath(target);
     var baseTarget = basename(targetPath);
@@ -52,7 +59,9 @@ class AndroidProject {
     );
   }
 
-  /// target to parts
+  /// Splits a Gradle [target] path (e.g. `':app:sub'` or `'app/sub'`) on
+  /// `:` and further splits each segment on the platform path separator,
+  /// returning the flattened path segments.
   static List<String> targetToParts(String target) {
     var parts = <String>[];
     var segments = target.split(':');
@@ -62,31 +71,38 @@ class AndroidProject {
     return parts;
   }
 
-  /// Target to Gradle target
+  /// Normalizes a Gradle [target] path (see [targetToParts]) into
+  /// colon-separated Gradle target syntax, e.g. `':app:sub'`.
   static String targetToGradleTarget(String target) {
     var parts = targetToParts(target);
     return ':${parts.join(':')}';
   }
 
-  /// Joins all parts into a path
+  /// Normalizes a Gradle [target] path (see [targetToParts]) into a
+  /// filesystem-style relative path, e.g. `'app/sub'`.
   String targetToPath(String target) {
     var parts = targetToParts(target);
     return joinAll(parts);
   }
 
-  /// Release mode constant
+  /// The `release` build mode name, for use as [getApkPath]'s `mode`.
   static const String modeRelease = 'release';
 
-  /// Debug mode constant
+  /// The `debug` build mode name, for use as [getApkPath]'s `mode`.
   static const String modeDebug = 'debug';
 
-  /// Application module name constant
+  /// The default `app` module name.
   static const String moduleApp = 'app';
 
-  /// Gradle shell executable filename
+  /// Path to the project's Gradle wrapper executable (`gradlew`).
   String get gradleExecutable => join(path, gradleShellExecutableFilename);
 
-  /// mode: debug/release
+  /// Computes the expected output path of a built apk.
+  ///
+  /// [module] defaults to [moduleApp], [mode] defaults to [modeRelease]
+  /// (typically [modeRelease] or [modeDebug]). If [flavor] is given, the
+  /// path includes the flavor-specific output directory and filename;
+  /// otherwise the plain module/mode path is used.
   String getApkPath({String? flavor, String? module, String? mode}) {
     module ??= moduleApp;
     mode ??= modeRelease;

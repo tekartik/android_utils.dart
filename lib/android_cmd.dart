@@ -5,10 +5,16 @@ ProcessCmd _adbCmd(List<String?> args) {
   return ProcessCmd('adb', args as List<String>);
 }
 
-/// Creates an adb command with the given arguments.
+/// Creates an `adb [args]` command.
 ProcessCmd adbCmd(List<String> args) => _adbCmd(args);
 
-/// adb monkey command arguments.
+/// Builds the argument list for `adb shell monkey`, the stress-testing
+/// event generator.
+///
+/// [packageName], if given, restricts events to that package (`-p`);
+/// otherwise all packages are targeted. [count] is the number of events to
+/// generate, defaulting to `50000`. [sysKeysPercent] sets the
+/// `--pct-syskeys` percentage (defaults to `0`).
 List<String> adbMonkeyArgs({
   String? packageName,
   int? count,
@@ -29,7 +35,8 @@ List<String> adbMonkeyArgs({
 /// Default emulator serial number.
 const String defaultEmulatorSerialNumber = 'emulator-5554';
 
-/// Kills the emulator with the given name.
+/// Builds the `adb -s [emulatorName] emu kill` command that stops a running
+/// emulator. [emulatorName] defaults to [defaultEmulatorSerialNumber].
 // http://stackoverflow.com/questions/20155376/android-stop-emulator-from-command-line
 // adb -s emulator-5554 emu kill
 ProcessCmd adbKillEmulator({String? emulatorName}) {
@@ -37,26 +44,31 @@ ProcessCmd adbKillEmulator({String? emulatorName}) {
   return ProcessCmd('adb', ['-s', emulatorName, 'emu', 'kill']);
 }
 
-/// View processes on the device.
+/// Builds the argument list for `adb shell ps`, listing device processes.
 List<String> shellPsAdbArgs() {
   return ['shell', 'ps'];
 }
 
-/// Kills the process with the given PID on the device.
+/// Builds the argument list for `adb shell kill [pid]`.
 List<String> shellKill(int pid) {
   return ['shell', 'kill', '$pid'];
 }
 
-/// Obsolete: Use [DeviceAdb] instead.
-/// Adb target
+/// Obsolete: Use `DeviceAdb` instead.
+///
+/// Identifies a device/emulator to target with `adb` commands built via
+/// [adbCmd].
 class AdbTarget {
-  /// Serial number of the device or emulator.
+  /// Serial number of the device or emulator to target with `-s`, or
+  /// `null` to target whichever single device is connected.
   final String? serial;
 
-  /// Adb
+  /// Creates a target for the device/emulator with the given [serial]
+  /// (`null` to target whichever single device is connected).
   AdbTarget({this.serial});
 
-  /// Creates an adb command with the given arguments.
+  /// Creates an `adb [args]` command, prefixed with `-s [serial]` if
+  /// [serial] was set.
   ProcessCmd adbCmd(List<String> args) {
     if (serial != null) {
       args.insertAll(0, ['-s', serial!]);
@@ -65,7 +77,9 @@ class AdbTarget {
   }
 }
 
-/// Name the apk command
+/// Builds the command to run the `apk_name_it` script (see
+/// `lib/bin/apk_name_it.dart`) against the standard release apk output
+/// path for the given [flavor] (or the flavor-less path if omitted).
 ProcessCmd nameApkCommand({String? flavor}) {
   String filename;
   if (flavor == null) {

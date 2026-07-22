@@ -2,18 +2,24 @@ import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_device.dart';
 import 'package:tekartik_android_utils/src/import.dart';
 
-/// Adb log options
+/// Options controlling [adbLog].
 class AdbLogOptions {
-  /// Optional all logs are displayed otherwise
+  /// Package name to filter `logcat` output to (only lines from that
+  /// package's running process). If `null`, all device logs are streamed
+  /// unfiltered.
   final String? package;
 
-  /// Optional `any` for first device, `any:<port>` for device by ip
+  /// Device to target, resolved the same way as [findDevice]'s `serial`
+  /// parameter (e.g. `null`/`'any'` for the first device, `'any:<port>'`
+  /// for an IP device, or an exact serial). If `null`, `adb` targets
+  /// whichever single device is connected.
   final String? serial;
 
-  /// Verbose commands
+  /// Whether to run the underlying shell commands verbosely.
   final bool verbose;
 
-  /// Creates an [AdbLogOptions] instance.
+  /// Creates options for [adbLog] targeting [package] on the device
+  /// resolved from [serial], defaulting [verbose] to `false`.
   AdbLogOptions({
     required this.package,
     required this.serial,
@@ -21,7 +27,13 @@ class AdbLogOptions {
   });
 }
 
-/// Log for a given device and package
+/// Streams `adb logcat` output for the device/package described by
+/// [options] to stdout, running indefinitely until the process is killed.
+///
+/// If [AdbLogOptions.package] is set, this polls for the package's process
+/// ID and restarts `logcat` filtered to that PID whenever it changes
+/// (e.g. after an app restart), rather than using `logcat`'s own package
+/// filtering.
 Future<void> adbLog(AdbLogOptions options) async {
   var serial = await findDevice(serial: options.serial);
   //var verbose = options.verbose;

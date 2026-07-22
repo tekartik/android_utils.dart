@@ -20,10 +20,16 @@ export 'src/bin/keytool_io.dart' show apkExtractSha1Digest;
 
 bool? _aaptSupported;
 
-/// True if aapt si present and supported
+/// Whether the `aapt` executable is available on the current `PATH`. The
+/// result is cached after the first check.
 bool get aaptSupported => _aaptSupported ??= whichSync('aapt') != null;
 
-/// Get the apk info from the aapt badging command.
+/// Runs `aapt dump badging` on the apk at [apkFilePath] and parses its
+/// output into an [ApkInfo].
+///
+/// If [verbose] is `true`, the underlying command's output is logged.
+///
+/// Returns `null` if no badging info line could be parsed from the output.
 Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
   var result = await runExecutableArguments('aapt', [
     'dump',
@@ -41,7 +47,12 @@ Future<ApkInfo?> getApkInfo(String apkFilePath, {bool? verbose}) async {
   return apkInfo;
 }
 
-/// Names an android apk file based on its info.
+/// Reads the apk at [apkFilePath] with [getApkInfo] and copies it (via
+/// [copyApk]) to a name derived from its package name, version name and
+/// version code, in [outFolderPath] (defaults to the apk's own directory).
+///
+/// Throws a [StateError] if [apkFilePath] doesn't exist or its info
+/// couldn't be read.
 Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   if (!File(apkFilePath).existsSync()) {
     throw StateError('$apkFilePath does not exist');
@@ -73,7 +84,10 @@ Future nameApk(String apkFilePath, {String? outFolderPath}) async {
   }
 }
 
-/// Copies an apk file to a new name based on its info.
+/// Copies the apk at [apkFilePath] to `<name>-<versionName>-<versionCode>.apk`
+/// (derived from [apkInfo]) inside [outFolderPath] (defaults to the apk's
+/// own directory). Does nothing if the computed destination is the same
+/// file as the source.
 Future copyApk(
   String apkFilePath,
   ApkInfo apkInfo, {
@@ -99,7 +113,15 @@ Future copyApk(
   stdout.writeln('  size: ${File(dst).statSync().size}');
 }
 
-/// Names an android apk file based on its manifest file.
+/// Copies (via [copyApk]) the apk at [apkFilePath] to a name derived from
+/// the app info parsed out of the Android manifest XML at
+/// [manifestFilePath].
+///
+/// [versionName] overrides the version name read from the manifest; if
+/// omitted, the manifest's own version name is used.
+///
+/// Throws a [StateError] if [apkFilePath] doesn't end in `.apk` or
+/// [manifestFilePath] doesn't end in `.xml`.
 Future nameIt(
   String apkFilePath,
   String manifestFilePath, {

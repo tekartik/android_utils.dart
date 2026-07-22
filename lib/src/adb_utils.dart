@@ -5,7 +5,9 @@ import 'package:tekartik_android_utils/build_utils.dart';
 
 import 'build_utils.dart';
 
-/// Check if adb is supported
+/// Checks whether the `adb` executable is available on the current `PATH`.
+///
+/// Returns `true` if `adb` was found, `false` otherwise.
 bool isAdbSupportedSync() {
   return whichSync('adb') != null;
 }
@@ -28,7 +30,12 @@ class AdbDeviceInfo {
   String? device;
 }
 
-/// Parses the output lines from `adb devices -l` command to extract device information.
+/// Parses [lines] — the stdout of `adb devices -l` — into a list of
+/// [AdbDeviceInfo], one per connected device. Lines before the `List of`
+/// header, and any that don't carry at least a serial and a type, are
+/// ignored.
+///
+/// Returns an empty list if no device lines are found.
 List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
   var list = <AdbDeviceInfo>[];
 
@@ -74,7 +81,10 @@ List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
   return list;
 }
 
-/// [initAndroidBuildEnvironment] must have been called first
+/// Runs `adb devices -l` and parses its output into [AdbDeviceInfo]s, one
+/// per connected device (possibly empty).
+///
+/// [initAndroidBuildEnvironment] must have been called first.
 Future<List<AdbDeviceInfo>> getAdbDeviceInfos() async {
   var lines = (await run('adb devices -l')).outLines;
   return adbDeviceInfosParseLines(lines);
@@ -91,25 +101,33 @@ class DeviceAdb {
   /// Shell instance for running adb commands without throwing on error
   var shellNoThrow = Shell(throwOnError: false);
 
-  /// Creates an instance of [DeviceAdb] with the specified serial number.
+  /// Creates a [DeviceAdb] that runs all commands against the device with
+  /// the given [serial] (as reported by `adb devices`).
   DeviceAdb(this.serial);
 
-  /// Run an ADB command and return the output lines
+  /// Runs `adb -s [serial] [command]` and returns its stdout as a list of
+  /// lines. Throws if the command exits with a non-zero code.
   Future<List<String>> runAdbCommandOutLines(String command) async {
     return (await shell.run('adb -s $serial $command')).outLines.toList();
   }
 
-  /// Run an ADB command and return the first [ProcessResult]
+  /// Runs `adb -s [serial] [command]` and returns the first
+  /// [ProcessResult]. Throws if the command exits with a non-zero code.
   Future<ProcessResult> runAdbCommand(String command) async {
     return (await shell.run('adb -s $serial $command')).first;
   }
 
-  /// Run an ADB command without throwing on error and return the first [ProcessResult]
+  /// Runs `adb -s [serial] [command]` and returns the first
+  /// [ProcessResult], without throwing if the command exits with a
+  /// non-zero code.
   Future<ProcessResult> runAdbCommandNoThrow(String command) async {
     return (await shellNoThrow.run('adb -s $serial $command')).first;
   }
 
-  /// Check if a file exists on the device
+  /// Checks whether [androidLocation] exists on the device, via
+  /// `adb shell ls`.
+  ///
+  /// Returns `true` if the path exists, `false` otherwise.
   Future<bool> fileExists(String androidLocation) async {
     var result = await runAdbCommandNoThrow('shell ls $androidLocation');
     // ls: /storage/emulated/0/Android/data/com.hublot.loves.football.ucl2022.dev/files/Documents/fan_dnk_dummy: No such file or directory
@@ -120,18 +138,25 @@ class DeviceAdb {
     return result.outLines.isNotEmpty;
   }
 
-  /// Pull a directory from the device to the local machine
+  /// Pulls the directory at [androidFrom] on the device into [localTo] on
+  /// the local machine, creating [localTo] (and any missing parents) first.
   Future<void> pullDirectory(String androidFrom, String localTo) async {
     await Directory(localTo).create(recursive: true);
     await runAdbCommandOutLines('pull $androidFrom $localTo');
   }
 
-  /// Push a directory from the local machine to the device
+  /// Pushes the local directory at [localFrom] to [androidTo] on the
+  /// device.
   Future<void> pushDirectory(String localFrom, String androidTo) async {
     await runAdbCommandOutLines('push $localFrom $androidTo');
   }
 
-  /// Get package information from the device using `adb shell dumpsys package`
+  /// Runs `adb shell dumpsys package [packageName]` on the device and
+  /// parses its output.
+  ///
+  /// Returns a [DumpsysPackageResult] whose [DumpsysPackageResult.packageInfo]
+  /// is `null` if [packageName] isn't installed or the output couldn't be
+  /// parsed.
   Future<DumpsysPackageResult> getDumpsysPackageInfo(String packageName) async {
     var lines = await runAdbCommandOutLines(
       'shell dumpsys package $packageName',
@@ -196,7 +221,12 @@ class DumpsysPackageResult {
   DumpsysPackageResult({this.packageInfo});
 }
 
-/// Parses the output lines from `adb shell dumpsys package` command to extract package information.
+/// Parses [lines] — the stdout of `adb shell dumpsys package <name>` — to
+/// extract the package's version and SDK information.
+///
+/// Returns a [DumpsysPackageResult] whose [DumpsysPackageResult.packageInfo]
+/// is `null` if the expected `Packages:` / `Package [...]` sections aren't
+/// found in [lines].
 DumpsysPackageResult adbDumpsysPackageParseLines(List<String> lines) {
   String levelPrefix(int level) {
     return '  ' * level;

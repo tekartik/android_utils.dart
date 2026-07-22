@@ -4,24 +4,29 @@ import 'package:process_run/stdio.dart';
 
 import 'project_impl.dart';
 
-/// Signing options for Android module
+/// Keystore location and password shared by the signing operations in
+/// [AndroidModuleSigningExt].
 class SigningOptions {
-  /// File name in Android module
+  /// Keystore file name/path, relative to the module directory.
   final String keystore;
 
-  /// Password for the keystore
+  /// Password protecting both the keystore and the signing key.
   final String password;
 
-  /// Creates an instance of [SigningOptions]
+  /// Creates signing options pointing at [keystore], protected by
+  /// [password].
   SigningOptions({required this.keystore, required this.password});
 }
 
-/// Default alias for the keystore
+/// Default keystore alias (`'app'`), used when none is given explicitly.
 const keystoreAliasDefault = 'app';
 
-/// Options for generating a key using keytool
+/// Options passed to `keytool -genkey` by
+/// [AndroidModuleSigningExt.generateKey], to fill in the certificate's
+/// distinguished name.
 class KeytoolGenKeyOptions {
-  /// Default alias for the keystore
+  /// Alias to store the generated key under, defaults to
+  /// [keystoreAliasDefault].
   final String alias;
 
   /// Full name of the user
@@ -42,7 +47,11 @@ class KeytoolGenKeyOptions {
   /// Country code of the user (2 letters)
   final String? countryCode;
 
-  /// Creates an instance of [KeytoolGenKeyOptions]
+  /// Creates key-generation options. [alias] defaults to
+  /// [keystoreAliasDefault]; the distinguished-name fields
+  /// ([firstAndLastName], [organizationUnit], [organization],
+  /// [cityOrLocality], [stateOrProvince], [countryCode]) default to `null`
+  /// and are omitted from the generated certificate's `-dname` when unset.
   KeytoolGenKeyOptions({
     this.alias = keystoreAliasDefault,
     this.firstAndLastName,
@@ -54,9 +63,13 @@ class KeytoolGenKeyOptions {
   }); // 2 letters
 }
 
-/// Extension on [AndroidModule] to handle signing operations
+/// Signing-related operations available on an [AndroidModule], all of which
+/// run `keytool` (or print Gradle config) from the module's directory.
 extension AndroidModuleSigningExt on AndroidModule {
-  /// Generates a key in the Android module using keytool
+  /// Generates a new signing key/keystore via `keytool -genkey`, using
+  /// [signinOptions] for the keystore location/password and
+  /// [keytoolGenOptions] for the key alias and certificate identity
+  /// fields.
   Future<void> generateKey({
     required SigningOptions signinOptions,
     required KeytoolGenKeyOptions keytoolGenOptions,
@@ -87,7 +100,8 @@ extension AndroidModuleSigningExt on AndroidModule {
     );
   }
 
-  /// Prints the key information from the keystore
+  /// Prints the certificate details of the keystore described by
+  /// [signinOptions], via `keytool -list -v`.
   Future<void> printKeyInfo({required SigningOptions signinOptions}) async {
     var keystore = signinOptions.keystore;
     var password = signinOptions.password;
@@ -97,7 +111,10 @@ extension AndroidModuleSigningExt on AndroidModule {
     );
   }
 
-  /// Prints the Gradle configuration for signing the Android module
+  /// Prints a Groovy Gradle (`build.gradle`) `signingConfigs`/`buildTypes`
+  /// snippet wiring [signinOptions]' keystore/password and [alias]
+  /// (defaults to [keystoreAliasDefault]) into the `release` signing
+  /// config, reused by the `debug` build type.
   Future<void> printGradleConfig({
     required SigningOptions signinOptions,
     String alias = keystoreAliasDefault,
@@ -123,7 +140,10 @@ extension AndroidModuleSigningExt on AndroidModule {
     ''');
   }
 
-  /// Prints the Gradle Kotlin DSL configuration for signing the Android module
+  /// Prints the Gradle Kotlin DSL (`build.gradle.kts`) equivalent of
+  /// [printGradleConfig], wiring [signinOptions]' keystore/password and
+  /// [alias] (defaults to [keystoreAliasDefault]) into the `release`
+  /// signing config, reused by the `debug` build type.
   Future<void> printGradleConfigKts({
     required SigningOptions signinOptions,
     String alias = keystoreAliasDefault,

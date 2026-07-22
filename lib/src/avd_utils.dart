@@ -27,7 +27,10 @@ class AvdInfo {
   String? sdCard;
 }
 
-/// Parses the lines of avdmanager list avd output
+/// Parses [lines] — the stdout of `avdmanager list avd` — into one
+/// [AvdInfo] per AVD entry (entries are separated by `----` lines).
+///
+/// Returns an empty list if [lines] contains no valid entries.
 List<AvdInfo?> avdInfosParseLines(Iterable<String> lines) {
   var list = <AvdInfo?>[];
   AvdInfo? avdInfo;
@@ -97,13 +100,17 @@ List<AvdInfo?> avdInfosParseLines(Iterable<String> lines) {
   return list;
 }
 
-/// [initAndroidBuildEnvironment] must have been called first
+/// Runs `avdmanager list avd` and parses its output into [AvdInfo]s, one
+/// per configured AVD.
+///
+/// [initAndroidBuildEnvironment] must have been called first.
 Future<List<AvdInfo?>> getAvdInfos() async {
   var lines = (await run('avdmanager list avd')).outLines;
   return avdInfosParseLines(lines);
 }
 
-/// Returns the list of AVD ini file names
+/// Returns the absolute, normalized paths of all `.ini` files directly
+/// under the Android SDK's AVD home directory, sorted alphabetically.
 Future<List<String>> getAvdIniFileNames() async {
   var bc = await getAndroidBuildContext();
   var iniFiles =
@@ -116,7 +123,14 @@ Future<List<String>> getAvdIniFileNames() async {
   return iniFiles;
 }
 
-/// Move an AVD folder to a new destination
+/// Moves the on-disk folder (and updates the `.ini` file) of the AVD named
+/// [avd] into the [dst] directory.
+///
+/// If a folder for [avd] already exists under [dst], the move is skipped
+/// unless [force] is `true` (defaults to `false`), in which case the
+/// existing destination folder is deleted first. Writes progress to
+/// stdout/stderr; does nothing (besides logging to stderr) if no AVD named
+/// [avd] is found.
 Future<void> moveAvdFolder({
   required String avd,
   required String dst,

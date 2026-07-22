@@ -81,9 +81,13 @@ class AndroidBuildContextImpl implements AndroidBuildContext {
       join(userHomePath, '.android', 'avd');
 }
 
-/// read registry key at give path.
+/// Reads the string (`REG_SZ`) value of [key] at the Windows registry
+/// [path] (e.g. `'HKLM\\SOFTWARE\\Android Studio'`), via `reg query`.
 ///
-/// Not fully safe (for example does not handle content starting with a space) but ok for many scenarios
+/// Returns the value, or `null` if the key/value isn't found.
+///
+/// Not fully safe (for example does not handle content starting with a
+/// space) but ok for many scenarios.
 Future<String?> readRegistryString(String path, String key) async {
   try {
     // We'll get lines like
@@ -117,7 +121,15 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
   return getAndroidBuildContext(sdkVersion: sdkVersion);
 }
 
-/// Get Android build context
+/// Locates the local Android Studio and Android SDK installations
+/// (platform-specific: registry lookup on Windows, well-known paths on
+/// macOS/Linux, plus the `ANDROID_SDK_ROOT` env var) and returns them as
+/// an [AndroidBuildContext].
+///
+/// If [sdkVersion] is given, only build-tools/command-line-tools versions
+/// whose major version matches it are considered; otherwise the latest
+/// available version is used. Fields of the returned context are `null`
+/// when the corresponding tool/directory could not be found.
 Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   AndroidBuildContext context;
 
@@ -318,7 +330,14 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
 
 Future<ShellEnvironment>? _androidBuildEnvironmentFuture;
 
-/// Get shell environment to merge
+/// Builds a [ShellEnvironment] with `PATH` entries prepended for the
+/// Android build tools, SDK tools, platform-tools, command-line tools,
+/// emulator and Android Studio's bundled JDK, so shell commands can find
+/// them.
+///
+/// [context] provides the tool locations; if omitted, it is obtained via
+/// [getAndroidBuildContext] (passing [sdkVersion] through). Entries are
+/// only added for tools whose path was actually found.
 Future<ShellEnvironment> getAndroidBuildEnvironment({
   AndroidBuildContext? context,
   int? sdkVersion,
@@ -350,7 +369,15 @@ Future<ShellEnvironment> getAndroidBuildEnvironment({
   return environment;
 }
 
-/// If specified, [context] and [sdkVersion] are used
+/// Merges the Android build [ShellEnvironment] (see
+/// [getAndroidBuildEnvironment]) into the global `shellEnvironment` used by
+/// `process_run`, so subsequent shell commands can find Android tools on
+/// their `PATH`.
+///
+/// Only does this once per process: subsequent calls await the same
+/// initialization. If specified on the first call, [context] and
+/// [sdkVersion] are used to resolve the environment; ignored on later
+/// calls.
 Future<void> initAndroidBuildEnvironment({
   AndroidBuildContext? context,
   int? sdkVersion,

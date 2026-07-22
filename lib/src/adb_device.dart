@@ -1,10 +1,17 @@
 import 'package:process_run/shell.dart';
 
-/// Supports:
+/// Resolves [serial] to a connected device's `adb` serial.
 ///
-/// `any:5555`: first ip device
-/// `any` or `<null>`: first device
-/// `<serial>`
+/// [serial] accepts several forms:
+/// - `'any:5555'` (or any `'any:<port>'`) — the first IP device listening
+///   on that port, as found by [findIpDevice].
+/// - `'any'` or `null` — the first connected device, as found by
+///   [findFirstDevice].
+/// - any other value — treated as an exact serial; returned only if it
+///   appears in [listDevices].
+///
+/// Returns the resolved serial, or `null` if no matching device is
+/// connected.
 Future<String?> findDevice({String? serial}) async {
   if (serial?.startsWith('any:') ?? false) {
     return await findIpDevice(port: int.parse(serial!.split(':').last));
@@ -19,7 +26,10 @@ Future<String?> findDevice({String? serial}) async {
   return null;
 }
 
-/// Lists all connected devices.
+/// Lists the serials of all devices currently connected to `adb`, by
+/// running `adb devices` and parsing its output.
+///
+/// Returns an empty list if no devices are connected.
 Future<List<String>> listDevices() async {
   var outlines = (await run('adb devices', verbose: false)).outLines;
   var devices = <String>[];
@@ -37,7 +47,12 @@ Future<List<String>> listDevices() async {
   return devices;
 }
 
-/// Finds the first IP device with the specified port.
+/// Finds the first connected device whose serial ends with `:[port]`
+/// (i.e. a device connected over TCP/IP), such as `192.168.1.10:5555`.
+///
+/// [port] defaults to `5555`, the standard `adb` TCP/IP port.
+///
+/// Returns that device's serial, or `null` if none matches.
 Future<String?> findIpDevice({int port = 5555}) async {
   var devices = await listDevices();
   for (var device in devices) {
@@ -50,7 +65,9 @@ Future<String?> findIpDevice({int port = 5555}) async {
   return null;
 }
 
-/// Finds the first device.
+/// Finds the serial of the first device returned by [listDevices].
+///
+/// Returns `null` if no device is connected.
 Future<String?> findFirstDevice() async {
   var devices = await listDevices();
   return devices.firstOrNull;
