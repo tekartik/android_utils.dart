@@ -1,4 +1,5 @@
 import 'package:process_run/shell.dart';
+import 'adb_ip_utils.dart';
 
 /// Resolves [serial] to a connected device's `adb` serial.
 ///
@@ -71,4 +72,54 @@ Future<String?> findIpDevice({int port = 5555}) async {
 Future<String?> findFirstDevice() async {
   var devices = await listDevices();
   return devices.firstOrNull;
+}
+
+/// A device known by its `adb` [serial] (as reported by `adb devices`),
+/// exposing helpers that run `adb -s [serial] ...` commands against it.
+class AdbDevice {
+  /// The device serial (e.g. `21051522507133` or `192.168.1.54:5555`).
+  final String serial;
+
+  /// Creates a device wrapper for [serial].
+  AdbDevice(this.serial);
+
+  /// Runs `adb -s [serial] shell [command]` and returns its stdout.
+  ///
+  /// Throws if the command exits with a non-zero code.
+  Future<String> runShellCommand(String command, {bool verbose = false}) async {
+    var result = await run(
+      'adb -s ${shellArgument(serial)} shell $command',
+      verbose: verbose,
+    );
+    return result.outText;
+  }
+
+  /// Finds the device's own (internal, typically wlan) IPv4 address.
+  ///
+  /// Tries, in order, `ip route get 1.1.1.1`, `ip addr show dev wlan0`
+  /// and `getprop dhcp.wlan0.ipaddress`, parsing each output with the
+  /// helpers from `adb_ip_utils.dart`.
+  ///
+  /// Returns `null` if none of the commands yields an address.
+  Future<String?> getIp({bool verbose = false}) async {
+    for (var attempt in [
+      ('ip route get 1.1.1.1', adbShellIpRouteGetParseIp),
+      ('ip addr show dev wlan0', adbShellIpAddrShowParseIp),
+      ('getprop dhcp.wlan0.ipaddress', adbShellGetPropIpAddressParseIp),
+    ]) {
+      var (command, parse) = attempt;
+      try {
+        var ip = parse(await runShellCommand(command, verbose: verbose));
+        if (ip != null) {
+          return ip;
+        }
+      } catch (_) {
+        // Try next command
+      }
+    }
+    return null;
+  }
+
+  @override
+  String toString() => 'AdbDevice($serial)';
 }

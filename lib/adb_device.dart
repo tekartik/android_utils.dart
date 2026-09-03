@@ -1,2 +1,2 @@
 export 'src/adb_device.dart'
-    show findDevice, findFirstDevice, findIpDevice, listDevices;
+    show AdbDevice, findDevice, findFirstDevice, findIpDevice, listDevices;
