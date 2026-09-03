@@ -4,11 +4,12 @@ import 'package:process_run/shell.dart';
 import 'package:tekartik_android_utils/adb_device.dart';
 import 'package:tekartik_android_utils/adb_utils.dart';
 import 'package:tekartik_android_utils/build_utils.dart';
+import 'package:tekartik_ci/ci_github.dart';
 import 'package:test/test.dart';
 
 Future<void> main() async {
   await initAndroidBuildEnvironment();
-  var isAdbSupported = isAdbSupportedSync();
+  var isAdbSupported = isAdbSupportedSync() && !runningInGithubActions;
   var androidFromEnv = ShellEnvironment().vars['TK_ANDROID_UTILS_ANDROID_FROM'];
   var firstDevice = isAdbSupported
       ? await findDevice(serial: 'emulator-5554')
