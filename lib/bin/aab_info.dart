@@ -16,12 +16,10 @@ Future main(List<String> args) async {
 
   var results = parser.parse(args);
 
-  parser.parse(args);
-
   var help = parseBool(results[_flagHelp])!;
 
   void usage() {
-    stdout.writeln('apk_info <path_to_apk_file>');
+    stdout.writeln('aab_info <path_to_aab_file>');
     stdout.writeln(parser.usage);
   }
 

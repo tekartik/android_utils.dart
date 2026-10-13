@@ -1,8 +1,8 @@
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 
-ProcessCmd _adbCmd(List<String?> args) {
-  return ProcessCmd('adb', args as List<String>);
+ProcessCmd _adbCmd(List<String> args) {
+  return ProcessCmd('adb', args);
 }
 
 /// Creates an `adb [args]` command.
@@ -70,10 +70,10 @@ class AdbTarget {
   /// Creates an `adb [args]` command, prefixed with `-s [serial]` if
   /// [serial] was set.
   ProcessCmd adbCmd(List<String> args) {
-    if (serial != null) {
-      args.insertAll(0, ['-s', serial!]);
-    }
-    return _adbCmd(args);
+    return _adbCmd([
+      if (serial != null) ...['-s', serial!],
+      ...args,
+    ]);
   }
 }
 

@@ -27,8 +27,6 @@ Future main(List<String> args) async {
   );
 
   var results = parser.parse(args);
-
-  parser.parse(args);
   //bool verbose = false;
 
   var help = parseBool(results[_flagHelp])!;

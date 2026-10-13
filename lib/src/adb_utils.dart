@@ -30,6 +30,8 @@ class AdbDeviceInfo {
   String? device;
 }
 
+final _whitespaceRegExp = RegExp(r'\s+');
+
 /// Parses [lines] — the stdout of `adb devices -l` — into a list of
 /// [AdbDeviceInfo], one per connected device. Lines before the `List of`
 /// header, and any that don't carry at least a serial and a type, are
@@ -46,11 +48,10 @@ List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
       continue;
     } else if (listStarted) {
       var parts = line
-          .split(' ')
-          .map((part) => part.trim())
+          .split(_whitespaceRegExp)
           .where((part) => part.isNotEmpty)
           .toList();
-      if (parts.length > 4) {
+      if (parts.length >= 2) {
         var info = AdbDeviceInfo()
           ..serial = parts[0]
           ..type = parts[1];
@@ -65,10 +66,10 @@ List<AdbDeviceInfo> adbDeviceInfosParseLines(Iterable<String> lines) {
                 info.product = value;
                 break;
               case 'model':
-                info.product = value;
+                info.model = value;
                 break;
               case 'device':
-                info.product = value;
+                info.device = value;
                 break;
             }
           }

@@ -24,8 +24,6 @@ Future main(List<String> args) async {
 
   var results = parser.parse(args);
 
-  parser.parse(args);
-
   var help = parseBool(results[_flagHelp])!;
   var versionName = results[_flagVersionName]?.toString();
 

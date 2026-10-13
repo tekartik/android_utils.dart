@@ -98,7 +98,7 @@ Future copyApk(
 
   var dst = join(outFolderPath ?? dirname(apkFilePath), dstFileName);
   stdout.writeln('naming: $dst');
-  if (absolute(apkFilePath) == absolute(dstFileName)) {
+  if (canonicalize(apkFilePath) == canonicalize(dst)) {
     stderr.writeln('name is already fine');
     return;
   } else {

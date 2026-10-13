@@ -27,13 +27,11 @@ Future main(List<String> args) async {
 
   var results = parser.parse(args);
 
-  parser.parse(args);
-
   var help = parseBool(results[_flagHelp])!;
   var emulatorName = results[_optionEmulatorName]?.toString();
 
   void usage() {
-    stdout.writeln('$scriptName [<emulator_name>');
+    stdout.writeln('$scriptName [-e <emulator_name>]');
     stdout.writeln(parser.usage);
   }
 

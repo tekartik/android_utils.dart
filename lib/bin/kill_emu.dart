@@ -19,8 +19,6 @@ Future main(List<String> args) async {
 
   var results = parser.parse(args);
 
-  parser.parse(args);
-
   var help = parseBool(results[_flagHelp])!;
   void usage() {
     stdout.writeln('kill the android (qemu) emulator process(es)');

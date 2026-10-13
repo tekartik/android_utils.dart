@@ -16,5 +16,17 @@ void main() {
           'app/build/outputs/apk/staging/release/app-staging-release.apk',
       ]);
     });
+    test('AdbTarget.adbCmd', () {
+      var args = ['shell', 'ps'];
+      expect(AdbTarget(serial: 'emulator-5554').adbCmd(args).arguments, [
+        '-s',
+        'emulator-5554',
+        'shell',
+        'ps',
+      ]);
+      // The caller's list is not modified
+      expect(args, ['shell', 'ps']);
+      expect(AdbTarget().adbCmd(args).arguments, ['shell', 'ps']);
+    });
   });
 }
