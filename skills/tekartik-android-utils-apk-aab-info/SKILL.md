@@ -65,9 +65,11 @@ metadata of an apk/aab and rename release artifacts. Everything here is
   and `.xml`, `StateError` otherwise).
 * These helpers write progress to stdout/stderr, they are meant for build
   scripts, not for a library API. They never delete the source apk.
-* Ready-made CLI: `dart pub global activate -s git https://github.com/tekartik/android_utils.dart`
-  then `apk_info <file.apk>` (name, versionCode, versionName, SHA1),
-  `apk_info <file.apk> <manifest.xml>` and `apk_name_it <file.apk> [dstFolder]`.
+* Ready-made scripts: `dart pub global activate -s git
+  https://github.com/tekartik/android_utils.dart`, then (no executables are
+  declared) `dart pub global run tekartik_android_utils:apk_info <file.apk>`
+  (name, versionCode, versionName, SHA1), `apk_info <file.apk>
+  <manifest.xml>` and `apk_name_it <file.apk> [dstFolder]`.
 * Testing: mark the test `@TestOn('vm')` and skip when the tool is missing
   (`whichSync('aapt') != null`), like the package's own `apk_utils_test.dart`;
   CI machines rarely have the Android SDK.

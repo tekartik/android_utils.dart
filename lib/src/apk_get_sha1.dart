@@ -16,7 +16,7 @@ bool get apksignerSupported =>
 Future<String?> getApkSha1(String apkPath, {bool verbose = false}) async {
   var outLines = (await Shell(
     verbose: verbose,
-  ).run('apksigner verify --print-certs $apkPath')).outLines;
+  ).run('apksigner verify --print-certs ${shellArgument(apkPath)}')).outLines;
   return extractApkSignerSha1Digest(outLines);
 }
 

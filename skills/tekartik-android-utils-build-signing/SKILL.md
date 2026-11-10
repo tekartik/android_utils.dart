@@ -15,9 +15,12 @@ description: >-
 # Android build environment, AVDs and signing (tekartik_android_utils)
 
 `tekartik_android_utils` finds the Android Studio / SDK installation of the
-current machine (Windows registry, well-known macOS/Linux paths,
-`ANDROID_SDK_ROOT`), exposes it as a build context and a `process_run`
-`ShellEnvironment`, and adds helpers around AVDs, Gradle builds and keystores.
+current machine (`ANDROID_SDK_ROOT`, the Windows registry and
+`%LOCALAPPDATA%\Android\Sdk`, `~/Library/Android/sdk` on macOS; on Linux
+Android Studio is found from its desktop shortcut and the SDK only from
+`ANDROID_SDK_ROOT`, `ANDROID_HOME` is not read), exposes it as a build
+context and a `process_run` `ShellEnvironment`, and adds helpers around AVDs,
+Gradle builds and keystores.
 All of it is `dart:io` only (Dart VM, no web).
 
 ## Guidelines
@@ -44,7 +47,10 @@ All of it is `dart:io` only (Dart VM, no web).
   `androidSdkBuildToolsPath`, `androidSdkPlatformToolsPath`,
   `androidSdkToolsPath`, `androidSdkCommandLineToolsPath`,
   `androidAvdHomePath`. Every getter is `String?` and is `null` when that
-  directory was not found, so null-check before joining paths. `sdkVersion`
+  directory was not found (an SDK without build-tools gives a null
+  `androidSdkBuildToolsPath`), so null-check before joining paths. The
+  Android Studio JDK is its `jbr` folder (`jre` before Android Studio
+  2022.2). `sdkVersion`
   (e.g. `31`) restricts build-tools/command-line-tools to that major version,
   otherwise the latest one is used.
 * Keep the returned context in a `var`: the `AndroidBuildContext` type itself is
@@ -60,19 +66,24 @@ All of it is `dart:io` only (Dart VM, no web).
   `.nonNulls`); `AvdInfo` carries `name`, `device`, `path`, `target`, `skin`,
   `sdCard`. `getAvdIniFileNames()` lists the `.ini` files of the AVD home
   without any tool call, and `moveAvdFolder(avd: ..., dst: ..., force: false)`
-  moves one AVD folder to another disk and rewrites its `.ini`; it logs and
-  skips when the destination already exists unless `force` is true.
+  moves one AVD folder to another disk and rewrites its `.ini` (absolute
+  path, `dst` may be relative); it logs and skips when the destination
+  already exists unless `force` is true, and does nothing when `dst` is
+  the folder already holding the AVD.
   `avdInfosParseLines(lines)` is the pure parser, use it in tests.
 * Gradle build (`project.dart`): `AndroidProject(path)` is just a path wrapper.
   `buildApkCmd(target, {flavor})` returns the `ProcessCmd` for
-  `./gradlew <target>:assemble<Flavor>Release` — run it yourself with `runCmd`
-  from `process_run` — and `getApkPath({flavor, module, mode})` computes the
-  expected output path (`module` defaults to `AndroidProject.moduleApp`, `mode`
-  to `AndroidProject.modeRelease`, the other constant is
-  `AndroidProject.modeDebug`). `nameApk(target)` renames the built release apk
-  after its version (see the `tekartik-android-utils-apk-aab-info` sibling
-  skill). Targets are normalized with `AndroidProject.targetToGradleTarget`
-  (`'app'` → `':app'`) and `targetToPath` (`':app:sub'` → `app/sub`).
+  `./gradlew <target>:assemble<Flavor>Release` (`:app:assembleRelease`,
+  `:app:assembleProdRelease` for `flavor: 'prod'`) — run it yourself with
+  `runCmd` from `process_run` — and `getApkPath({flavor, module, mode})`
+  computes the expected output path (`module` defaults to
+  `AndroidProject.moduleApp`, `mode` to `AndroidProject.modeRelease`, the
+  other constant is `AndroidProject.modeDebug`). `nameApk(target)` renames
+  the built release apk
+  (`<target>/build/outputs/apk/release/<name>-release.apk`) after its
+  version (see the `tekartik-android-utils-apk-aab-info` sibling skill).
+  Targets are normalized with `AndroidProject.targetToGradleTarget`
+  (`'app'` or `':app'` → `':app'`) and `targetToPath` (`':app:sub'` → `app/sub`).
 * Signing (`signing.dart`, which also re-exports `project.dart`): build an
   `AndroidModule(project: androidProject, module: 'app')`, then use the
   `AndroidModuleSigningExt` extension methods, all running in the module
@@ -92,9 +103,10 @@ All of it is `dart:io` only (Dart VM, no web).
 * Never hardcode a real keystore password in a script or a test: read it from
   the environment (`Platform.environment`) or a git-ignored local file, and keep
   the generated `.jks` out of the repository.
-* Ready-made CLI (after `dart pub global activate -s git
+* Ready-made script (after `dart pub global activate -s git
   https://github.com/tekartik/android_utils.dart`):
-  `android_build_environment` prints the detected paths.
+  `dart pub global run tekartik_android_utils:android_build_environment`
+  prints the detected paths (`--env` writes a PATH file to source).
 * Testing: mark tests `@TestOn('vm')`, call `initAndroidBuildEnvironment()` in
   `setUpAll`, and tolerate `null` paths — machines without Android Studio must
   not fail the suite (that is what the package's own `build_utils_test.dart`

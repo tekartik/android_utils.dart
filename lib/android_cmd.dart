@@ -83,7 +83,8 @@ class AdbTarget {
 ProcessCmd nameApkCommand({String? flavor}) {
   String filename;
   if (flavor == null) {
-    filename = 'app-release';
+    // Android Gradle plugin 3 and later: apk/release/app-release.apk
+    filename = join('release', 'app-release');
   } else {
     filename = join(flavor, 'release', 'app-$flavor-release');
   }

@@ -126,6 +126,10 @@ Future<List<String>> getAvdIniFileNames() async {
 /// Moves the on-disk folder (and updates the `.ini` file) of the AVD named
 /// [avd] into the [dst] directory.
 ///
+/// [dst] may be relative (the `.ini` file gets its absolute path); a [dst]
+/// naming the folder already holding the AVD (trailing slash, relative
+/// path, symbolic link) does nothing.
+///
 /// If a folder for [avd] already exists under [dst], the move is skipped
 /// unless [force] is `true` (defaults to `false`), in which case the
 /// existing destination folder is deleted first. Writes progress to
@@ -137,6 +141,14 @@ Future<void> moveAvdFolder({
   bool force = false,
 }) async {
   var iniFiles = await getAvdIniFileNames();
+  // Absolute (written in the .ini file) and canonical (compared with the
+  // resolved avd folder: a trailing slash, a relative path or a link to
+  // the same folder must not delete the avd).
+  dst = normalize(absolute(dst));
+  var canonicalDst = dst;
+  if (Directory(dst).existsSync()) {
+    canonicalDst = await Directory(dst).resolveSymbolicLinks();
+  }
 
   var found = false;
   for (var iniFile in iniFiles) {
@@ -159,7 +171,7 @@ Future<void> moveAvdFolder({
       var sb = StringBuffer();
 
       var avdTopDir = dirname(path);
-      if (avdTopDir != dst) {
+      if (avdTopDir != canonicalDst) {
         var dstPath = join(dst, '$avd.avd');
         stdout.writeln('Moving $path to $dstPath...');
 

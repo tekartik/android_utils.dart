@@ -15,6 +15,13 @@ void main() {
         else
           'app/build/outputs/apk/staging/release/app-staging-release.apk',
       ]);
+      // Android Gradle plugin 3+ output, as with a flavor
+      expect(nameApkCommand().arguments, [
+        if (Platform.isWindows)
+          'app\\build\\outputs\\apk\\release\\app-release.apk'
+        else
+          'app/build/outputs/apk/release/app-release.apk',
+      ]);
     });
     test('AdbTarget.adbCmd', () {
       var args = ['shell', 'ps'];

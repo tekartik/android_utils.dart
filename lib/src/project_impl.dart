@@ -30,20 +30,27 @@ class AndroidProject {
   /// Creates a reference to the Android project rooted at [path].
   AndroidProject(this.path);
 
-  /// Builds the `ProcessCmd` for `./gradlew <target>:assemble<flavor>Release`,
+  /// Builds the `ProcessCmd` for `./gradlew <target>:assemble<Flavor>Release`,
   /// where [target] is a Gradle target path (e.g. `':app'` or `'app'`,
-  /// see [targetToGradleTarget]) and [flavor] (if given) is prepended to
-  /// the `Release` build variant name.
+  /// see [targetToGradleTarget]) and [flavor] (if given, its first letter
+  /// upper cased) is prepended to the `Release` build variant name:
+  /// `:app:assembleRelease`, `:app:assembleProdRelease`.
   ProcessCmd buildApkCmd(String target, {String? flavor}) {
     var gradleTarget = targetToGradleTarget(target);
+    var variant = (flavor == null || flavor.isEmpty)
+        ? ''
+        : '${flavor[0].toUpperCase()}${flavor.substring(1)}';
     var cmd = ProcessCmd(gradleExecutable, [
-      '$gradleTarget:assemble${flavor}Release',
+      '$gradleTarget:assemble${variant}Release',
     ], workingDirectory: path);
     return cmd;
   }
 
   /// Renames the release apk built for the Gradle [target] (e.g. `':app'`
   /// or `'app'`) to a name derived from its info, via `nameApk`.
+  ///
+  /// The apk is `<target>/build/outputs/apk/release/<name>-release.apk`
+  /// (Android Gradle plugin 3 and later).
   Future nameApk(String target) {
     var targetPath = targetToPath(target);
     var baseTarget = basename(targetPath);
@@ -54,6 +61,7 @@ class AndroidProject {
         'build',
         'outputs',
         'apk',
+        modeRelease,
         '$baseTarget-release.apk',
       ),
     );
@@ -66,6 +74,10 @@ class AndroidProject {
     var parts = <String>[];
     var segments = target.split(':');
     for (var segment in segments) {
+      // ':app' starts with an empty segment (contextPathSplit rejects it)
+      if (segment.isEmpty) {
+        continue;
+      }
       parts.addAll(contextPathSplit(context, segment));
     }
     return parts;
@@ -119,7 +131,7 @@ class AndroidProject {
     } else {
       return join(
         path,
-        'app',
+        module,
         'build',
         'outputs',
         'apk',

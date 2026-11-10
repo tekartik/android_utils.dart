@@ -39,7 +39,9 @@ parsing and a `logcat` streamer. It is `dart:io` only (Dart VM, no web).
   `Future<String?>`. `findDevice({serial})` resolves the usual CLI forms:
   `null` or `'any'` → first device, `'any:<port>'` → first TCP/IP device,
   anything else → that exact serial, but only if it is currently connected
-  (otherwise `null`).
+  (otherwise `null`). `listDevices()` keeps `offline` and
+  `unauthorized` devices too (use `getAdbDeviceInfos()` and its `type` to
+  pick a usable one).
 * Two different device wrappers exist, pick one:
   * `AdbDevice(serial)` (`adb_device.dart`) is the light one:
     `runShellCommand(command, {verbose})` returns the stdout of
@@ -83,10 +85,11 @@ parsing and a `logcat` streamer. It is `dart:io` only (Dart VM, no web).
   (`keyValueDeviceIdMenu(kv)`, `keyValuesDeviceIdMenu([kv])`) to let a
   developer pick the target serial interactively; it needs
   `tekartik_app_dev_menu` (`KeyValue`).
-* Ready-made CLI (after `dart pub global activate -s git
-  https://github.com/tekartik/android_utils.dart`): `adb_log -p <package>
-  [-s <serial>]`, `adb_device_os_version`, `adb_tcpip`, `adb_kill_emu`,
-  `adb_kill_monkey`.
+* Ready-made scripts (after `dart pub global activate -s git
+  https://github.com/tekartik/android_utils.dart`, run as
+  `dart pub global run tekartik_android_utils:<script>`: the pubspec
+  declares no executables): `adb_log -p <package> [-s <serial>]`,
+  `adb_device_os_version`, `adb_tcpip`, `adb_kill_emu`, `adb_kill_monkey`.
 * Anti-pattern: do not assume a device is connected in tests. Mark them
   `@TestOn('vm')` and guard with `isAdbSupportedSync()` plus an empty
   `listDevices()` check.

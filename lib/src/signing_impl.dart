@@ -124,7 +124,7 @@ extension AndroidModuleSigningExt on AndroidModule {
         release {
             keyAlias $alias
             keyPassword '${signinOptions.password}'
-            storeFile file(${signinOptions.keystore}')
+            storeFile file('${signinOptions.keystore}')
             storePassword '${signinOptions.password}'
         }
     }

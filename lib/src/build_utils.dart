@@ -247,10 +247,12 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   Version? readSdkVersion;
 
   if (sdkDir != null) {
-    {
+    var buildToolsDir = Directory(join(sdkDir, 'build-tools'));
+    // A fresh SDK (cmdline-tools only) has no build-tools yet.
+    if (await buildToolsDir.exists()) {
       // build tools
       var versions =
-          ((await Directory(join(sdkDir, 'build-tools')).list().toList())
+          ((await buildToolsDir.list().toList())
                   .whereType<Directory>()
                   .map((e) => parseVersion(basename(e.path)))
                   .where((v) => sdkVersion == null || v.major == sdkVersion)
@@ -305,7 +307,10 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   }
   if (asDir != null) {
     for (var subDir in [
-      // Linux
+      // Android Studio 2022.2 (Flamingo) and later: jbr (JetBrains Runtime)
+      join('jbr', 'bin'),
+      if (platform.isMacOS) 'jbr/Contents/Home/bin',
+      // Older Android Studio, Linux and Windows
       join('jre', 'bin'),
       // Macos
       if (platform.isMacOS) ...[
