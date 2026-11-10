@@ -1,9 +1,11 @@
+import 'package:fs_shim/fs_shim.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:process_run/src/shell_utils.dart' // ignore: implementation_imports
     show shellSplit;
+import 'package:process_run/utils/shell_context.dart';
 
-import 'import_io.dart';
+import 'import.dart';
 
 /// Initialized using [initAndroidBuildEnvironment]
 /// Valid actions are composed of a verb and an optional direct object:
@@ -130,8 +132,13 @@ Future<AndroidBuildContext> getAndroidBuildContent({int? sdkVersion}) async {
 /// whose major version matches it are considered; otherwise the latest
 /// available version is used. Fields of the returned context are `null`
 /// when the corresponding tool/directory could not be found.
+///
+/// The machine is the one of the shell: the files are read with fs_shim
+/// (`fileSystemDefault`) and the platform is the one of `shellContext`, so a
+/// remote shell and file system can be set.
 Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   AndroidBuildContext context;
+  var platform = shellContext.platform;
 
   var asDirs = <String>[];
   var sdkDirs = <String>[];
@@ -147,7 +154,7 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   }
 
   // Find AS
-  if (Platform.isLinux) {
+  if (platform.isLinux) {
     // Look for shortcut
     var shortcutFile = join(
       userHomePath,
@@ -177,11 +184,11 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
       // devPrint(_);
     }
   }
-  if (Platform.isMacOS) {
+  if (platform.isMacOS) {
     asDirs.addAll(['/Applications/Android Studio.app/Contents']);
     sdkDirs.addAll([join(userHomePath, 'Library', 'Android', 'sdk')]);
   }
-  if (Platform.isWindows) {
+  if (platform.isWindows) {
     // Find registry
     // Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio
     // Key Path
@@ -222,13 +229,13 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
   }
 
   for (var dir in asDirs) {
-    if (Directory(dir).existsSync()) {
+    if (await Directory(dir).exists()) {
       asDir = dir;
       break;
     }
   }
   for (var dir in sdkDirs) {
-    if (Directory(dir).existsSync()) {
+    if (await Directory(dir).exists()) {
       sdkDir = dir;
       break;
     }
@@ -243,8 +250,7 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     {
       // build tools
       var versions =
-          (Directory(join(sdkDir, 'build-tools'))
-                  .listSync()
+          ((await Directory(join(sdkDir, 'build-tools')).list().toList())
                   .whereType<Directory>()
                   .map((e) => parseVersion(basename(e.path)))
                   .where((v) => sdkVersion == null || v.major == sdkVersion)
@@ -264,7 +270,7 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
     {
       // command line tools
       var commandLineToolsBasePath = join(sdkDir, 'cmdline-tools');
-      if (Directory(commandLineToolsBasePath).existsSync()) {
+      if (await Directory(commandLineToolsBasePath).exists()) {
         var versionTexts = await (Directory(commandLineToolsBasePath)
             .list()
             .where((e) => e is Directory)
@@ -302,7 +308,7 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
       // Linux
       join('jre', 'bin'),
       // Macos
-      if (Platform.isMacOS) ...[
+      if (platform.isMacOS) ...[
         // 2021-09 Android studio
         'jre/Contents/Home/bin',
 
@@ -311,7 +317,7 @@ Future<AndroidBuildContext> getAndroidBuildContext({int? sdkVersion}) async {
       ],
     ]) {
       var dir = join(asDir, subDir);
-      if (Directory(dir).existsSync()) {
+      if (await Directory(dir).exists()) {
         asJdkDir = dirname(dir);
         break;
       }

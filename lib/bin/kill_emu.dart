@@ -4,6 +4,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:process_run/utils/shell_context.dart';
 import 'package:tekartik_android_utils/src/import.dart';
 import 'package:tekartik_cmd_tools/kill_cmd.dart';
 
@@ -31,7 +32,8 @@ Future main(List<String> args) async {
     return;
   }
 
-  if (Platform.isWindows) {
+  // The platform of the shell (a remote one when a shell context is set).
+  if (shellContext.platform.isWindows) {
     //await dart .\bin\kill_cmd.dart qemu-system-i386.exe
     await killAllCommandsByName('qemu-system-i386.exe');
     await killAllCommandsByName('qemu-system-x86_64.exe');
