@@ -42,7 +42,11 @@ Future main(List<String> args) async {
       await new Directory(content).delete(recursive: true);
     } catch (_) {}
 
-    ProcessResult result = await Process.run('aapt', ['dump', 'badging', apkFile]);
+    ProcessResult result = await Shell(
+      stdin: const Stream<List<int>>.empty(),
+      verbose: false,
+      throwOnError: false,
+    ).runExecutableArguments('aapt', ['dump', 'badging', apkFile]);
     List<String> lines = LineSplitter.split(result.stdout.toString());
     ApkInfo apkInfo;
     for (String line in lines) {
