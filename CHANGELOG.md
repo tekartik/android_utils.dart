@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.8
+
+- Add `emulator_utils.dart`: list the AVDs, launch an emulator and wait for its boot, stop it
+- Add the `android_emu_run` script: run a command (`flutter test integration_test`...) on a device, launching an emulator when needed
+- Requires `process_run` 1.4.4 (detached start)
+
 ## 0.6.7
 
 - Add `AdbDevice` class with `getIp()` to find a device internal ip address

@@ -48,9 +48,31 @@ Future<void> main() async {
 | `apk_utils.dart`, `aab_utils.dart` | `getApkInfo` (aapt), `nameApk`, `getApkSha1` (apksigner), `getAabInfo` (bundletool) |
 | `adb_device.dart`, `adb_utils.dart`, `adb_shell.dart`, `adb_log.dart` | `listDevices`, `findDevice`, `AdbDevice`, `DeviceAdb`, `getAdbDeviceInfos`, `ps` parsing, `adbLog` |
 | `avd_utils.dart` | `getAvdInfos`, `moveAvdFolder` |
+| `emulator_utils.dart` | `listAndroidEmulatorAvds`, `launchAndroidEmulator` (detached, waits for the boot), `killAndroidEmulator`, `waitForAdbDeviceBootCompleted` |
 | `project.dart`, `signing.dart` | `AndroidProject` (gradle `assemble<Flavor>Release`, apk paths), keystore generation and Gradle signing config |
 
 The package skills (`skills/`) give the details and examples.
+
+## Run a command on an emulator
+
+`android_emu_run` runs a command on an Android device, launching an emulator
+when none is online, and stops the emulator it launched afterwards:
+
+```bash
+dart pub global activate -s git https://github.com/tekartik/android_utils.dart
+# In a Flutter app: the running emulator, a phone, or the only AVD
+dart pub global run tekartik_android_utils:android_emu_run -- flutter test integration_test
+# That AVD (its running emulator, or a new one), kept running afterwards
+dart pub global run tekartik_android_utils:android_emu_run --avd Pixel_9 --keep -- flutter test integration_test
+# Boot it and leave it running (no command)
+dart pub global run tekartik_android_utils:android_emu_run --avd Pixel_9 --no-window
+```
+
+The device is `--serial`, otherwise the running emulator of `--avd` or a new
+one, otherwise the first online emulator or device, otherwise the only AVD
+(`--list` shows them). The command gets `ANDROID_SERIAL` (adb, gradle
+`connectedAndroidTest`) and, for `flutter run/test/drive/install/attach/logs/
+screenshot`, `-d <serial>`; its exit code is the one of the tool.
 
 ## Platforms
 

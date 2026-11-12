@@ -4,11 +4,14 @@ description: >-
   Use when driving adb from Dart: listing and selecting connected devices, running
   adb shell commands, pushing/pulling directories, reading an installed
   package version with dumpsys, parsing adb shell ps output or streaming
-  logcat. Covers listDevices, findDevice, findFirstDevice, findIpDevice,
+  logcat, launching an emulator and running tests on it (android_emu_run).
+  Covers listDevices, findDevice, findFirstDevice, findIpDevice,
   AdbDevice, DeviceAdb, AdbDeviceInfo, getAdbDeviceInfos, DumpsysPackageResult,
-  adbLog, AdbLogOptions, ShellPsParser, adbCmd, adbKillEmulator from
+  adbLog, AdbLogOptions, ShellPsParser, adbCmd, adbKillEmulator,
+  listAndroidEmulatorAvds, launchAndroidEmulator, killAndroidEmulator,
+  waitForAdbDeviceBootCompleted from
   package:tekartik_android_utils/adb_device.dart, adb_utils.dart,
-  adb_shell.dart, adb_log.dart and android_cmd.dart.
+  adb_shell.dart, adb_log.dart, android_cmd.dart and emulator_utils.dart.
 ---
 
 # adb devices, shell and logs (tekartik_android_utils)
@@ -88,8 +91,28 @@ parsing and a `logcat` streamer. It is `dart:io` only (Dart VM, no web).
 * Ready-made scripts (after `dart pub global activate -s git
   https://github.com/tekartik/android_utils.dart`, run as
   `dart pub global run tekartik_android_utils:<script>`: the pubspec
-  declares no executables): `adb_log -p <package> [-s <serial>]`,
+  declares no executables): `adb_log -p <package> [-s <serial>]`, `android_emu_run`,
   `adb_device_os_version`, `adb_tcpip`, `adb_kill_emu`, `adb_kill_monkey`.
+* Emulators (`emulator_utils.dart`, after `initAndroidBuildEnvironment()`
+  which puts the SDK `emulator` folder on the PATH):
+  `listAndroidEmulatorAvds()` (`emulator -list-avds`),
+  `launchAndroidEmulator(avd: ..., noWindow: ..., arguments: [...])` starts
+  it **detached** (it lives on after the program) on the first free console
+  port and returns once `sys.boot_completed` is `1` (an
+  `AndroidEmulatorLaunch`, its `serial` is `emulator-<port>`, `kill()` stops
+  it); `killAndroidEmulator(serial)` (`adb emu kill`, waits until adb drops
+  it), `getAndroidEmulatorAvdName(serial)`, `waitForAdbDeviceBootCompleted`.
+  The pure parts (`emulatorListAvdsParseLines`, `adbEmuAvdNameParseLines`,
+  `androidEmulatorFreePort`, `androidCommandWithDevice`,
+  `androidEmulatorRunChooseTarget`) are unit tested without an emulator.
+* Run tests on an emulator from the command line: `android_emu_run [--avd
+  <name>] [--serial <serial>] [--keep] [--no-window] -- flutter test
+  integration_test`. It uses `--serial`, otherwise the running emulator of
+  `--avd` or a new one, otherwise the first online emulator or device,
+  otherwise the only AVD; the command gets `ANDROID_SERIAL` and, for a
+  flutter command taking a device, `-d <serial>`. It stops the emulator it
+  launched (not one already running) unless `--keep`; without a command it
+  only boots it. `--list` shows the devices (with their AVD) and the AVDs.
 * Anti-pattern: do not assume a device is connected in tests. Mark them
   `@TestOn('vm')` and guard with `isAdbSupportedSync()` plus an empty
   `listDevices()` check.
